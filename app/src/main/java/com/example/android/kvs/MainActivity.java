@@ -6,21 +6,34 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 
 public class MainActivity extends ActionBarActivity {
+    @InjectView(R.id.user_id_text)
+    TextView userIdTextView;
+    @InjectView(R.id.user_name_text)
+    TextView userNameTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Example sample = ExampleSchema.create(this);
-        sample.putUserName("JAVA");
-        String text = sample.getUserName();
-        TextView textView = (TextView) findViewById(R.id.text_view);
-        textView.setText(text);
+        ButterKnife.inject(this);
+        setupViews();
     }
 
+    private void setupViews() {
+        Example example = ExampleSchema.create(this);
+
+        int userId = example.getUserId();
+        userIdTextView.setText("user_id: " + userId);
+
+        example.putUserName("JAVA");
+        String text = example.getUserName();
+        userNameTextView.setText("user_name: " + text);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

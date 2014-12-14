@@ -58,20 +58,24 @@ public class SchemaWriter {
     private void writeMethods(JavaWriter writer) throws IOException {
         for (VariableElement element : model.keys) {
             Key key = element.getAnnotation(Key.class);
-            writeAccessors(writer, key, element);
+            writeMethod(writer, key, element);
         }
     }
 
-    private void writeAccessors(JavaWriter writer, Key key, VariableElement element) throws IOException {
+    private void writeMethod(JavaWriter writer, Key key, VariableElement element) throws IOException {
         String fieldTypeFqdn = element.asType().toString();
+        String fieldName = element.getSimpleName().toString();
+        String keyName = key.value();
         switch (fieldTypeFqdn) {
             case Classes.STRING:
-                writeGetter(writer, "String", element.getSimpleName().toString(), key.value());
-                writeSetter(writer, "String", element.getSimpleName().toString(), key.value());
+                writeGetter(writer, "String", fieldName, keyName);
+                writeSetter(writer, "String", fieldName, keyName);
+                writeHas(writer, fieldName, keyName);
                 break;
             case "int":
-                writeGetter(writer, "int", element.getSimpleName().toString(), key.value());
-                writeSetter(writer, "int", element.getSimpleName().toString(), key.value());
+                writeGetter(writer, "int", fieldName, keyName);
+                writeSetter(writer, "int", fieldName, keyName);
+                writeHas(writer, fieldName, keyName);
                 break;
             default:
                 throw new IllegalArgumentException(fieldTypeFqdn + " is not supported");
@@ -87,6 +91,12 @@ public class SchemaWriter {
     private void writeSetter(JavaWriter writer, String fieldTypeName, String fieldName, String keyName) throws IOException {
         writer.beginMethod("void", "put" + StringUtils.capitalize(fieldName), EnumSet.of(Modifier.PUBLIC), fieldTypeName, fieldName)
                 .emitStatement("put%s(\"%s\", %s)", StringUtils.capitalize(fieldTypeName), keyName, fieldName)
+                .endMethod();
+    }
+
+    private void writeHas(JavaWriter writer, String fieldName, String keyName) throws IOException {
+        writer.beginMethod("boolean", "has" + StringUtils.capitalize(fieldName), EnumSet.of(Modifier.PUBLIC), "String", keyName)
+                .emitStatement("return has(%s)", keyName)
                 .endMethod();
     }
 }

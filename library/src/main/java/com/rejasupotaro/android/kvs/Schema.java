@@ -16,4 +16,6 @@ public interface Schema {
     public int getInt(String key);
     public long getLong(String key);
     public Set<String> getStringSet(String key);
+
+    public boolean has(String key);
 }

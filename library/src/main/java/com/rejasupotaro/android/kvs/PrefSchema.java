@@ -72,4 +72,9 @@ public abstract class PrefSchema implements Schema {
     public Set<String> getStringSet(String key) {
         return prefs.getStringSet(key, new HashSet<String>());
     }
+
+    @Override
+    public boolean has(String key) {
+        return prefs.contains(key);
+    }
 }

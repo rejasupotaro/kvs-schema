@@ -30,8 +30,7 @@ public class SchemaWriter {
             JavaWriter writer = new JavaWriter(sourceFile.openWriter());
 
             writer.emitPackage(model.packageName);
-            writer.emitImports(Arrays.asList(
-                    Classes.CONTEXT));
+            writeImports(writer);
             writer.beginType(model.className, "class", EnumSet.of(Modifier.PUBLIC, Modifier.FINAL), model.originalClassName);
 
             writeFields(writer);
@@ -43,6 +42,11 @@ public class SchemaWriter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void writeImports(JavaWriter writer) throws IOException {
+        writer.emitImports(Arrays.asList(
+                Classes.CONTEXT));
     }
 
     private void writeFields(JavaWriter writer) throws IOException {

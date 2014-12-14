@@ -41,11 +41,12 @@ public abstract class ExampleSchema extends PrefSchema {
 
 ```java
 Example example = ExampleSchema.create(context);
-example.putUserId("JAVA");
-example.hasUserId(); // => true
-example.getUserId(); // => JAVA
-example.removeUserId();
-example.hasUserId(); // => false
+example.putUserId(123);
+example.putUserName("JAVA");
+example.hasUserName(); // => true
+example.getUserName(); // => JAVA
+example.removeUserName();
+example.hasUserName(); // => false
 ```
 
 ### Saved XML (when using PrefSchema)
@@ -54,7 +55,7 @@ example.hasUserId(); // => false
 root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml
 <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
 <map>
-<string name="user_name">JAVA</string>
+<string name="user_id">123</string>
 </map>
 ```
 

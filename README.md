@@ -45,6 +45,16 @@ example.putUserId("JAVA");
 example.getUserId(); // => JAVA
 ```
 
+### Saved XML
+
+```xml
+root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+<string name="user_name">JAVA</string>
+</map>
+```
+
 ### What's going on here?
 
 KVS Schema runs as a standard annotation processor in javac.

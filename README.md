@@ -42,7 +42,10 @@ public abstract class ExampleSchema extends PrefSchema {
 ```java
 Example example = ExampleSchema.create(context);
 example.putUserId("JAVA");
+example.hasUserId(); // => true
 example.getUserId(); // => JAVA
+example.removeUserId();
+example.hasUserId(); // => false
 ```
 
 ### Saved XML (when using PrefSchema)

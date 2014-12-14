@@ -13,9 +13,9 @@ import javax.lang.model.element.VariableElement;
 import javax.tools.JavaFileObject;
 
 public class SchemaWriter {
-    private KvsModel model;
+    private SchemaModel model;
 
-    public SchemaWriter(KvsModel model) {
+    public SchemaWriter(SchemaModel model) {
         this.model = model;
     }
 

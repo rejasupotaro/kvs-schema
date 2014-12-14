@@ -20,7 +20,7 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
 @AutoService(Processor.class)
-public class KvsProcessor extends AbstractProcessor {
+public class SchemaProcessor extends AbstractProcessor {
     private Elements elementUtils;
     private Types typeUtils;
     private Filer filer;
@@ -47,19 +47,19 @@ public class KvsProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment env) {
-        List<KvsModel> models = parseKvsAnnotations(env);
-        for (KvsModel model : models) {
+        List<SchemaModel> models = parseKvsAnnotations(env);
+        for (SchemaModel model : models) {
             SchemaWriter writer = new SchemaWriter(model);
             writer.write(filer);
         }
         return true;
     }
 
-    private List<KvsModel> parseKvsAnnotations(RoundEnvironment env) {
-        ArrayList<KvsModel> models = new ArrayList<>();
+    private List<SchemaModel> parseKvsAnnotations(RoundEnvironment env) {
+        ArrayList<SchemaModel> models = new ArrayList<>();
         ArrayList<Element> elements = new ArrayList<>(env.getElementsAnnotatedWith(Kvs.class));
         for (Element element : elements) {
-            models.add(new KvsModel((TypeElement) element, elementUtils));
+            models.add(new SchemaModel((TypeElement) element, elementUtils));
         }
         return models;
     }

@@ -11,7 +11,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
 
-public class KvsModel {
+public class SchemaModel {
     public TypeElement element;
     public String packageName;
     public String originalClassName;
@@ -19,7 +19,7 @@ public class KvsModel {
     public String name;
     public List<VariableElement> keys = new ArrayList<>();
 
-    public KvsModel(TypeElement element, Elements elementUtils) {
+    public SchemaModel(TypeElement element, Elements elementUtils) {
         this.element = element;
         Kvs kvs = element.getAnnotation(Kvs.class);
         this.name = kvs.name();

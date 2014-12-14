@@ -86,7 +86,7 @@ public class SchemaWriter {
 
     private void writeGetter(JavaWriter writer, String fieldTypeName, String fieldName, String keyName) throws IOException {
         writer.beginMethod(fieldTypeName, "get" + StringUtils.capitalize(fieldName), EnumSet.of(Modifier.PUBLIC))
-                .emitStatement("return get%s(\"%s\")", StringUtils.capitalize(fieldTypeName), keyName)
+                .emitStatement("return get%s(\"%s\", %s)", StringUtils.capitalize(fieldTypeName), keyName, fieldName)
                 .endMethod();
     }
 

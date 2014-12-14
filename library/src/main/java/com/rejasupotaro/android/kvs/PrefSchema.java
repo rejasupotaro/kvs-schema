@@ -44,32 +44,32 @@ public abstract class PrefSchema implements Schema {
     }
 
     @Override
-    public boolean getBoolean(String key) {
-        return prefs.getBoolean(key, false);
+    public boolean getBoolean(String key, boolean defValue) {
+        return prefs.getBoolean(key, defValue);
     }
 
     @Override
-    public String getString(String key) {
-        return prefs.getString(key, "");
+    public String getString(String key, String defValue) {
+        return prefs.getString(key, defValue);
     }
 
     @Override
-    public float getFloat(String key) {
-        return prefs.getFloat(key, 0);
+    public float getFloat(String key, float defValue) {
+        return prefs.getFloat(key, defValue);
     }
 
     @Override
-    public int getInt(String key) {
-        return prefs.getInt(key, 0);
+    public int getInt(String key, int defValue) {
+        return prefs.getInt(key, defValue);
     }
 
     @Override
-    public long getLong(String key) {
-        return prefs.getLong(key, 0);
+    public long getLong(String key, long defValue) {
+        return prefs.getLong(key, defValue);
     }
 
     @Override
-    public Set<String> getStringSet(String key) {
+    public Set<String> getStringSet(String key, Set<String> defValue) {
         return prefs.getStringSet(key, new HashSet<String>());
     }
 
@@ -85,6 +85,6 @@ public abstract class PrefSchema implements Schema {
 
     @Override
     public void clear() {
-        prefs.edit().clear().apply();
+        prefs.edit().clear();
     }
 }

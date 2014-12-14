@@ -10,12 +10,12 @@ public interface Schema {
     public void putLong(String key, long value);
     public void putStringSet(String key, Set<String> value);
 
-    public boolean getBoolean(String key);
-    public String getString(String key);
-    public float getFloat(String key);
-    public int getInt(String key);
-    public long getLong(String key);
-    public Set<String> getStringSet(String key);
+    public boolean getBoolean(String key, boolean defValue);
+    public String getString(String key, String defValue);
+    public float getFloat(String key, float defValue);
+    public int getInt(String key, int defValue);
+    public long getLong(String key, long defValue);
+    public Set<String> getStringSet(String key, Set<String> defValue);
 
     public boolean has(String key);
 

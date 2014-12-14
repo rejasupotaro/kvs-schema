@@ -14,7 +14,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Sample sample = SampleSchema.create(this);
+        Example sample = ExampleSchema.create(this);
         sample.putUserName("JAVA");
         String text = sample.getUserName();
         TextView textView = (TextView) findViewById(R.id.text_view);

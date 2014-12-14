@@ -26,7 +26,7 @@ How to use KVS Schema
 ### Create Schema
 
 ```java
-@Kvs("example")
+@Table("example")
 public abstract class SampleSchema extends PrefSchema {
     @Key("user_id") int userId;
     @Key("user_name") String userName;

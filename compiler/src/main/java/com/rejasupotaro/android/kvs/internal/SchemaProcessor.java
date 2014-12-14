@@ -1,7 +1,7 @@
 package com.rejasupotaro.android.kvs.internal;
 
 import com.google.auto.service.AutoService;
-import com.rejaupotaro.android.kvs.annotations.Kvs;
+import com.rejaupotaro.android.kvs.annotations.Table;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -28,7 +28,7 @@ public class SchemaProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         return new LinkedHashSet<String>() {{
-            add(Kvs.class.getName());
+            add(Table.class.getName());
         }};
     }
 
@@ -47,7 +47,7 @@ public class SchemaProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment env) {
-        List<SchemaModel> models = parseKvsAnnotations(env);
+        List<SchemaModel> models = parseTableAnnotations(env);
         for (SchemaModel model : models) {
             SchemaWriter writer = new SchemaWriter(model);
             writer.write(filer);
@@ -55,9 +55,9 @@ public class SchemaProcessor extends AbstractProcessor {
         return true;
     }
 
-    private List<SchemaModel> parseKvsAnnotations(RoundEnvironment env) {
+    private List<SchemaModel> parseTableAnnotations(RoundEnvironment env) {
         ArrayList<SchemaModel> models = new ArrayList<>();
-        ArrayList<Element> elements = new ArrayList<>(env.getElementsAnnotatedWith(Kvs.class));
+        ArrayList<Element> elements = new ArrayList<>(env.getElementsAnnotatedWith(Table.class));
         for (Element element : elements) {
             models.add(new SchemaModel((TypeElement) element, elementUtils));
         }

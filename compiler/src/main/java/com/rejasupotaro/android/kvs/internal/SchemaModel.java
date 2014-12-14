@@ -1,7 +1,7 @@
 package com.rejasupotaro.android.kvs.internal;
 
 import com.rejaupotaro.android.kvs.annotations.Key;
-import com.rejaupotaro.android.kvs.annotations.Kvs;
+import com.rejaupotaro.android.kvs.annotations.Table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +21,8 @@ public class SchemaModel {
 
     public SchemaModel(TypeElement element, Elements elementUtils) {
         this.element = element;
-        Kvs kvs = element.getAnnotation(Kvs.class);
-        this.name = kvs.name();
+        Table table = element.getAnnotation(Table.class);
+        this.name = table.name();
         this.packageName = getPackageName(elementUtils, element);
         this.originalClassName = getClassName(element, packageName);
         this.className = originalClassName.replace("Schema", "");

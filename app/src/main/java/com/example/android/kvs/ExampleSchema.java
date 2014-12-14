@@ -4,9 +4,9 @@ import android.content.Context;
 
 import com.rejasupotaro.android.kvs.PrefSchema;
 import com.rejaupotaro.android.kvs.annotations.Key;
-import com.rejaupotaro.android.kvs.annotations.Kvs;
+import com.rejaupotaro.android.kvs.annotations.Table;
 
-@Kvs(name = "example")
+@Table(name = "example")
 public abstract class ExampleSchema extends PrefSchema {
     @Key("user_id") int userId;
     @Key("user_name") String userName;

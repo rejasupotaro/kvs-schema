@@ -20,4 +20,6 @@ public interface Schema {
     public boolean has(String key);
 
     public void remove(String key);
+
+    public void clear();
 }

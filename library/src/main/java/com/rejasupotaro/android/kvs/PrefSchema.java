@@ -82,4 +82,9 @@ public abstract class PrefSchema implements Schema {
     public void remove(String key) {
         prefs.edit().remove(key).apply();
     }
+
+    @Override
+    public void clear() {
+        prefs.edit().clear().apply();
+    }
 }

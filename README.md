@@ -29,7 +29,7 @@ How to use KVS Schema
 @Table("example")
 public abstract class ExampleSchema extends PrefSchema {
     @Key("user_id") int userId;
-    @Key("user_name") String userName;
+    @Key("user_name") String userName = "guest";
 
     public static Example create(Context context) {
         return new Example(context);
@@ -45,7 +45,7 @@ example.putUserId("JAVA");
 example.getUserId(); // => JAVA
 ```
 
-### Saved XML
+### Saved XML (when using PrefSchema)
 
 ```xml
 root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml

@@ -55,6 +55,24 @@ root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml
 </map>
 ```
 
+### Generated Code
+
+```java
+import android.content.Context;
+public final class Example extends ExampleSchema {
+  private final String name = "example";
+  public Example(Context context) { init(context, name); }
+  public int getUserId() { return getInt("user_id"); }
+  public void putUserId(int userId) { putInt("user_id", userId); }
+  public boolean hasUserId() { return has("user_id"); }
+  public void removeUserId() { remove("user_id"); }
+  public String getUserName() { return getString("user_name"); }
+  public void putUserName(String userName) { putString("user_name", userName); }
+  public boolean hasUserName() { return has("user_name"); }
+  public void removeUserName() { remove("user_name"); }
+}
+```
+
 ### What's going on here?
 
 KVS Schema runs as a standard annotation processor in javac.

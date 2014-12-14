@@ -71,11 +71,13 @@ public class SchemaWriter {
                 writeGetter(writer, "String", fieldName, keyName);
                 writeSetter(writer, "String", fieldName, keyName);
                 writeHas(writer, fieldName, keyName);
+                writeRemove(writer, fieldName, keyName);
                 break;
             case "int":
                 writeGetter(writer, "int", fieldName, keyName);
                 writeSetter(writer, "int", fieldName, keyName);
                 writeHas(writer, fieldName, keyName);
+                writeRemove(writer, fieldName, keyName);
                 break;
             default:
                 throw new IllegalArgumentException(fieldTypeFqdn + " is not supported");
@@ -95,8 +97,14 @@ public class SchemaWriter {
     }
 
     private void writeHas(JavaWriter writer, String fieldName, String keyName) throws IOException {
-        writer.beginMethod("boolean", "has" + StringUtils.capitalize(fieldName), EnumSet.of(Modifier.PUBLIC), "String", keyName)
-                .emitStatement("return has(%s)", keyName)
+        writer.beginMethod("boolean", "has" + StringUtils.capitalize(fieldName), EnumSet.of(Modifier.PUBLIC))
+                .emitStatement("return has(\"%s\")", keyName)
+                .endMethod();
+    }
+
+    private void writeRemove(JavaWriter writer, String fieldName, String keyName) throws IOException {
+        writer.beginMethod("void", "remove" + StringUtils.capitalize(fieldName), EnumSet.of(Modifier.PUBLIC))
+                .emitStatement("remove(\"%s\")", keyName)
                 .endMethod();
     }
 }

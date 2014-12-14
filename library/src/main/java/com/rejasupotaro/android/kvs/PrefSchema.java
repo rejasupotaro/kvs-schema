@@ -77,4 +77,9 @@ public abstract class PrefSchema implements Schema {
     public boolean has(String key) {
         return prefs.contains(key);
     }
+
+    @Override
+    public void remove(String key) {
+        prefs.edit().remove(key).apply();
+    }
 }

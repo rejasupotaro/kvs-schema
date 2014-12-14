@@ -18,4 +18,6 @@ public interface Schema {
     public Set<String> getStringSet(String key);
 
     public boolean has(String key);
+
+    public void remove(String key);
 }

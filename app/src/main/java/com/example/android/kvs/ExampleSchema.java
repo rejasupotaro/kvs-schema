@@ -8,8 +8,8 @@ import com.rejaupotaro.android.kvs.annotations.Table;
 
 @Table(name = "example")
 public abstract class ExampleSchema extends PrefSchema {
-    @Key("user_id") int userId = -1;
-    @Key("user_name") String userName = "guest";
+    @Key("user_id") protected int userId = -1;
+    @Key("user_name") protected String userName = "guest";
 
     public static Example create(Context context) {
         return new Example(context);

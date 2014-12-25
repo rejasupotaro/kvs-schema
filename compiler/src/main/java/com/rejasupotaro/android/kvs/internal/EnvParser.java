@@ -23,11 +23,20 @@ public final class EnvParser {
     }
 
     public static void validateSchemaModel(List<SchemaModel> models) {
+        List<String> tableNames = new ArrayList<>();
         for (SchemaModel model : models) {
-            if (model.getTableName() == null || model.getTableName().equals("")) {
+            String tableName = model.getTableName();
+
+            if (tableName == null || tableName.equals("")) {
                 String originalClassName = model.getOriginalClassName();
                 throw new IllegalArgumentException(originalClassName + " should define table name");
             }
+
+            if (tableNames.contains(tableName)) {
+                throw new IllegalArgumentException("table name \"" + tableName + "\" is already defined");
+            }
+
+            tableNames.add(tableName);
         }
     }
 }

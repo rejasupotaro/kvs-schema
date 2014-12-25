@@ -9,19 +9,78 @@ dependencies {
     compile 'com.google.auto.service:auto-service:1.0-rc2'
 }
 
-uploadArchives {
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
+group = 'com.rejasupotaro'
+archivesBaseName = 'kvs-schema-compiler'
+version = '0.0.2'
 
-    task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
-        from javadoc.destinationDir
-    }
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
 
-    artifacts {
-        archives sourcesJar
-        archives javadocJar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+publishing {
+    publications {
+        mavenAndroid(MavenPublication) {
+            groupId 'com.rejasupotaro'
+            artifactId 'kvs-schema-compiler'
+            version version
+            artifact jar
+            artifact sourcesJar
+            artifact javadocJar
+            pom.withXml {
+                Node root = asNode()
+                root.appendNode('name', 'kvs-schema')
+                root.appendNode('description', 'Immutable code generation to store key-value data for Android')
+                root.appendNode('url', 'https://github.com/rejasupotaro/kvs-schema')
+
+                def issues = root.appendNode('issueManagement')
+                issues.appendNode('system', 'github')
+                issues.appendNode('url', 'https://github.com/rejasupotaro/kvs-schema/issues')
+
+                def scm = root.appendNode('scm')
+                scm.appendNode('url', 'https://github.com/rejasupotaro/kvs-schema')
+                scm.appendNode('connection', 'git@github.com:rejasupotaro/kvs-schema.git')
+                scm.appendNode('developerConnection', 'git@github.com:rejasupotaro/kvs-schema.git')
+
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'MIT')
+                license.appendNode('url', 'https://raw.githubusercontent.com/rejasupotaro/kvs-schema/master/LICENSE.txt')
+                license.appendNode('distribution', 'repo')
+            }
+        }
     }
 }
+
+def getBintrayUserProperty() {
+    return hasProperty('bintrayUser') ? bintrayUser : ""
+}
+
+def getBintrayApiKeyProperty() {
+    return hasProperty('bintrayApiKey') ? bintrayApiKey : ""
+}
+
+bintray {
+    user = bintrayUserProperty
+    key = bintrayApiKeyProperty
+    publications = ['mavenAndroid']
+    dryRun = false
+    pkg {
+        repo = 'maven'
+        name = 'kvs-schema-compiler'
+        licenses = ['MIT']
+    }
+}
+

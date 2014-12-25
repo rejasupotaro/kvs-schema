@@ -25,7 +25,8 @@ public final class EnvParser {
     public static void validateSchemaModel(List<SchemaModel> models) {
         for (SchemaModel model : models) {
             if (model.getTableName() == null || model.getTableName().equals("")) {
-                throw new IllegalArgumentException("Table name should not be empty");
+                String originalClassName = model.getOriginalClassName();
+                throw new IllegalArgumentException(originalClassName + " should define table name");
             }
         }
     }

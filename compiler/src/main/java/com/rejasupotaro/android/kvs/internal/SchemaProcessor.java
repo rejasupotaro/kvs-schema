@@ -3,7 +3,6 @@ package com.rejasupotaro.android.kvs.internal;
 import com.google.auto.service.AutoService;
 import com.rejaupotaro.android.kvs.annotations.Table;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +13,6 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -47,20 +45,11 @@ public class SchemaProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment env) {
-        List<SchemaModel> models = parseTableAnnotations(env);
+        List<SchemaModel> models = EnvParser.parse(env, elementUtils);
         for (SchemaModel model : models) {
             SchemaWriter writer = new SchemaWriter(model);
             writer.write(filer);
         }
         return true;
-    }
-
-    private List<SchemaModel> parseTableAnnotations(RoundEnvironment env) {
-        ArrayList<SchemaModel> models = new ArrayList<>();
-        ArrayList<Element> elements = new ArrayList<>(env.getElementsAnnotatedWith(Table.class));
-        for (Element element : elements) {
-            models.add(new SchemaModel((TypeElement) element, elementUtils));
-        }
-        return models;
     }
 }

@@ -34,7 +34,7 @@ dependencies {
 
 group = 'com.rejasupotaro'
 archivesBaseName = 'kvs-schema'
-version = '0.0.4'
+version = '0.0.5'
 
 apply from: '../android-artifacts.gradle'
 

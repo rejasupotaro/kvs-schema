@@ -64,9 +64,9 @@ root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml
 Add dependencies your build.gradle
 
 ```groovy
-apt 'com.rejasupotaro:kvs-schema-compiler:0.0.4:fat'
-compile 'com.rejasupotaro:kvs-schema-core:0.0.4'
-compile 'com.rejasupotaro:kvs-schema:0.0.4'
+apt 'com.rejasupotaro:kvs-schema-compiler:0.0.5:fat'
+compile 'com.rejasupotaro:kvs-schema-core:0.0.5'
+compile 'com.rejasupotaro:kvs-schema:0.0.5'
 ```
 
 ### What's going on here?

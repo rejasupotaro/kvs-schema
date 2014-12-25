@@ -1,5 +1,7 @@
 package com.rejasupotaro.android.kvs.internal;
 
+import com.rejasupotaro.android.kvs.internal.exceptions.TableNameDuplicateException;
+import com.rejasupotaro.android.kvs.internal.exceptions.TableNameIsNotDefinedException;
 import com.rejaupotaro.android.kvs.annotations.Table;
 
 import java.util.ArrayList;
@@ -29,11 +31,11 @@ public final class EnvParser {
 
             if (tableName == null || tableName.equals("")) {
                 String originalClassName = model.getOriginalClassName();
-                throw new IllegalArgumentException(originalClassName + " should define table name");
+                throw new TableNameIsNotDefinedException(originalClassName + " should define table name");
             }
 
             if (tableNames.contains(tableName)) {
-                throw new IllegalArgumentException("table name \"" + tableName + "\" is already defined");
+                throw new TableNameDuplicateException("table name \"" + tableName + "\" is already defined");
             }
 
             tableNames.add(tableName);

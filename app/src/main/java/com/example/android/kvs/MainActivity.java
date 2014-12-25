@@ -9,7 +9,6 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-
 public class MainActivity extends ActionBarActivity {
     @InjectView(R.id.user_id_text)
     TextView userIdTextView;

@@ -11,29 +11,16 @@ dependencies {
 
 group = 'com.rejasupotaro'
 archivesBaseName = 'kvs-schema-compiler'
-version = '0.0.2'
+version = '0.0.3'
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
+apply from: '../java-artifacts.gradle'
 
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 publishing {
     publications {
-        mavenAndroid(MavenPublication) {
+        mavenJava(MavenPublication) {
             groupId 'com.rejasupotaro'
             artifactId 'kvs-schema-compiler'
             version version
@@ -75,7 +62,7 @@ def getBintrayApiKeyProperty() {
 bintray {
     user = bintrayUserProperty
     key = bintrayApiKeyProperty
-    publications = ['mavenAndroid']
+    publications = ['mavenJava']
     dryRun = false
     pkg {
         repo = 'maven'

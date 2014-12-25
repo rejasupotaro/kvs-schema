@@ -22,16 +22,16 @@ public class SchemaWriter {
     public void write(Filer filer) {
         try {
             StringBuilder fqdn = new StringBuilder();
-            fqdn.append(model.packageName)
+            fqdn.append(model.getPackageName())
                     .append(".")
-                    .append(model.className);
+                    .append(model.getClassName());
 
-            JavaFileObject sourceFile = filer.createSourceFile(fqdn.toString(), model.element);
+            JavaFileObject sourceFile = filer.createSourceFile(fqdn.toString(), model.getElement());
             JavaWriter writer = new JavaWriter(sourceFile.openWriter());
 
-            writer.emitPackage(model.packageName);
+            writer.emitPackage(model.getPackageName());
             writeImports(writer);
-            writer.beginType(model.className, "class", EnumSet.of(Modifier.PUBLIC, Modifier.FINAL), model.originalClassName);
+            writer.beginType(model.getClassName(), "class", EnumSet.of(Modifier.PUBLIC, Modifier.FINAL), model.getOriginalClassName());
 
             writeFields(writer);
             writeConstructor(writer);
@@ -50,17 +50,17 @@ public class SchemaWriter {
     }
 
     private void writeFields(JavaWriter writer) throws IOException {
-        writer.emitField("String", "name", EnumSet.of(Modifier.PRIVATE, Modifier.FINAL), "\"" + model.name + "\"");
+        writer.emitField("String", "tableName", EnumSet.of(Modifier.PRIVATE, Modifier.FINAL), "\"" + model.getTableName() + "\"");
     }
 
     private void writeConstructor(JavaWriter writer) throws IOException {
         writer.beginConstructor(EnumSet.of(Modifier.PUBLIC), "Context", "context")
-                .emitStatement("init(context, name)")
+                .emitStatement("init(context, tableName)")
                 .endConstructor();
     }
 
     private void writeMethods(JavaWriter writer) throws IOException {
-        for (VariableElement element : model.keys) {
+        for (VariableElement element : model.getKeys()) {
             Key key = element.getAnnotation(Key.class);
             writeMethod(writer, key, element);
         }

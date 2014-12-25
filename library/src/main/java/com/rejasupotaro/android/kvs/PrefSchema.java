@@ -9,8 +9,8 @@ import java.util.Set;
 public abstract class PrefSchema extends Schema {
     private SharedPreferences prefs;
 
-    protected void init(Context context, String name) {
-        prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+    protected void init(Context context, String tableName) {
+        prefs = context.getSharedPreferences(tableName, Context.MODE_PRIVATE);
     }
 
     @Override

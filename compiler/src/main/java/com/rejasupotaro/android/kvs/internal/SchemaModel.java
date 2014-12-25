@@ -12,17 +12,41 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
 
 public class SchemaModel {
-    public TypeElement element;
-    public String packageName;
-    public String originalClassName;
-    public String className;
-    public String name;
-    public List<VariableElement> keys = new ArrayList<>();
+    private TypeElement element;
+    private String packageName;
+    private String originalClassName;
+    private String className;
+    private String tableName;
+    private List<VariableElement> keys = new ArrayList<>();
+
+    public TypeElement getElement() {
+        return element;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public String getOriginalClassName() {
+        return originalClassName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public List<VariableElement> getKeys() {
+        return keys;
+    }
 
     public SchemaModel(TypeElement element, Elements elementUtils) {
         this.element = element;
         Table table = element.getAnnotation(Table.class);
-        this.name = table.name();
+        this.tableName = table.value();
         this.packageName = getPackageName(elementUtils, element);
         this.originalClassName = getClassName(element, packageName);
         this.className = originalClassName.replace("Schema", "");

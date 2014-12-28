@@ -10,7 +10,11 @@ public abstract class PrefSchema extends Schema {
     private SharedPreferences prefs;
 
     protected void init(Context context, String tableName) {
-        prefs = context.getSharedPreferences(tableName, Context.MODE_PRIVATE);
+        this.prefs = context.getSharedPreferences(tableName, Context.MODE_PRIVATE);
+    }
+
+    protected void init(SharedPreferences prefs) {
+        this.prefs = prefs;
     }
 
     @Override

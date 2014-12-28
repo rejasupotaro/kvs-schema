@@ -71,15 +71,33 @@ public class SchemaWriter {
         String fieldName = element.getSimpleName().toString();
         String keyName = key.value();
         switch (fieldTypeFqdn) {
+            case "boolean":
+                writeGetter(writer, "boolean", fieldName, keyName);
+                writeSetter(writer, "boolean", fieldName, keyName);
+                writeHas(writer, fieldName, keyName);
+                writeRemove(writer, fieldName, keyName);
+                break;
             case Classes.STRING:
                 writeGetter(writer, "String", fieldName, keyName);
                 writeSetter(writer, "String", fieldName, keyName);
                 writeHas(writer, fieldName, keyName);
                 writeRemove(writer, fieldName, keyName);
                 break;
+            case "float":
+                writeGetter(writer, "float", fieldName, keyName);
+                writeSetter(writer, "float", fieldName, keyName);
+                writeHas(writer, fieldName, keyName);
+                writeRemove(writer, fieldName, keyName);
+                break;
             case "int":
                 writeGetter(writer, "int", fieldName, keyName);
                 writeSetter(writer, "int", fieldName, keyName);
+                writeHas(writer, fieldName, keyName);
+                writeRemove(writer, fieldName, keyName);
+                break;
+            case "long":
+                writeGetter(writer, "long", fieldName, keyName);
+                writeSetter(writer, "long", fieldName, keyName);
                 writeHas(writer, fieldName, keyName);
                 writeRemove(writer, fieldName, keyName);
                 break;

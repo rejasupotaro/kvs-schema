@@ -27,12 +27,12 @@ How to use KVS Schema
 
 ```java
 @Table("example")
-public abstract class ExampleSchema extends PrefSchema {
+public abstract class ExamplePrefsSchema extends PrefSchema {
     @Key("user_id") int userId;
     @Key("user_name") String userName = "guest";
 
-    public static Example create(Context context) {
-        return new Example(context);
+    public static ExamplePrefs create(Context context) {
+        return new ExamplePrefs(context);
     }
 }
 ```
@@ -40,13 +40,13 @@ public abstract class ExampleSchema extends PrefSchema {
 ### Write And Read
 
 ```java
-Example example = ExampleSchema.create(context);
-example.putUserId(123);
-example.putUserName("JAVA");
-example.hasUserName(); // => true
-example.getUserName(); // => JAVA
-example.removeUserName();
-example.hasUserName(); // => false
+ExamplePrefs examplePrefs = ExampleSchema.create(context);
+examplePrefs.putUserId(123);
+examplePrefs.putUserName("JAVA");
+examplePrefs.hasUserName(); // => true
+examplePrefs.getUserName(); // => JAVA
+examplePrefs.removeUserName();
+examplePrefs.hasUserName(); // => false
 ```
 
 ### Saved XML (when using PrefSchema)

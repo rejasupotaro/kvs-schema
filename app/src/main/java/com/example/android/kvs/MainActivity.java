@@ -24,13 +24,13 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setupViews() {
-        Example example = ExampleSchema.create(this);
+        ExamplePrefs examplePrefs = ExamplePrefsSchema.get(this);
 
-        long userId = example.getUserId();
+        long userId = examplePrefs.getUserId();
         userIdTextView.setText("user_id: " + userId);
 
-        example.putUserName("JAVA");
-        String text = example.getUserName();
+        examplePrefs.putUserName("JAVA");
+        String text = examplePrefs.getUserName();
         userNameTextView.setText("user_name: " + text);
     }
 

@@ -1,5 +1,6 @@
 package com.rejasupotaro.android.kvs.internal;
 
+import com.rejasupotaro.android.kvs.internal.exceptions.TableNameIsInvalidException;
 import com.rejaupotaro.android.kvs.annotations.Key;
 import com.rejaupotaro.android.kvs.annotations.Table;
 
@@ -49,6 +50,9 @@ public class SchemaModel {
         this.tableName = table.value();
         this.packageName = getPackageName(elementUtils, element);
         this.originalClassName = getClassName(element, packageName);
+        if (!originalClassName.endsWith("Schema")) {
+            throw new TableNameIsInvalidException(originalClassName + " is invalid. Table class name should end with 'Schema'");
+        }
         this.className = originalClassName.replace("Schema", "");
 
         findAnnotations(element);

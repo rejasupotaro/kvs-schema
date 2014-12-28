@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
     private void setupViews() {
         Example example = ExampleSchema.create(this);
 
-        int userId = example.getUserId();
+        long userId = example.getUserId();
         userIdTextView.setText("user_id: " + userId);
 
         example.putUserName("JAVA");

@@ -5,7 +5,7 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 
 group = 'com.rejasupotaro'
 archivesBaseName = 'kvs-schema-compiler'
-version = '0.0.5'
+version = '0.1.0'
 
 apply from: '../java-artifacts.gradle'
 

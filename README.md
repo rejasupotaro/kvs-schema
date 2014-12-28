@@ -1,7 +1,7 @@
-[WIP] KVS Schema
+KVS Schema
 ==========
 
-Immutable code generation to store key-value data for Android.
+KVS Schema is code generation library to manage key-value data for Android.
 
 Contents
 ------------------
@@ -64,9 +64,9 @@ root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml
 Add dependencies your build.gradle
 
 ```groovy
-apt 'com.rejasupotaro:kvs-schema-compiler:0.1.0:fat'
-compile 'com.rejasupotaro:kvs-schema-core:0.1.0'
-compile 'com.rejasupotaro:kvs-schema:0.1.0'
+apt 'com.rejasupotaro:kvs-schema-compiler:0.1.2:fat'
+compile 'com.rejasupotaro:kvs-schema-core:0.1.2'
+compile 'com.rejasupotaro:kvs-schema:0.1.2'
 ```
 
 ### What's going on here?

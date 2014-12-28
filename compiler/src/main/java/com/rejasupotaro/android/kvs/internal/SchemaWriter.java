@@ -34,7 +34,7 @@ public class SchemaWriter {
             writer.beginType(model.getClassName(), "class", EnumSet.of(Modifier.PUBLIC, Modifier.FINAL), model.getOriginalClassName());
 
             writeFields(writer);
-            writeConstructor(writer);
+            writeConstructors(writer);
             writeMethods(writer);
 
             writer.endType();
@@ -47,6 +47,7 @@ public class SchemaWriter {
     private void writeImports(JavaWriter writer) throws IOException {
         ArrayList<String> imports = new ArrayList<String>() {{
             add(Classes.CONTEXT);
+            add(Classes.SHARED_PREFERENCES);
         }};
         for (VariableElement element : model.getKeys()) {
             String fieldTypeFqdn = element.asType().toString();
@@ -61,9 +62,13 @@ public class SchemaWriter {
         writer.emitField("String", "tableName", EnumSet.of(Modifier.PRIVATE, Modifier.FINAL), "\"" + model.getTableName() + "\"");
     }
 
-    private void writeConstructor(JavaWriter writer) throws IOException {
+    private void writeConstructors(JavaWriter writer) throws IOException {
         writer.beginConstructor(EnumSet.of(Modifier.PUBLIC), "Context", "context")
                 .emitStatement("init(context, tableName)")
+                .endConstructor();
+
+        writer.beginConstructor(EnumSet.of(Modifier.PUBLIC), "SharedPreferences", "prefs")
+                .emitStatement("init(prefs)")
                 .endConstructor();
     }
 

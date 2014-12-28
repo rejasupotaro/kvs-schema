@@ -4,7 +4,7 @@ import com.rejaupotaro.android.kvs.annotations.Key;
 import com.squareup.javawriter.JavaWriter;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.EnumSet;
 
 import javax.annotation.processing.Filer;
@@ -45,8 +45,16 @@ public class SchemaWriter {
     }
 
     private void writeImports(JavaWriter writer) throws IOException {
-        writer.emitImports(Arrays.asList(
-                Classes.CONTEXT));
+        ArrayList<String> imports = new ArrayList<String>() {{
+            add(Classes.CONTEXT);
+        }};
+        for (VariableElement element : model.getKeys()) {
+            String fieldTypeFqdn = element.asType().toString();
+            if (!imports.contains(fieldTypeFqdn) && fieldTypeFqdn.contains(".")) {
+                imports.add(fieldTypeFqdn);
+            }
+        }
+        writer.emitImports(imports);
     }
 
     private void writeFields(JavaWriter writer) throws IOException {
@@ -72,32 +80,32 @@ public class SchemaWriter {
         String keyName = key.value();
         switch (fieldTypeFqdn) {
             case "boolean":
-                writeGetter(writer, "boolean", fieldName, keyName);
-                writeSetter(writer, "boolean", fieldName, keyName);
+                writeGetter(writer, "boolean", "boolean", fieldName, keyName);
+                writeSetter(writer, "boolean", "boolean", fieldName, keyName);
                 writeHas(writer, fieldName, keyName);
                 writeRemove(writer, fieldName, keyName);
                 break;
             case Classes.STRING:
-                writeGetter(writer, "String", fieldName, keyName);
-                writeSetter(writer, "String", fieldName, keyName);
+                writeGetter(writer, "String", "String", fieldName, keyName);
+                writeSetter(writer, "String", "String", fieldName, keyName);
                 writeHas(writer, fieldName, keyName);
                 writeRemove(writer, fieldName, keyName);
                 break;
             case "float":
-                writeGetter(writer, "float", fieldName, keyName);
-                writeSetter(writer, "float", fieldName, keyName);
+                writeGetter(writer, "float", "float", fieldName, keyName);
+                writeSetter(writer, "float", "float", fieldName, keyName);
                 writeHas(writer, fieldName, keyName);
                 writeRemove(writer, fieldName, keyName);
                 break;
             case "int":
-                writeGetter(writer, "int", fieldName, keyName);
-                writeSetter(writer, "int", fieldName, keyName);
+                writeGetter(writer, "int", "int", fieldName, keyName);
+                writeSetter(writer, "int", "int", fieldName, keyName);
                 writeHas(writer, fieldName, keyName);
                 writeRemove(writer, fieldName, keyName);
                 break;
             case "long":
-                writeGetter(writer, "long", fieldName, keyName);
-                writeSetter(writer, "long", fieldName, keyName);
+                writeGetter(writer, "long", "long", fieldName, keyName);
+                writeSetter(writer, "long", "long", fieldName, keyName);
                 writeHas(writer, fieldName, keyName);
                 writeRemove(writer, fieldName, keyName);
                 break;
@@ -106,26 +114,30 @@ public class SchemaWriter {
         }
     }
 
-    private void writeGetter(JavaWriter writer, String fieldTypeName, String fieldName, String keyName) throws IOException {
-        writer.beginMethod(fieldTypeName, "get" + StringUtils.capitalize(fieldName), EnumSet.of(Modifier.PUBLIC))
-                .emitStatement("return get%s(\"%s\", %s)", StringUtils.capitalize(fieldTypeName), keyName, fieldName)
+    private void writeGetter(JavaWriter writer, String fieldTypeName, String argTypeOfSuperMethod, String fieldName, String keyName) throws IOException {
+        String methodName = "get" + StringUtils.capitalize(fieldName);
+        writer.beginMethod(fieldTypeName, methodName, EnumSet.of(Modifier.PUBLIC))
+                .emitStatement("return get%s(\"%s\", %s)", StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName)
                 .endMethod();
     }
 
-    private void writeSetter(JavaWriter writer, String fieldTypeName, String fieldName, String keyName) throws IOException {
-        writer.beginMethod("void", "put" + StringUtils.capitalize(fieldName), EnumSet.of(Modifier.PUBLIC), fieldTypeName, fieldName)
-                .emitStatement("put%s(\"%s\", %s)", StringUtils.capitalize(fieldTypeName), keyName, fieldName)
+    private void writeSetter(JavaWriter writer, String fieldTypeName, String argTypeOfSuperMethod, String fieldName, String keyName) throws IOException {
+        String methodName = "put" + StringUtils.capitalize(fieldName);
+        writer.beginMethod("void", methodName, EnumSet.of(Modifier.PUBLIC), fieldTypeName, fieldName)
+                .emitStatement("put%s(\"%s\", %s)", StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName)
                 .endMethod();
     }
 
     private void writeHas(JavaWriter writer, String fieldName, String keyName) throws IOException {
-        writer.beginMethod("boolean", "has" + StringUtils.capitalize(fieldName), EnumSet.of(Modifier.PUBLIC))
+        String methodName = "has" + StringUtils.capitalize(fieldName);
+        writer.beginMethod("boolean", methodName, EnumSet.of(Modifier.PUBLIC))
                 .emitStatement("return has(\"%s\")", keyName)
                 .endMethod();
     }
 
     private void writeRemove(JavaWriter writer, String fieldName, String keyName) throws IOException {
-        writer.beginMethod("void", "remove" + StringUtils.capitalize(fieldName), EnumSet.of(Modifier.PUBLIC))
+        String methodName = "remove" + StringUtils.capitalize(fieldName);
+        writer.beginMethod("void", methodName, EnumSet.of(Modifier.PUBLIC))
                 .emitStatement("remove(\"%s\")", keyName)
                 .endMethod();
     }

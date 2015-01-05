@@ -21,12 +21,12 @@ public class SchemaWriter {
 
     public void write(Filer filer) {
         try {
-            StringBuilder fqdn = new StringBuilder();
-            fqdn.append(model.getPackageName())
+            StringBuilder fqcn = new StringBuilder();
+            fqcn.append(model.getPackageName())
                     .append(".")
                     .append(model.getClassName());
 
-            JavaFileObject sourceFile = filer.createSourceFile(fqdn.toString(), model.getElement());
+            JavaFileObject sourceFile = filer.createSourceFile(fqcn.toString(), model.getElement());
             JavaWriter writer = new JavaWriter(sourceFile.openWriter());
 
             writer.emitPackage(model.getPackageName());
@@ -80,10 +80,10 @@ public class SchemaWriter {
     }
 
     private void writeMethod(JavaWriter writer, Key key, VariableElement element) throws IOException {
-        String fieldTypeFqdn = element.asType().toString();
+        String fieldTypeFqcn = element.asType().toString();
         String fieldName = element.getSimpleName().toString();
         String keyName = key.value();
-        switch (fieldTypeFqdn) {
+        switch (fieldTypeFqcn) {
             case "boolean":
                 writeGetter(writer, "boolean", "boolean", fieldName, keyName);
                 writeSetter(writer, "boolean", "boolean", fieldName, keyName);
@@ -115,7 +115,7 @@ public class SchemaWriter {
                 writeRemove(writer, fieldName, keyName);
                 break;
             default:
-                throw new IllegalArgumentException(fieldTypeFqdn + " is not supported");
+                throw new IllegalArgumentException(fieldTypeFqcn + " is not supported");
         }
     }
 

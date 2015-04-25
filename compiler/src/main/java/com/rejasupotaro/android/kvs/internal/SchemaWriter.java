@@ -1,16 +1,20 @@
 package com.rejasupotaro.android.kvs.internal;
 
 import com.rejaupotaro.android.kvs.annotations.Key;
-import com.squareup.javawriter.JavaWriter;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.List;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.VariableElement;
-import javax.tools.JavaFileObject;
 
 public class SchemaWriter {
     private SchemaModel model;
@@ -21,129 +25,144 @@ public class SchemaWriter {
 
     public void write(Filer filer) {
         try {
-            StringBuilder fqcn = new StringBuilder();
-            fqcn.append(model.getPackageName())
-                    .append(".")
-                    .append(model.getClassName());
+            TypeSpec.Builder classBuilder = TypeSpec.classBuilder(model.getClassName());
+            classBuilder.addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+            ClassName superClassName = ClassName.get(model.getPackageName(), model.getOriginalClassName());
+            classBuilder.superclass(superClassName);
 
-            JavaFileObject sourceFile = filer.createSourceFile(fqcn.toString(), model.getElement());
-            JavaWriter writer = new JavaWriter(sourceFile.openWriter());
+            List<FieldSpec> fieldSpecs = createFields();
+            for (FieldSpec fieldSpec : fieldSpecs) {
+                classBuilder.addField(fieldSpec);
+            }
 
-            writer.emitPackage(model.getPackageName());
-            writeImports(writer);
-            writer.beginType(model.getClassName(), "class", EnumSet.of(Modifier.PUBLIC, Modifier.FINAL), model.getOriginalClassName());
+            List<MethodSpec> methodSpecs = new ArrayList<>();
+            methodSpecs.addAll(createConstructors());
+            methodSpecs.addAll(createMethods());
+            for (MethodSpec methodSpec : methodSpecs) {
+                classBuilder.addMethod(methodSpec);
+            }
 
-            writeFields(writer);
-            writeConstructors(writer);
-            writeMethods(writer);
-
-            writer.endType();
-            writer.close();
+            TypeSpec outClass = classBuilder.build();
+            JavaFile.builder(model.getPackageName(), outClass)
+                    .build()
+                    .writeTo(filer);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void writeImports(JavaWriter writer) throws IOException {
-        ArrayList<String> imports = new ArrayList<String>() {{
-            add(Classes.CONTEXT);
-            add(Classes.SHARED_PREFERENCES);
-        }};
-        for (VariableElement element : model.getKeys()) {
-            String fieldTypeFqdn = element.asType().toString();
-            if (!imports.contains(fieldTypeFqdn) && fieldTypeFqdn.contains(".")) {
-                imports.add(fieldTypeFqdn);
-            }
-        }
-        writer.emitImports(imports);
+    private List<FieldSpec> createFields() throws IOException {
+        List<FieldSpec> fieldSpecs = new ArrayList<>();
+        fieldSpecs.add(FieldSpec.builder(String.class, "tableName")
+                .build());
+        return fieldSpecs;
     }
 
-    private void writeFields(JavaWriter writer) throws IOException {
-        writer.emitField("String", "tableName", EnumSet.of(Modifier.PRIVATE, Modifier.FINAL), "\"" + model.getTableName() + "\"");
+    private List<MethodSpec> createConstructors() throws IOException {
+        List<MethodSpec> methodSpecs = new ArrayList<>();
+        methodSpecs.add(MethodSpec.constructorBuilder()
+                .addParameter(ClassName.get("android.content", "Context"), "context")
+                .addStatement("init(context, tableName)")
+                .build());
+        methodSpecs.add(MethodSpec.constructorBuilder()
+                .addParameter(ClassName.get("android.content", "SharedPreferences"), "prefs")
+                .addStatement("init(prefs)")
+                .build());
+        return methodSpecs;
     }
 
-    private void writeConstructors(JavaWriter writer) throws IOException {
-        writer.beginConstructor(EnumSet.of(Modifier.PUBLIC), "Context", "context")
-                .emitStatement("init(context, tableName)")
-                .endConstructor();
-
-        writer.beginConstructor(EnumSet.of(Modifier.PUBLIC), "SharedPreferences", "prefs")
-                .emitStatement("init(prefs)")
-                .endConstructor();
-    }
-
-    private void writeMethods(JavaWriter writer) throws IOException {
+    private List<MethodSpec> createMethods() throws IOException {
+        List<MethodSpec> methodSpecs = new ArrayList<>();
         for (VariableElement element : model.getKeys()) {
             Key key = element.getAnnotation(Key.class);
-            writeMethod(writer, key, element);
+            methodSpecs.addAll(createMethod(key, element));
         }
+        return methodSpecs;
     }
 
-    private void writeMethod(JavaWriter writer, Key key, VariableElement element) throws IOException {
+    private List<MethodSpec> createMethod(Key key, VariableElement element) throws IOException {
+        List<MethodSpec> methodSpecs = new ArrayList<>();
         String fieldTypeFqcn = element.asType().toString();
         String fieldName = element.getSimpleName().toString();
         String keyName = key.value();
         switch (fieldTypeFqcn) {
             case "boolean":
-                writeGetter(writer, "boolean", "boolean", fieldName, keyName);
-                writeSetter(writer, "boolean", "boolean", fieldName, keyName);
-                writeHas(writer, fieldName, keyName);
-                writeRemove(writer, fieldName, keyName);
+                methodSpecs.add(createGetterMethod(boolean.class, "boolean", fieldName, keyName));
+                methodSpecs.add(createSetterMethod(boolean.class, "boolean", fieldName, keyName));
+                methodSpecs.add(createHasMethod(fieldName, keyName));
+                methodSpecs.add(createRemoveMethod(fieldName, keyName));
                 break;
             case Classes.STRING:
-                writeGetter(writer, "String", "String", fieldName, keyName);
-                writeSetter(writer, "String", "String", fieldName, keyName);
-                writeHas(writer, fieldName, keyName);
-                writeRemove(writer, fieldName, keyName);
+                methodSpecs.add(createGetterMethod(String.class, "String", fieldName, keyName));
+                methodSpecs.add(createSetterMethod(String.class, "String", fieldName, keyName));
+                methodSpecs.add(createHasMethod(fieldName, keyName));
+                methodSpecs.add(createRemoveMethod(fieldName, keyName));
                 break;
             case "float":
-                writeGetter(writer, "float", "float", fieldName, keyName);
-                writeSetter(writer, "float", "float", fieldName, keyName);
-                writeHas(writer, fieldName, keyName);
-                writeRemove(writer, fieldName, keyName);
+                methodSpecs.add(createGetterMethod(float.class, "float", fieldName, keyName));
+                methodSpecs.add(createSetterMethod(float.class, "float", fieldName, keyName));
+                methodSpecs.add(createHasMethod(fieldName, keyName));
+                methodSpecs.add(createRemoveMethod(fieldName, keyName));
                 break;
             case "int":
-                writeGetter(writer, "int", "int", fieldName, keyName);
-                writeSetter(writer, "int", "int", fieldName, keyName);
-                writeHas(writer, fieldName, keyName);
-                writeRemove(writer, fieldName, keyName);
+                methodSpecs.add(createGetterMethod(long.class, "int", fieldName, keyName));
+                methodSpecs.add(createSetterMethod(long.class, "int", fieldName, keyName));
+                methodSpecs.add(createHasMethod(fieldName, keyName));
+                methodSpecs.add(createRemoveMethod(fieldName, keyName));
                 break;
             case "long":
-                writeGetter(writer, "long", "long", fieldName, keyName);
-                writeSetter(writer, "long", "long", fieldName, keyName);
-                writeHas(writer, fieldName, keyName);
-                writeRemove(writer, fieldName, keyName);
+                methodSpecs.add(createGetterMethod(long.class, "long", fieldName, keyName));
+                methodSpecs.add(createSetterMethod(long.class, "long", fieldName, keyName));
+                methodSpecs.add(createHasMethod(fieldName, keyName));
+                methodSpecs.add(createRemoveMethod(fieldName, keyName));
                 break;
             default:
                 throw new IllegalArgumentException(fieldTypeFqcn + " is not supported");
         }
+        return methodSpecs;
     }
 
-    private void writeGetter(JavaWriter writer, String fieldTypeName, String argTypeOfSuperMethod, String fieldName, String keyName) throws IOException {
+    private MethodSpec createGetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) throws IOException {
         String methodName = "get" + StringUtils.capitalize(fieldName);
-        writer.beginMethod(fieldTypeName, methodName, EnumSet.of(Modifier.PUBLIC))
-                .emitStatement("return get%s(\"%s\", %s)", StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName)
-                .endMethod();
+        String statement = String.format("return get%s(\"%s\", %s)", StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName);
+
+        return MethodSpec.methodBuilder(methodName)
+                .returns(fieldType)
+                .addStatement(statement)
+                .build();
     }
 
-    private void writeSetter(JavaWriter writer, String fieldTypeName, String argTypeOfSuperMethod, String fieldName, String keyName) throws IOException {
+    private MethodSpec createSetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) throws IOException {
         String methodName = "put" + StringUtils.capitalize(fieldName);
-        writer.beginMethod("void", methodName, EnumSet.of(Modifier.PUBLIC), fieldTypeName, fieldName)
-                .emitStatement("put%s(\"%s\", %s)", StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName)
-                .endMethod();
+        String statement = String.format("put%s(\"%s\", %s)", StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName);
+
+        return MethodSpec.methodBuilder(methodName)
+                .addModifiers(Modifier.PUBLIC)
+                .returns(void.class)
+                .addParameter(fieldType, fieldName)
+                .addStatement(statement)
+                .build();
     }
 
-    private void writeHas(JavaWriter writer, String fieldName, String keyName) throws IOException {
+    private MethodSpec createHasMethod(String fieldName, String keyName) throws IOException {
         String methodName = "has" + StringUtils.capitalize(fieldName);
-        writer.beginMethod("boolean", methodName, EnumSet.of(Modifier.PUBLIC))
-                .emitStatement("return has(\"%s\")", keyName)
-                .endMethod();
+        String statement = String.format("return has(\"%s\")", keyName);
+
+        return MethodSpec.methodBuilder(methodName)
+                .addModifiers(Modifier.PUBLIC)
+                .returns(boolean.class)
+                .addStatement(statement)
+                .build();
     }
 
-    private void writeRemove(JavaWriter writer, String fieldName, String keyName) throws IOException {
+    private MethodSpec createRemoveMethod(String fieldName, String keyName) throws IOException {
         String methodName = "remove" + StringUtils.capitalize(fieldName);
-        writer.beginMethod("void", methodName, EnumSet.of(Modifier.PUBLIC))
-                .emitStatement("remove(\"%s\")", keyName)
-                .endMethod();
+        String statement = String.format("remove(\"%s\")", keyName);
+
+        return MethodSpec.methodBuilder(methodName)
+                .addModifiers(Modifier.PUBLIC)
+                .returns(void.class)
+                .addStatement(statement)
+                .build();
     }
 }

@@ -121,45 +121,37 @@ public class SchemaWriter {
 
     private MethodSpec createGetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
         String methodName = "get" + StringUtils.capitalize(fieldName);
-        String statement = String.format("return get%s(\"%s\", %s)", StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName);
-
         return MethodSpec.methodBuilder(methodName)
                 .returns(fieldType)
-                .addStatement(statement)
+                .addStatement("return $N($S, $N)", "get" + StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName)
                 .build();
     }
 
     private MethodSpec createSetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
         String methodName = "put" + StringUtils.capitalize(fieldName);
-        String statement = String.format("put%s(\"%s\", %s)", StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName);
-
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(void.class)
                 .addParameter(fieldType, fieldName)
-                .addStatement(statement)
+                .addStatement("$N($S, $N)", "put" + StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName)
                 .build();
     }
 
     private MethodSpec createHasMethod(String fieldName, String keyName) {
         String methodName = "has" + StringUtils.capitalize(fieldName);
-        String statement = String.format("return has(\"%s\")", keyName);
-
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(boolean.class)
-                .addStatement(statement)
+                .addStatement("return has($S)", keyName)
                 .build();
     }
 
     private MethodSpec createRemoveMethod(String fieldName, String keyName) {
         String methodName = "remove" + StringUtils.capitalize(fieldName);
-        String statement = String.format("remove(\"%s\")", keyName);
-
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(void.class)
-                .addStatement(statement)
+                .addStatement("remove($S)", keyName)
                 .build();
     }
 }

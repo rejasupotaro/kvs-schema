@@ -23,42 +23,39 @@ public class SchemaWriter {
         this.model = model;
     }
 
-    public void write(Filer filer) {
-        try {
-            TypeSpec.Builder classBuilder = TypeSpec.classBuilder(model.getClassName());
-            classBuilder.addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-            ClassName superClassName = ClassName.get(model.getPackageName(), model.getOriginalClassName());
-            classBuilder.superclass(superClassName);
+    public void write(Filer filer) throws IOException {
+        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(model.getClassName());
+        classBuilder.addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+        ClassName superClassName = ClassName.get(model.getPackageName(), model.getOriginalClassName());
+        classBuilder.superclass(superClassName);
 
-            List<FieldSpec> fieldSpecs = createFields();
-            for (FieldSpec fieldSpec : fieldSpecs) {
-                classBuilder.addField(fieldSpec);
-            }
-
-            List<MethodSpec> methodSpecs = new ArrayList<>();
-            methodSpecs.addAll(createConstructors());
-            methodSpecs.addAll(createMethods());
-            for (MethodSpec methodSpec : methodSpecs) {
-                classBuilder.addMethod(methodSpec);
-            }
-
-            TypeSpec outClass = classBuilder.build();
-            JavaFile.builder(model.getPackageName(), outClass)
-                    .build()
-                    .writeTo(filer);
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<FieldSpec> fieldSpecs = createFields();
+        for (FieldSpec fieldSpec : fieldSpecs) {
+            classBuilder.addField(fieldSpec);
         }
+
+        List<MethodSpec> methodSpecs = new ArrayList<>();
+        methodSpecs.addAll(createConstructors());
+        methodSpecs.addAll(createMethods());
+        for (MethodSpec methodSpec : methodSpecs) {
+            classBuilder.addMethod(methodSpec);
+        }
+
+        TypeSpec outClass = classBuilder.build();
+
+        JavaFile.builder(model.getPackageName(), outClass)
+                .build()
+                .writeTo(filer);
     }
 
-    private List<FieldSpec> createFields() throws IOException {
+    private List<FieldSpec> createFields() {
         List<FieldSpec> fieldSpecs = new ArrayList<>();
         fieldSpecs.add(FieldSpec.builder(String.class, "tableName")
                 .build());
         return fieldSpecs;
     }
 
-    private List<MethodSpec> createConstructors() throws IOException {
+    private List<MethodSpec> createConstructors() {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.add(MethodSpec.constructorBuilder()
                 .addParameter(ClassName.get("android.content", "Context"), "context")
@@ -71,7 +68,7 @@ public class SchemaWriter {
         return methodSpecs;
     }
 
-    private List<MethodSpec> createMethods() throws IOException {
+    private List<MethodSpec> createMethods() {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (VariableElement element : model.getKeys()) {
             Key key = element.getAnnotation(Key.class);
@@ -80,7 +77,7 @@ public class SchemaWriter {
         return methodSpecs;
     }
 
-    private List<MethodSpec> createMethod(Key key, VariableElement element) throws IOException {
+    private List<MethodSpec> createMethod(Key key, VariableElement element) {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         String fieldTypeFqcn = element.asType().toString();
         String fieldName = element.getSimpleName().toString();
@@ -122,7 +119,7 @@ public class SchemaWriter {
         return methodSpecs;
     }
 
-    private MethodSpec createGetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) throws IOException {
+    private MethodSpec createGetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
         String methodName = "get" + StringUtils.capitalize(fieldName);
         String statement = String.format("return get%s(\"%s\", %s)", StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName);
 
@@ -132,7 +129,7 @@ public class SchemaWriter {
                 .build();
     }
 
-    private MethodSpec createSetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) throws IOException {
+    private MethodSpec createSetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
         String methodName = "put" + StringUtils.capitalize(fieldName);
         String statement = String.format("put%s(\"%s\", %s)", StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName);
 
@@ -144,7 +141,7 @@ public class SchemaWriter {
                 .build();
     }
 
-    private MethodSpec createHasMethod(String fieldName, String keyName) throws IOException {
+    private MethodSpec createHasMethod(String fieldName, String keyName) {
         String methodName = "has" + StringUtils.capitalize(fieldName);
         String statement = String.format("return has(\"%s\")", keyName);
 
@@ -155,7 +152,7 @@ public class SchemaWriter {
                 .build();
     }
 
-    private MethodSpec createRemoveMethod(String fieldName, String keyName) throws IOException {
+    private MethodSpec createRemoveMethod(String fieldName, String keyName) {
         String methodName = "remove" + StringUtils.capitalize(fieldName);
         String statement = String.format("remove(\"%s\")", keyName);
 

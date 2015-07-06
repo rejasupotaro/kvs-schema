@@ -40,6 +40,12 @@ task bumpPatch << {
     }
 }
 
+task genReadMe << {
+    def template = file('README.md.template').text
+    def result = template.replaceAll("%%version%%", version())
+    file("README.md").withWriter{ it << result }
+}
+
 task version << {
     println version()
 }

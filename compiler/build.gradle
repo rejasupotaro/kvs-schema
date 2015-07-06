@@ -22,13 +22,6 @@ group = 'com.rejasupotaro'
 archivesBaseName = 'kvs-schema-compiler'
 version = '0.1.4'
 
-apply plugin: 'eu.appsatori.fatjar'
-
-fatJar {
-    classifier 'fat'
-    exclude 'META-INF/*.DSA'
-}
-
 apply from: '../java-artifacts.gradle'
 
 apply plugin: 'maven-publish'
@@ -41,7 +34,6 @@ publishing {
             artifactId 'kvs-schema-compiler'
             version version
             artifact jar
-            artifact fatJar
             artifact sourcesJar
             artifact javadocJar
             pom.withXml {

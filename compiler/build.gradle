@@ -20,7 +20,7 @@ sourceSets {
 
 group = 'com.rejasupotaro'
 archivesBaseName = 'kvs-schema-compiler'
-version = '0.1.4'
+version = '0.1.5'
 
 apply from: '../java-artifacts.gradle'
 

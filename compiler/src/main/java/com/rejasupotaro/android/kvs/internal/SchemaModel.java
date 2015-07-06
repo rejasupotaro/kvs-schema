@@ -1,7 +1,7 @@
 package com.rejasupotaro.android.kvs.internal;
 
-import com.rejasupotaro.android.kvs.Key;
-import com.rejasupotaro.android.kvs.Table;
+import com.rejasupotaro.android.kvs.annotations.Key;
+import com.rejasupotaro.android.kvs.annotations.Table;
 import com.rejasupotaro.android.kvs.internal.exceptions.TableNameIsInvalidException;
 
 import java.util.ArrayList;

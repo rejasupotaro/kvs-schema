@@ -1,6 +1,6 @@
 package com.rejasupotaro.android.kvs.internal;
 
-import com.rejasupotaro.android.kvs.Key;
+import com.rejasupotaro.android.kvs.annotations.Key;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;

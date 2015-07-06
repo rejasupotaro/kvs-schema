@@ -3,8 +3,8 @@ package com.example.android.kvs;
 import android.content.Context;
 
 import com.rejasupotaro.android.kvs.PrefSchema;
-import com.rejasupotaro.android.kvs.Key;
-import com.rejasupotaro.android.kvs.Table;
+import com.rejasupotaro.android.kvs.annotations.Key;
+import com.rejasupotaro.android.kvs.annotations.Table;
 
 @Table("example")
 public abstract class ExamplePrefsSchema extends PrefSchema {

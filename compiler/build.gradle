@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'bintray-release'
 
 targetCompatibility = JavaVersion.VERSION_1_7
 sourceCompatibility = JavaVersion.VERSION_1_7
@@ -18,64 +19,13 @@ sourceSets {
     }
 }
 
-group = 'com.rejasupotaro'
-archivesBaseName = 'kvs-schema-compiler'
-
-apply from: '../java-artifacts.gradle'
-
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId 'com.rejasupotaro'
-            artifactId 'kvs-schema-compiler'
-            version VERSION
-            artifact jar
-            artifact sourcesJar
-            artifact javadocJar
-            pom.withXml {
-                Node root = asNode()
-                root.appendNode('name', 'kvs-schema')
-                root.appendNode('description', 'Immutable code generation to store key-value data for Android')
-                root.appendNode('url', 'https://github.com/rejasupotaro/kvs-schema')
-
-                def issues = root.appendNode('issueManagement')
-                issues.appendNode('system', 'github')
-                issues.appendNode('url', 'https://github.com/rejasupotaro/kvs-schema/issues')
-
-                def scm = root.appendNode('scm')
-                scm.appendNode('url', 'https://github.com/rejasupotaro/kvs-schema')
-                scm.appendNode('connection', 'git@github.com:rejasupotaro/kvs-schema.git')
-                scm.appendNode('developerConnection', 'git@github.com:rejasupotaro/kvs-schema.git')
-
-                def license = root.appendNode('licenses').appendNode('license')
-                license.appendNode('name', 'MIT')
-                license.appendNode('url', 'https://raw.githubusercontent.com/rejasupotaro/kvs-schema/master/LICENSE.txt')
-                license.appendNode('distribution', 'repo')
-            }
-        }
-    }
-}
-
-def getBintrayUserProperty() {
-    return hasProperty('bintrayUser') ? bintrayUser : ""
-}
-
-def getBintrayApiKeyProperty() {
-    return hasProperty('bintrayApiKey') ? bintrayApiKey : ""
-}
-
-bintray {
-    user = bintrayUserProperty
-    key = bintrayApiKeyProperty
-    publications = ['mavenJava']
-    dryRun = false
-    pkg {
-        repo = 'maven'
-        name = 'kvs-schema-compiler'
-        licenses = ['MIT']
-    }
+publish {
+    userOrg = 'rejasupotaro'
+    groupId = 'com.rejasupotaro'
+    artifactId = 'kvs-schema-compiler'
+    version = VERSION
+    description = 'Immutable code generation to store key-value data for Android'
+    website = 'https://github.com/rejasupotaro/kvs-schema'
+    licences = ['MIT']
 }
 

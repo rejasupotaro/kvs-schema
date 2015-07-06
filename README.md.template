@@ -76,5 +76,5 @@ $ ./gradlew bumpPatch
 ### Upload library
 
 ```sh
-$ ./gradlew bintrayUpload
+$ ./gradlew bintrayUpload -PdryRun=false
 ```

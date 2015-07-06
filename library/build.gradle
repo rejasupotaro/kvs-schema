@@ -32,7 +32,6 @@ dependencies {
 
 group = 'com.rejasupotaro'
 archivesBaseName = 'kvs-schema'
-version = '0.1.5'
 
 apply from: '../android-artifacts.gradle'
 
@@ -44,7 +43,7 @@ publishing {
         mavenAndroid(MavenPublication) {
             groupId 'com.rejasupotaro'
             artifactId 'kvs-schema'
-            version version
+            version VERSION
             artifact androidJar
             artifact androidSourcesJar
             pom.withXml {

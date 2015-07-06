@@ -1,4 +1,4 @@
-package com.rejaupotaro.android.kvs.annotations;
+package com.rejasupotaro.android.kvs.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

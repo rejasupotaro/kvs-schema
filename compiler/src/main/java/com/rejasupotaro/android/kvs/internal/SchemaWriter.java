@@ -1,6 +1,6 @@
 package com.rejasupotaro.android.kvs.internal;
 
-import com.rejaupotaro.android.kvs.annotations.Key;
+import com.rejasupotaro.android.kvs.annotations.Key;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
@@ -102,8 +102,8 @@ public class SchemaWriter {
                 methodSpecs.add(createRemoveMethod(fieldName, keyName));
                 break;
             case "int":
-                methodSpecs.add(createGetterMethod(long.class, "int", fieldName, keyName));
-                methodSpecs.add(createSetterMethod(long.class, "int", fieldName, keyName));
+                methodSpecs.add(createGetterMethod(int.class, "int", fieldName, keyName));
+                methodSpecs.add(createSetterMethod(int.class, "int", fieldName, keyName));
                 methodSpecs.add(createHasMethod(fieldName, keyName));
                 methodSpecs.add(createRemoveMethod(fieldName, keyName));
                 break;
@@ -122,6 +122,7 @@ public class SchemaWriter {
     private MethodSpec createGetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
         String methodName = "get" + StringUtils.capitalize(fieldName);
         return MethodSpec.methodBuilder(methodName)
+                .addModifiers(Modifier.PUBLIC)
                 .returns(fieldType)
                 .addStatement("return $N($S, $N)", "get" + StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName)
                 .build();

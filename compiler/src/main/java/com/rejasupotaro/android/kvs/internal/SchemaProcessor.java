@@ -1,7 +1,7 @@
 package com.rejasupotaro.android.kvs.internal;
 
 import com.google.auto.service.AutoService;
-import com.rejaupotaro.android.kvs.annotations.Table;
+import com.rejasupotaro.android.kvs.annotations.Table;
 
 import java.io.IOException;
 import java.util.LinkedHashSet;

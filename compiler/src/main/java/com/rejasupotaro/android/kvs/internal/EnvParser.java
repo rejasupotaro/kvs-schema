@@ -1,8 +1,8 @@
 package com.rejasupotaro.android.kvs.internal;
 
+import com.rejasupotaro.android.kvs.Table;
 import com.rejasupotaro.android.kvs.internal.exceptions.TableNameDuplicateException;
 import com.rejasupotaro.android.kvs.internal.exceptions.TableNameIsNotDefinedException;
-import com.rejaupotaro.android.kvs.annotations.Table;
 
 import java.util.ArrayList;
 import java.util.List;

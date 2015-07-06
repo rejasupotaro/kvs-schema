@@ -4,7 +4,7 @@ KVS Schema
 Code generation library to manage key-value data for Android.
 
 How to use KVS Schema
-------------------
+----------
 
 
 ### Create Schema
@@ -55,3 +55,26 @@ compile 'com.rejasupotaro:kvs-schema-core:0.1.6'
 ### What's going on here?
 
 KVS Schema runs as a standard annotation processor in javac.
+
+For developers
+----------
+
+### Show version
+
+```sh
+$ ./gradlew version
+```
+
+### Bump version
+
+```sh
+$ ./gradlew bumpMajor
+$ ./gradlew bumpMinor
+$ ./gradlew bumpPatch
+```
+
+### Upload library
+
+```sh
+$ ./gradlew bintrayUpload
+```

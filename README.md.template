@@ -1,11 +1,13 @@
 KVS Schema
 ==========
 
-Code generation library to manage key-value data for Android.
+KVS Schema is a code generation library to manage key-value data for Android.
+
+I use SharedPreferences to save values. However, sometimes I lose key names and types.
+This library helps you to manage key-value data. You can find your pref file's structure at a glance.
 
 How to use KVS Schema
 ----------
-
 
 ### Create Schema
 
@@ -24,16 +26,16 @@ public abstract class ExamplePrefsSchema extends PrefSchema {
 ### Write And Read
 
 ```java
-ExamplePrefs examplePrefs = ExampleSchema.create(context);
-examplePrefs.putUserId(123);
-examplePrefs.putUserName("JAVA");
-examplePrefs.hasUserName(); // => true
-examplePrefs.getUserName(); // => JAVA
-examplePrefs.removeUserName();
-examplePrefs.hasUserName(); // => false
+ExamplePrefs prefs = ExamplePrefsSchema.create(context);
+prefs.putUserId(123);
+prefs.putUserName("Jack");
+prefs.hasUserName(); // => true
+prefs.getUserName(); // => Jack
+prefs.removeUserName();
+prefs.hasUserName(); // => false
 ```
 
-### Saved XML (when using PrefSchema)
+### Saved XML (using PrefSchema)
 
 ```xml
 root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml

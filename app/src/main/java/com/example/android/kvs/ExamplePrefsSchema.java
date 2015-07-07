@@ -10,10 +10,16 @@ import com.rejasupotaro.android.kvs.annotations.Table;
 public abstract class ExamplePrefsSchema extends PrefSchema {
     public static ExamplePrefs prefs;
 
-    @Key("user_id")
-    protected long userId = -1;
-    @Key("user_name")
-    protected String userName = "guest";
+    @Key("int_value")
+    protected int intValue;
+    @Key("long_value")
+    protected long longValue;
+    @Key("float_value")
+    protected float floatValue;
+    @Key("boolean_value")
+    protected boolean booleanValue;
+    @Key("string_value")
+    protected String stringValue = "guest";
 
     public static synchronized ExamplePrefs get(Context context) {
         if (prefs == null) {

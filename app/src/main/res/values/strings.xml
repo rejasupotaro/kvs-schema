@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">KVS Schema</string>
     <string name="action_settings">Settings</string>
-
+    <string name="type">Type</string>
+    <string name="value">Value</string>
+    <string name="_int">int</string>
+    <string name="_long">long</string>
+    <string name="_float">float</string>
+    <string name="_boolean">boolean</string>
+    <string name="string">String</string>
 </resources>

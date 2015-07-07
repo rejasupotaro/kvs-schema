@@ -10,10 +10,16 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class MainActivity extends ActionBarActivity {
-    @InjectView(R.id.user_id_text)
-    TextView userIdTextView;
-    @InjectView(R.id.user_name_text)
-    TextView userNameTextView;
+    @InjectView(R.id.int_value_text)
+    TextView intValueTextView;
+    @InjectView(R.id.long_value_text)
+    TextView longValueTextView;
+    @InjectView(R.id.float_value_text)
+    TextView floatValueTextView;
+    @InjectView(R.id.boolean_value_text)
+    TextView booleanValueTextView;
+    @InjectView(R.id.string_value_text)
+    TextView stringValueTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,35 +30,36 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setupViews() {
-        ExamplePrefs examplePrefs = ExamplePrefsSchema.get(this);
+        ExamplePrefs prefs = ExamplePrefsSchema.get(this);
 
-        long userId = examplePrefs.getUserId();
-        userIdTextView.setText("user_id: " + userId);
+        prefs.putIntValue(1);
+        long intValue = prefs.getIntValue();
+        intValueTextView.setText("" + intValue);
 
-        examplePrefs.putUserName("JAVA");
-        String text = examplePrefs.getUserName();
-        userNameTextView.setText("user_name: " + text);
+        prefs.putLongValue(1);
+        long longValue = prefs.getLongValue();
+        longValueTextView.setText("" + longValue);
+
+        prefs.putFloatValue(1.0f);
+        float floatValue = prefs.getFloatValue();
+        floatValueTextView.setText("" + floatValue);
+
+        prefs.putBooleanValue(true);
+        boolean booleanValue = prefs.getBooleanValue();
+        booleanValueTextView.setText("" + booleanValue);
+
+        stringValueTextView.setText(prefs.getStringValue());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 }

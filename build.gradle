@@ -20,3 +20,9 @@ apply from: "${project.rootDir}/gradle/version/version.gradle"
 ext {
     VERSION = ext.versionName()
 }
+
+task genReadMe << {
+    def template = file('README.md.template').text
+    def result = template.replaceAll("%%version%%", VERSION)
+    file("README.md").withWriter{ it << result }
+}

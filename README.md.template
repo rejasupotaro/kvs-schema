@@ -75,6 +75,12 @@ $ ./gradlew bumpMinor
 $ ./gradlew bumpPatch
 ```
 
+### Generate README
+
+```sh
+$ ./gradlew genReadMe
+```
+
 ### Upload library
 
 ```sh

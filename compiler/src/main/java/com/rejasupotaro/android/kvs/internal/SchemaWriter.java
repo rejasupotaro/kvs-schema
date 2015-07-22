@@ -29,7 +29,7 @@ public class SchemaWriter {
         ClassName superClassName = ClassName.get(model.getPackageName(), model.getOriginalClassName());
         classBuilder.superclass(superClassName);
 
-        List<FieldSpec> fieldSpecs = createFields();
+        List<FieldSpec> fieldSpecs = createFields(model.getTableName());
         for (FieldSpec fieldSpec : fieldSpecs) {
             classBuilder.addField(fieldSpec);
         }
@@ -48,9 +48,10 @@ public class SchemaWriter {
                 .writeTo(filer);
     }
 
-    private List<FieldSpec> createFields() {
+    private List<FieldSpec> createFields(String tableName) {
         List<FieldSpec> fieldSpecs = new ArrayList<>();
-        fieldSpecs.add(FieldSpec.builder(String.class, "tableName")
+        fieldSpecs.add(FieldSpec.builder(String.class, "TABLE_NAME", Modifier.PUBLIC, Modifier.FINAL)
+                .initializer("$S", tableName)
                 .build());
         return fieldSpecs;
     }
@@ -59,7 +60,7 @@ public class SchemaWriter {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.add(MethodSpec.constructorBuilder()
                 .addParameter(ClassName.get("android.content", "Context"), "context")
-                .addStatement("init(context, tableName)")
+                .addStatement("init(context, TABLE_NAME)")
                 .build());
         methodSpecs.add(MethodSpec.constructorBuilder()
                 .addParameter(ClassName.get("android.content", "SharedPreferences"), "prefs")

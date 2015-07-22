@@ -57,10 +57,10 @@ public class SchemaProcessorTest {
                                         "import java.lang.String;\n" +
                                         "\n" +
                                         "public final class ExamplePrefs extends ExamplePrefsSchema {\n" +
-                                        "  String tableName;\n" +
+                                        "  public final String TABLE_NAME = \"example\";\n" +
                                         "\n" +
                                         "  ExamplePrefs(Context context) {\n" +
-                                        "    init(context, tableName);\n" +
+                                        "    init(context, TABLE_NAME);\n" +
                                         "  }\n" +
                                         "\n" +
                                         "  ExamplePrefs(SharedPreferences prefs) {\n" +
@@ -146,6 +146,7 @@ public class SchemaProcessorTest {
                                         "  public void removeStringValue() {\n" +
                                         "    remove(\"string_value\");\n" +
                                         "  }\n" +
-                                        "}\n"));
+                                        "}\n"
+                        ));
     }
 }

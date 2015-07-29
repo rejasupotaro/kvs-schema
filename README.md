@@ -47,7 +47,7 @@ root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml
 
 ### Installation
 
-Add dependencies your build.gradle
+Add dependencies to your build.gradle
 
 ```groovy
 apt 'com.rejasupotaro:kvs-schema-compiler:1.1.0'

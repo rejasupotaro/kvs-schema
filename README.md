@@ -3,8 +3,8 @@ KVS Schema
 
 KVS Schema is a code generation library to manage key-value data for Android.
 
-I use SharedPreferences to save values. However, sometimes I lose key names and types.
-This library helps you to manage key-value data. You can find your pref file's structure at a glance.
+I use SharedPreferences to save values. However, sometimes I forget key names and types.
+This library helps you to manage key-value data. You can find the structure of pref file at a glance.
 
 How to use KVS Schema
 ----------
@@ -23,6 +23,8 @@ public abstract class ExamplePrefsSchema extends PrefSchema {
 }
 ```
 
+Class name should be *Schema for now.
+
 ### Write And Read
 
 ```java
@@ -35,7 +37,7 @@ prefs.removeUserName();
 prefs.hasUserName(); // => false
 ```
 
-### Saved XML (using PrefSchema)
+### Saved XML (the case of PrefSchema)
 
 ```xml
 root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml
@@ -47,7 +49,7 @@ root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml
 
 ### Installation
 
-Add dependencies to your build.gradle
+Add dependencies your build.gradle
 
 ```groovy
 apt 'com.rejasupotaro:kvs-schema-compiler:1.1.0'
@@ -73,6 +75,12 @@ $ ./gradlew version
 $ ./gradlew bumpMajor
 $ ./gradlew bumpMinor
 $ ./gradlew bumpPatch
+```
+
+### Generate README
+
+```sh
+$ ./gradlew genReadMe
 ```
 
 ### Upload library

@@ -12,6 +12,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 
+import static com.rejasupotaro.android.kvs.internal.StringUtils.isEmpty;
+
 public final class EnvParser {
     public static List<SchemaModel> parse(RoundEnvironment env, Elements elementUtils) {
         ArrayList<SchemaModel> models = new ArrayList<>();
@@ -29,7 +31,7 @@ public final class EnvParser {
         for (SchemaModel model : models) {
             String tableName = model.getTableName();
 
-            if (tableName == null || tableName.equals("")) {
+            if (isEmpty(tableName)) {
                 String originalClassName = model.getOriginalClassName();
                 throw new TableNameIsNotDefinedException(originalClassName + " should define table name");
             }

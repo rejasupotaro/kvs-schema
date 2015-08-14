@@ -30,16 +30,12 @@ public class SchemaWriter {
         classBuilder.superclass(superClassName);
 
         List<FieldSpec> fieldSpecs = createFields(model.getTableName());
-        for (FieldSpec fieldSpec : fieldSpecs) {
-            classBuilder.addField(fieldSpec);
-        }
+        classBuilder.addFields(fieldSpecs);
 
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.addAll(createConstructors());
-        methodSpecs.addAll(createMethods());
-        for (MethodSpec methodSpec : methodSpecs) {
-            classBuilder.addMethod(methodSpec);
-        }
+        methodSpecs.addAll(createMethods(model.getKeys()));
+        classBuilder.addMethods(methodSpecs);
 
         TypeSpec outClass = classBuilder.build();
 
@@ -48,7 +44,7 @@ public class SchemaWriter {
                 .writeTo(filer);
     }
 
-    private List<FieldSpec> createFields(String tableName) {
+    private static List<FieldSpec> createFields(String tableName) {
         List<FieldSpec> fieldSpecs = new ArrayList<>();
         fieldSpecs.add(FieldSpec.builder(String.class, "TABLE_NAME", Modifier.PUBLIC, Modifier.FINAL)
                 .initializer("$S", tableName)
@@ -56,29 +52,29 @@ public class SchemaWriter {
         return fieldSpecs;
     }
 
-    private List<MethodSpec> createConstructors() {
+    private static List<MethodSpec> createConstructors() {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.add(MethodSpec.constructorBuilder()
-                .addParameter(ClassName.get("android.content", "Context"), "context")
+                .addParameter(Classes.CONTEXT, "context")
                 .addStatement("init(context, TABLE_NAME)")
                 .build());
         methodSpecs.add(MethodSpec.constructorBuilder()
-                .addParameter(ClassName.get("android.content", "SharedPreferences"), "prefs")
+                .addParameter(Classes.PREFS, "prefs")
                 .addStatement("init(prefs)")
                 .build());
         return methodSpecs;
     }
 
-    private List<MethodSpec> createMethods() {
+    private static List<MethodSpec> createMethods(List<VariableElement> keys) {
         List<MethodSpec> methodSpecs = new ArrayList<>();
-        for (VariableElement element : model.getKeys()) {
+        for (VariableElement element : keys) {
             Key key = element.getAnnotation(Key.class);
             methodSpecs.addAll(createMethod(key, element));
         }
         return methodSpecs;
     }
 
-    private List<MethodSpec> createMethod(Key key, VariableElement element) {
+    private static List<MethodSpec> createMethod(Key key, VariableElement element) {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         String fieldTypeFqcn = element.asType().toString();
         String fieldName = element.getSimpleName().toString();
@@ -120,7 +116,7 @@ public class SchemaWriter {
         return methodSpecs;
     }
 
-    private MethodSpec createGetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
+    private static MethodSpec createGetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
         String methodName = "get" + StringUtils.capitalize(fieldName);
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
@@ -129,7 +125,7 @@ public class SchemaWriter {
                 .build();
     }
 
-    private MethodSpec createSetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
+    private static MethodSpec createSetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
         String methodName = "put" + StringUtils.capitalize(fieldName);
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
@@ -139,7 +135,7 @@ public class SchemaWriter {
                 .build();
     }
 
-    private MethodSpec createHasMethod(String fieldName, String keyName) {
+    private static MethodSpec createHasMethod(String fieldName, String keyName) {
         String methodName = "has" + StringUtils.capitalize(fieldName);
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
@@ -148,7 +144,7 @@ public class SchemaWriter {
                 .build();
     }
 
-    private MethodSpec createRemoveMethod(String fieldName, String keyName) {
+    private static MethodSpec createRemoveMethod(String fieldName, String keyName) {
         String methodName = "remove" + StringUtils.capitalize(fieldName);
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)

@@ -17,13 +17,11 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 
 @AutoService(Processor.class)
 public class SchemaProcessor extends AbstractProcessor {
     private Elements elementUtils;
-    private Types typeUtils;
     private Filer filer;
     private Messager messager;
 
@@ -43,7 +41,6 @@ public class SchemaProcessor extends AbstractProcessor {
     public synchronized void init(ProcessingEnvironment env) {
         super.init(env);
         this.elementUtils = env.getElementUtils();
-        this.typeUtils = env.getTypeUtils();
         this.filer = env.getFiler();
         this.messager = env.getMessager();
     }

@@ -9,4 +9,12 @@ public class StringUtilsTest {
     public void testCapitalize() {
         assertThat(StringUtils.capitalize("username")).isEqualTo("Username");
     }
+
+    @Test
+    public void testIsEmpty() {
+        assertThat(StringUtils.isEmpty(null)).isTrue();
+        assertThat(StringUtils.isEmpty("")).isTrue();
+        assertThat(StringUtils.isEmpty("hoge")).isFalse();
+    }
+
 }

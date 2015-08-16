@@ -9,4 +9,5 @@
     <string name="_float">float</string>
     <string name="_boolean">boolean</string>
     <string name="string">String</string>
+    <string name="string_set">String Set</string>
 </resources>

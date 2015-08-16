@@ -25,7 +25,7 @@ public abstract class ExamplePrefsSchema extends PrefSchema {
 
 Class name should be *Schema for now.
 
-### Write And Read
+### Read and Write
 
 ```java
 ExamplePrefs prefs = ExamplePrefsSchema.create(context);
@@ -36,6 +36,17 @@ prefs.getUserName(); // => Jack
 prefs.removeUserName();
 prefs.hasUserName(); // => false
 ```
+
+### Supported types
+
+kvs-schema supports these types for now.
+
+- boolean
+- String
+- float
+- int
+- long
+- Set<String>
 
 ### Saved XML (the case of PrefSchema)
 

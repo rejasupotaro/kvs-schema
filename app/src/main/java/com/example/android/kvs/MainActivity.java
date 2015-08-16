@@ -6,6 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -20,6 +23,8 @@ public class MainActivity extends ActionBarActivity {
     TextView booleanValueTextView;
     @InjectView(R.id.string_value_text)
     TextView stringValueTextView;
+    @InjectView(R.id.string_set_text)
+    TextView stringSetTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +35,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setupViews() {
-        ExamplePrefs prefs = ExamplePrefsSchema.get(this);
+        ExamplePrefs prefs = ExamplePrefsSchema.create(this);
 
         prefs.putIntValue(1);
         long intValue = prefs.getIntValue();
@@ -49,6 +54,14 @@ public class MainActivity extends ActionBarActivity {
         booleanValueTextView.setText("" + booleanValue);
 
         stringValueTextView.setText(prefs.getStringValue());
+
+        prefs.putStringSet(new HashSet<String>() {{
+            add("JAVA");
+            add("+");
+            add("YOU");
+        }});
+        Set<String> stringSet = prefs.getStringSet();
+        stringSetTextView.setText(stringSet.toString());
     }
 
     @Override

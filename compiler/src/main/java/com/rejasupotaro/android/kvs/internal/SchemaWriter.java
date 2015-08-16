@@ -5,12 +5,14 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Modifier;
@@ -55,11 +57,11 @@ public class SchemaWriter {
     private static List<MethodSpec> createConstructors() {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.add(MethodSpec.constructorBuilder()
-                .addParameter(Classes.CONTEXT, "context")
+                .addParameter(ClassName.get("android.content", "Context"), "context")
                 .addStatement("init(context, TABLE_NAME)")
                 .build());
         methodSpecs.add(MethodSpec.constructorBuilder()
-                .addParameter(Classes.PREFS, "prefs")
+                .addParameter(ClassName.get("android.content", "SharedPreferences"), "prefs")
                 .addStatement("init(prefs)")
                 .build());
         return methodSpecs;
@@ -76,7 +78,6 @@ public class SchemaWriter {
 
     private static List<MethodSpec> createMethod(Key key, VariableElement element) {
         List<MethodSpec> methodSpecs = new ArrayList<>();
-        String fieldTypeFqcn = element.asType().toString();
         String fieldName = element.getSimpleName().toString();
         String keyName = key.value();
 
@@ -111,7 +112,14 @@ public class SchemaWriter {
             methodSpecs.add(createSetterMethod(typeName, "long", fieldName, keyName));
             methodSpecs.add(createHasMethod(fieldName, keyName));
             methodSpecs.add(createRemoveMethod(fieldName, keyName));
+        } else if (t.equals(ParameterizedTypeName.get(Set.class, String.class))) {
+            TypeName typeName = ParameterizedTypeName.get(Set.class, String.class);
+            methodSpecs.add(createGetterMethod(typeName, "StringSet", fieldName, keyName));
+            methodSpecs.add(createSetterMethod(typeName, "StringSet", fieldName, keyName));
+            methodSpecs.add(createHasMethod(fieldName, keyName));
+            methodSpecs.add(createRemoveMethod(fieldName, keyName));
         } else {
+            String fieldTypeFqcn = element.asType().toString();
             throw new IllegalArgumentException(fieldTypeFqcn + " is not supported");
         }
 

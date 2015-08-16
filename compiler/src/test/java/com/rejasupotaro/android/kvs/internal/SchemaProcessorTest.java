@@ -13,35 +13,41 @@ public class SchemaProcessorTest {
     @Test
     public void testProcessor() {
         JavaFileObject examplePrefsSchema = JavaFileObjects
-                .forSourceString("ExamplePrefsSchema", "package com.example.android.kvs;"
-                        + "import android.content.Context;\n" +
-                        "\n" +
-                        "import com.rejasupotaro.android.kvs.PrefSchema;\n" +
-                        "import com.rejasupotaro.android.kvs.annotations.Key;\n" +
-                        "import com.rejasupotaro.android.kvs.annotations.Table;\n" +
-                        "\n" +
-                        "@Table(\"example\")\n" +
-                        "public abstract class ExamplePrefsSchema extends PrefSchema {\n" +
-                        "    public static ExamplePrefs prefs;\n" +
-                        "\n" +
-                        "    @Key(\"int_value\")\n" +
-                        "    protected int intValue;\n" +
-                        "    @Key(\"long_value\")\n" +
-                        "    protected long longValue;\n" +
-                        "    @Key(\"float_value\")\n" +
-                        "    protected float floatValue;\n" +
-                        "    @Key(\"boolean_value\")\n" +
-                        "    protected boolean booleanValue;\n" +
-                        "    @Key(\"string_value\")\n" +
-                        "    protected String stringValue = \"guest\";\n" +
-                        "\n" +
-                        "    public static synchronized ExamplePrefs get(Context context) {\n" +
-                        "        if (prefs == null) {\n" +
-                        "            prefs = new ExamplePrefs(context);\n" +
-                        "        }\n" +
-                        "        return prefs;\n" +
-                        "    }\n" +
-                        "}\n");
+                .forSourceString("ExamplePrefsSchema",
+                        "package com.example.android.kvs;\n" +
+                                "\n" +
+                                "import android.content.Context;\n" +
+                                "\n" +
+                                "import com.rejasupotaro.android.kvs.PrefSchema;\n" +
+                                "import com.rejasupotaro.android.kvs.annotations.Key;\n" +
+                                "import com.rejasupotaro.android.kvs.annotations.Table;\n" +
+                                "\n" +
+                                "import java.util.Set;\n" +
+                                "\n" +
+                                "@Table(\"example\")\n" +
+                                "public abstract class ExamplePrefsSchema extends PrefSchema {\n" +
+                                "    public static ExamplePrefs prefs;\n" +
+                                "\n" +
+                                "    @Key(\"int_value\")\n" +
+                                "    protected int intValue;\n" +
+                                "    @Key(\"long_value\")\n" +
+                                "    protected long longValue;\n" +
+                                "    @Key(\"float_value\")\n" +
+                                "    protected float floatValue;\n" +
+                                "    @Key(\"boolean_value\")\n" +
+                                "    protected boolean booleanValue;\n" +
+                                "    @Key(\"string_value\")\n" +
+                                "    protected String stringValue = \"guest\";\n" +
+                                "    @Key(\"string_set\")\n" +
+                                "    protected Set<String> stringSet;\n" +
+                                "\n" +
+                                "    public static synchronized ExamplePrefs create(Context context) {\n" +
+                                "        if (prefs == null) {\n" +
+                                "            prefs = new ExamplePrefs(context);\n" +
+                                "        }\n" +
+                                "        return prefs;\n" +
+                                "    }\n" +
+                                "}\n");
 
         assert_().about(javaSource())
                 .that(examplePrefsSchema)
@@ -55,6 +61,7 @@ public class SchemaProcessorTest {
                                         "import android.content.Context;\n" +
                                         "import android.content.SharedPreferences;\n" +
                                         "import java.lang.String;\n" +
+                                        "import java.util.Set;\n" +
                                         "\n" +
                                         "public final class ExamplePrefs extends ExamplePrefsSchema {\n" +
                                         "  public final String TABLE_NAME = \"example\";\n" +
@@ -145,6 +152,22 @@ public class SchemaProcessorTest {
                                         "\n" +
                                         "  public void removeStringValue() {\n" +
                                         "    remove(\"string_value\");\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  public Set<String> getStringSet() {\n" +
+                                        "    return getStringSet(\"string_set\", stringSet);\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  public void putStringSet(Set<String> stringSet) {\n" +
+                                        "    putStringSet(\"string_set\", stringSet);\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  public boolean hasStringSet() {\n" +
+                                        "    return has(\"string_set\");\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  public void removeStringSet() {\n" +
+                                        "    remove(\"string_set\");\n" +
                                         "  }\n" +
                                         "}\n"
                         ));

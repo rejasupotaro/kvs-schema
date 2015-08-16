@@ -53,4 +53,12 @@
     <TextView
         android:id="@+id/string_value_text"
         style="@style/GridCell" />
+
+    <TextView
+        style="@style/GridCell"
+        android:text="@string/string" />
+
+    <TextView
+        android:id="@+id/string_set_text"
+        style="@style/GridCell" />
 </GridLayout>

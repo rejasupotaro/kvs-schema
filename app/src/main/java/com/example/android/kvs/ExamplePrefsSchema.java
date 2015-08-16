@@ -21,7 +21,7 @@ public abstract class ExamplePrefsSchema extends PrefSchema {
     @Key("string_value")
     protected String stringValue = "guest";
 
-    public static synchronized ExamplePrefs get(Context context) {
+    public static synchronized ExamplePrefs create(Context context) {
         if (prefs == null) {
             prefs = new ExamplePrefs(context);
         }

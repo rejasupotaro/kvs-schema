@@ -5,10 +5,10 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,44 +79,46 @@ public class SchemaWriter {
         String fieldTypeFqcn = element.asType().toString();
         String fieldName = element.getSimpleName().toString();
         String keyName = key.value();
-        switch (fieldTypeFqcn) {
-            case "boolean":
-                methodSpecs.add(createGetterMethod(boolean.class, "boolean", fieldName, keyName));
-                methodSpecs.add(createSetterMethod(boolean.class, "boolean", fieldName, keyName));
-                methodSpecs.add(createHasMethod(fieldName, keyName));
-                methodSpecs.add(createRemoveMethod(fieldName, keyName));
-                break;
-            case Classes.STRING:
-                methodSpecs.add(createGetterMethod(String.class, "String", fieldName, keyName));
-                methodSpecs.add(createSetterMethod(String.class, "String", fieldName, keyName));
-                methodSpecs.add(createHasMethod(fieldName, keyName));
-                methodSpecs.add(createRemoveMethod(fieldName, keyName));
-                break;
-            case "float":
-                methodSpecs.add(createGetterMethod(float.class, "float", fieldName, keyName));
-                methodSpecs.add(createSetterMethod(float.class, "float", fieldName, keyName));
-                methodSpecs.add(createHasMethod(fieldName, keyName));
-                methodSpecs.add(createRemoveMethod(fieldName, keyName));
-                break;
-            case "int":
-                methodSpecs.add(createGetterMethod(int.class, "int", fieldName, keyName));
-                methodSpecs.add(createSetterMethod(int.class, "int", fieldName, keyName));
-                methodSpecs.add(createHasMethod(fieldName, keyName));
-                methodSpecs.add(createRemoveMethod(fieldName, keyName));
-                break;
-            case "long":
-                methodSpecs.add(createGetterMethod(long.class, "long", fieldName, keyName));
-                methodSpecs.add(createSetterMethod(long.class, "long", fieldName, keyName));
-                methodSpecs.add(createHasMethod(fieldName, keyName));
-                methodSpecs.add(createRemoveMethod(fieldName, keyName));
-                break;
-            default:
-                throw new IllegalArgumentException(fieldTypeFqcn + " is not supported");
+
+        TypeName t = TypeName.get(element.asType());
+        if (t.equals(TypeName.BOOLEAN)) {
+            TypeName typeName = TypeName.BOOLEAN;
+            methodSpecs.add(createGetterMethod(typeName, "boolean", fieldName, keyName));
+            methodSpecs.add(createSetterMethod(typeName, "boolean", fieldName, keyName));
+            methodSpecs.add(createHasMethod(fieldName, keyName));
+            methodSpecs.add(createRemoveMethod(fieldName, keyName));
+        } else if (t.equals(ClassName.get(String.class))) {
+            TypeName typeName = ClassName.get(String.class);
+            methodSpecs.add(createGetterMethod(typeName, "String", fieldName, keyName));
+            methodSpecs.add(createSetterMethod(typeName, "String", fieldName, keyName));
+            methodSpecs.add(createHasMethod(fieldName, keyName));
+            methodSpecs.add(createRemoveMethod(fieldName, keyName));
+        } else if (t.equals(TypeName.FLOAT)) {
+            TypeName typeName = TypeName.FLOAT;
+            methodSpecs.add(createGetterMethod(typeName, "float", fieldName, keyName));
+            methodSpecs.add(createSetterMethod(typeName, "float", fieldName, keyName));
+            methodSpecs.add(createHasMethod(fieldName, keyName));
+            methodSpecs.add(createRemoveMethod(fieldName, keyName));
+        } else if (t.equals(TypeName.INT)) {
+            TypeName typeName = TypeName.INT;
+            methodSpecs.add(createGetterMethod(typeName, "int", fieldName, keyName));
+            methodSpecs.add(createSetterMethod(typeName, "int", fieldName, keyName));
+            methodSpecs.add(createHasMethod(fieldName, keyName));
+            methodSpecs.add(createRemoveMethod(fieldName, keyName));
+        } else if (t.equals(TypeName.LONG)) {
+            TypeName typeName = TypeName.LONG;
+            methodSpecs.add(createGetterMethod(typeName, "long", fieldName, keyName));
+            methodSpecs.add(createSetterMethod(typeName, "long", fieldName, keyName));
+            methodSpecs.add(createHasMethod(fieldName, keyName));
+            methodSpecs.add(createRemoveMethod(fieldName, keyName));
+        } else {
+            throw new IllegalArgumentException(fieldTypeFqcn + " is not supported");
         }
+
         return methodSpecs;
     }
 
-    private static MethodSpec createGetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
+    private static MethodSpec createGetterMethod(TypeName fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
         String methodName = "get" + StringUtils.capitalize(fieldName);
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
@@ -125,7 +127,7 @@ public class SchemaWriter {
                 .build();
     }
 
-    private static MethodSpec createSetterMethod(Type fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
+    private static MethodSpec createSetterMethod(TypeName fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
         String methodName = "put" + StringUtils.capitalize(fieldName);
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)

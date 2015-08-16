@@ -30,7 +30,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setupViews() {
-        ExamplePrefs prefs = ExamplePrefsSchema.get(this);
+        ExamplePrefs prefs = ExamplePrefsSchema.create(this);
 
         prefs.putIntValue(1);
         long intValue = prefs.getIntValue();

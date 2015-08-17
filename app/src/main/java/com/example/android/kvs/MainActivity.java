@@ -9,28 +9,28 @@ import android.widget.TextView;
 import java.util.HashSet;
 import java.util.Set;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class MainActivity extends ActionBarActivity {
-    @InjectView(R.id.int_value_text)
+    @Bind(R.id.int_value_text)
     TextView intValueTextView;
-    @InjectView(R.id.long_value_text)
+    @Bind(R.id.long_value_text)
     TextView longValueTextView;
-    @InjectView(R.id.float_value_text)
+    @Bind(R.id.float_value_text)
     TextView floatValueTextView;
-    @InjectView(R.id.boolean_value_text)
+    @Bind(R.id.boolean_value_text)
     TextView booleanValueTextView;
-    @InjectView(R.id.string_value_text)
+    @Bind(R.id.string_value_text)
     TextView stringValueTextView;
-    @InjectView(R.id.string_set_text)
+    @Bind(R.id.string_set_text)
     TextView stringSetTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         setupViews();
     }
 

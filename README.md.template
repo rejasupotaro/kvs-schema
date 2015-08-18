@@ -6,12 +6,14 @@ KVS Schema is a code generation library to manage key-value data for Android.
 I use SharedPreferences to save values. However, sometimes I forget key names and types.
 This library helps you to manage key-value data. You can find the structure of pref file at a glance.
 
-Even if you have already used SharedPreferences directly, migration is easy because kvs-schema simply maps the structure of SharedPreferences.
+Even if you have already used SharedPreferences directly, migration is easy because KVS Schema simply maps the structure of SharedPreferences.
 
-How to use KVS Schema
+How to use
 ----------
 
 ### Create Schema
+
+First, create a schema class. Class name should be `*Schema`.
 
 ```java
 @Table("example")
@@ -25,9 +27,11 @@ public abstract class ExamplePrefsSchema extends PrefSchema {
 }
 ```
 
-Class name should be *Schema.
+rvalues become default value. For example, "guest" is assigned when `user_name` is not exist in `example` prefs.
 
 ### Read and Write
+
+Annotation processor generates `put*`, `get*`, `has*` and `remove*` methods. You can use these methods.
 
 ```java
 ExamplePrefs prefs = ExamplePrefsSchema.create(context);
@@ -71,20 +75,16 @@ apt 'com.rejasupotaro:kvs-schema-compiler:%%version%%'
 compile 'com.rejasupotaro:kvs-schema:%%version%%'
 ```
 
-### What's going on here?
-
-KVS Schema runs as a standard annotation processor in javac.
-
 For developers
 ----------
 
-### Show version
+**Show version**
 
 ```sh
 $ ./gradlew version
 ```
 
-### Bump version
+**Bump version**
 
 ```sh
 $ ./gradlew bumpMajor
@@ -92,13 +92,13 @@ $ ./gradlew bumpMinor
 $ ./gradlew bumpPatch
 ```
 
-### Generate README
+**Generate README**
 
 ```sh
 $ ./gradlew genReadMe
 ```
 
-### Upload library
+**Upload library**
 
 ```sh
 $ ./gradlew bintrayUpload -PdryRun=false

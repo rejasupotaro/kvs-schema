@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 public class SharedPreferencesTable {
+    private static final String[] HEADER = {"Key", "Type"};
+
     private String name;
     private List<Row> rows = new ArrayList<>();
 
@@ -42,8 +44,9 @@ public class SharedPreferencesTable {
 
     @Override
     public String toString() {
-        String[] header = {name, ""};
-        return FlipTable.of(header, toArray(rows));
+        return String.format("\n\n  name: %s\n%s\n",
+                name,
+                FlipTable.of(HEADER, toArray(rows)));
     }
 
     public static class Row {

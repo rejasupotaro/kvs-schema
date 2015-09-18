@@ -11,24 +11,23 @@ import com.rejasupotaro.android.kvs.SharedPreferencesInfo;
 import com.rejasupotaro.android.kvs.SharedPreferencesTable;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends ActionBarActivity {
-    @Bind(R.id.int_value_text)
-    TextView intValueTextView;
     @Bind(R.id.long_value_text)
-    TextView longValueTextView;
-    @Bind(R.id.float_value_text)
-    TextView floatValueTextView;
-    @Bind(R.id.boolean_value_text)
-    TextView booleanValueTextView;
+    TextView userIdTextView;
     @Bind(R.id.string_value_text)
-    TextView stringValueTextView;
-    @Bind(R.id.string_set_text)
-    TextView stringSetTextView;
+    TextView userNameTextView;
+    @Bind(R.id.int_value_text)
+    TextView userAgeTextView;
+    @Bind(R.id.boolean_value_text)
+    TextView guestFlagTextView;
+    @Bind(R.id.string_set_value_text)
+    TextView searchHistoryTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,36 +38,33 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setupViews() {
-        ExamplePrefs prefs = ExamplePrefsSchema.create(this);
+        ExamplePrefs prefs = ExamplePrefsSchema.get(this);
 
-        prefs.putIntValue(1);
-        long intValue = prefs.getIntValue();
-        intValueTextView.setText("" + intValue);
+        prefs.putUserId(1L);
+        long id = prefs.getUserId();
+        userIdTextView.setText("" + id);
 
-        prefs.putLongValue(1);
-        long longValue = prefs.getLongValue();
-        longValueTextView.setText("" + longValue);
+        prefs.putGuestFlag(false);
+        boolean isGuest = prefs.getGuestFlag();
+        guestFlagTextView.setText("" + isGuest);
 
-        prefs.putFloatValue(1.0f);
-        float floatValue = prefs.getFloatValue();
-        floatValueTextView.setText("" + floatValue);
+        prefs.putUserName("rejasupotaro");
+        userNameTextView.setText(prefs.getUserName());
 
-        prefs.putBooleanValue(true);
-        boolean booleanValue = prefs.getBooleanValue();
-        booleanValueTextView.setText("" + booleanValue);
+        prefs.putUserAge(26);
+        long age = prefs.getUserAge();
+        userAgeTextView.setText("" + age);
 
-        stringValueTextView.setText(prefs.getStringValue());
-
-        prefs.putStringSet(new HashSet<String>() {{
-            add("JAVA");
-            add("+");
-            add("YOU");
+        prefs.putSearchHistory(new HashSet<String>() {{
+            add("turkey gravy");
+            add("pork stake");
+            add("banana cake");
         }});
-        Set<String> stringSet = prefs.getStringSet();
-        stringSetTextView.setText(stringSet.toString());
+        Set<String> languages = prefs.getSearchHistory();
+        searchHistoryTextView.setText(languages.toString());
 
-        for (SharedPreferencesTable table : SharedPreferencesInfo.getAllPrefsAsTable(this)) {
-            Log.d("DEBUG", "");
+        List<SharedPreferencesTable> tables = SharedPreferencesInfo.getAllPrefsAsTable(this);
+        for (SharedPreferencesTable table : tables) {
             Log.d("DEBUG", table.toString());
         }
     }

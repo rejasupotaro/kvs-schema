@@ -12,20 +12,18 @@ import java.util.Set;
 public abstract class ExamplePrefsSchema extends PrefSchema {
     public static ExamplePrefs prefs;
 
-    @Key("int_value")
-    protected int intValue;
-    @Key("long_value")
-    protected long longValue;
-    @Key("float_value")
-    protected float floatValue;
-    @Key("boolean_value")
-    protected boolean booleanValue;
-    @Key("string_value")
-    protected String stringValue = "guest";
-    @Key("string_set")
-    protected Set<String> stringSet;
+    @Key("user_id")
+    long userId;
+    @Key("user_name")
+    String userName = "guest";
+    @Key("user_age")
+    int userAge;
+    @Key("guest_flag")
+    boolean guestFlag;
+    @Key("search_history")
+    Set<String> searchHistory;
 
-    public static synchronized ExamplePrefs create(Context context) {
+    public static synchronized ExamplePrefs get(Context context) {
         if (prefs == null) {
             prefs = new ExamplePrefs(context);
         }

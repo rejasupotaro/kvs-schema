@@ -2,9 +2,13 @@ package com.example.android.kvs;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.rejasupotaro.android.kvs.SharedPreferencesInfo;
+import com.rejasupotaro.android.kvs.SharedPreferencesTable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -62,6 +66,11 @@ public class MainActivity extends ActionBarActivity {
         }});
         Set<String> stringSet = prefs.getStringSet();
         stringSetTextView.setText(stringSet.toString());
+
+        for (SharedPreferencesTable table : SharedPreferencesInfo.getAllPrefsAsTable(this)) {
+            Log.d("DEBUG", "");
+            Log.d("DEBUG", table.toString());
+        }
     }
 
     @Override

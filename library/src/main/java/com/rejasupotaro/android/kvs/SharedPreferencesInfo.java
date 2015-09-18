@@ -4,46 +4,45 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SharedPreferencesInfo {
-
-    public static void dump(Context context) {
-        List<SharedPreferences> sharedPreferencesList = getAllSharedPreferences(context);
-
-        for (SharedPreferences sharedPreferences : sharedPreferencesList) {
-            for (Map.Entry<String, ?> entry : sharedPreferences.getAll().entrySet()) {
-                String keyName = entry.getKey();
-                String valueType = entry.getValue().getClass().getSimpleName();
-                Log.d("DEBUG", String.format("%s %s", keyName, valueType));
-            }
-        }
-    }
-
-    public static List<SharedPreferences> getAllSharedPreferences(Context context) {
-        File sharedPrefsDir = getSharedPrefsDir(context);
-        File[] sharedPrefsFiles = sharedPrefsDir.listFiles();
-        if (sharedPrefsFiles == null || sharedPrefsFiles.length == 0) {
+    public static List<SharedPreferencesTable> getAllPrefsAsTable(Context context) {
+        HashMap<String, SharedPreferences> sharedPreferencesMap = getAllPrefs(context);
+        if (sharedPreferencesMap.isEmpty()) {
             return new ArrayList<>();
         }
 
-        List<SharedPreferences> sharedPreferencesList = new ArrayList<>();
-        for (File file : sharedPrefsFiles) {
-            String filenameWithoutExtension = file.getName().split("\\.(?=[^\\.]+$)")[0];
-            Log.e("DEBUG", filenameWithoutExtension);
-
-            SharedPreferences prefs = context.getSharedPreferences(filenameWithoutExtension, Context.MODE_PRIVATE);
-            sharedPreferencesList.add(prefs);
+        List<SharedPreferencesTable> sharedPreferencesTables = new ArrayList<>();
+        for (Map.Entry<String, SharedPreferences> entry : sharedPreferencesMap.entrySet()) {
+            SharedPreferencesTable sharedPreferencesTable = new SharedPreferencesTable(entry.getKey(), entry.getValue());
+            sharedPreferencesTables.add(sharedPreferencesTable);
         }
-        return sharedPreferencesList;
+        return sharedPreferencesTables;
     }
 
-    public static File getSharedPrefsDir(Context context) {
+    public static HashMap<String, SharedPreferences> getAllPrefs(Context context) {
+        File sharedPrefsDir = getPrefsDir(context);
+        File[] sharedPrefsFiles = sharedPrefsDir.listFiles();
+        if (sharedPrefsFiles == null || sharedPrefsFiles.length == 0) {
+            return new HashMap<>();
+        }
+
+        HashMap<String, SharedPreferences> sharedPreferencesMap = new HashMap<>();
+        for (File file : sharedPrefsFiles) {
+            String filenameWithoutExtension = file.getName().split("\\.(?=[^\\.]+$)")[0];
+            SharedPreferences prefs = context.getSharedPreferences(filenameWithoutExtension, Context.MODE_PRIVATE);
+            sharedPreferencesMap.put(filenameWithoutExtension, prefs);
+        }
+        return sharedPreferencesMap;
+    }
+
+    public static File getPrefsDir(Context context) {
         return new File(getApplicationDataDir(context), "/shared_prefs");
     }
 

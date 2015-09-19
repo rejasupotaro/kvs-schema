@@ -116,13 +116,13 @@ You can see what kind of data is saved in your app like below.
 ```
    name: com.example.android.kvs_preferences
    path: /data/data/com.example.android.kvs/shared_prefs/com.example.android.kvs_preferences.xml
- ╔═══════════╤═════════╗
- ║ Key       │ Type    ║
- ╠═══════════╪═════════╣
- ║ user_name │ String  ║
- ╟───────────┼─────────╢
- ║ user_id   │ Long    ║
- ╚═══════════╧═════════╝
+ ╔═══════════╤══════════════╤════════╗
+ ║ Key       │ Value        │ Type   ║
+ ╠═══════════╪══════════════╪════════╣
+ ║ user_name │ rejasupotaro │ String ║
+ ╟───────────┼──────────────┼────────╢
+ ║ user_id   │ 1            │ String ║
+ ╚═══════════╧══════════════╧════════╝
  ```
 
 For developers

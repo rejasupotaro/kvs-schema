@@ -11,11 +11,15 @@ import java.util.Map;
 public class SharedPreferencesTable {
     private static final String[] HEADER = {"Key", "Type"};
 
+    private SharedPreferences sharedPreferences;
     private String name;
+    private String path;
     private List<Row> rows = new ArrayList<>();
 
-    public SharedPreferencesTable(String name, SharedPreferences sharedPreferences) {
+    public SharedPreferencesTable(SharedPreferences sharedPreferences, String name, String path) {
+        this.sharedPreferences = sharedPreferences;
         this.name = name;
+        this.path = path;
 
         for (Map.Entry<String, ?> entry : sharedPreferences.getAll().entrySet()) {
             String keyName = entry.getKey();
@@ -24,8 +28,16 @@ public class SharedPreferencesTable {
         }
     }
 
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public String getPath() {
+        return path;
     }
 
     public List<Row> getRows() {
@@ -44,8 +56,9 @@ public class SharedPreferencesTable {
 
     @Override
     public String toString() {
-        return String.format("\n\n  name: %s\n%s\n",
+        return String.format("\n\n  name: %s\n  path: %s\n%s\n",
                 name,
+                path,
                 FlipTable.of(HEADER, toArray(rows)));
     }
 

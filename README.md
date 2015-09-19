@@ -105,16 +105,17 @@ public abstract class ExamplePrefsSchema extends PrefSchema {
 In addition, SharedPreferencesInfo may help you to migrate existing app. You can get existing SharedPreferences through `SharedPreferencesInfo.getAllPrefsAsTable`.
 
 ```java
-List<SharedPreferencesTable> tables = SharedPreferencesInfo.getAllPrefsAsTable(this);
+List<SharedPreferencesTable> tables = SharedPreferencesInfo.getAll(this);
         for (SharedPreferencesTable table : tables) {
             Log.d("DEBUG", table.toString());
         }
 ```
 
-You can see what data is saved in your app.
+You can see what kind of data is saved in your app like below.
 
 ```
    name: com.example.android.kvs_preferences
+   path: /data/data/com.example.android.kvs/shared_prefs/com.example.android.kvs_preferences.xml
  ╔═══════════╤═════════╗
  ║ Key       │ Type    ║
  ╠═══════════╪═════════╣

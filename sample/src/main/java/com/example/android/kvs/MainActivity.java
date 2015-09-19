@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity {
         Set<String> languages = prefs.getSearchHistory();
         searchHistoryTextView.setText(languages.toString());
 
-        List<SharedPreferencesTable> tables = SharedPreferencesInfo.getAllPrefsAsTable(this);
+        List<SharedPreferencesTable> tables = SharedPreferencesInfo.getAll(this);
         for (SharedPreferencesTable table : tables) {
             Log.d("DEBUG", table.toString());
         }

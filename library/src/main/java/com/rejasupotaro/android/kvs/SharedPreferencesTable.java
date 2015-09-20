@@ -38,7 +38,7 @@ public class SharedPreferencesTable {
         for (Map.Entry<String, ?> entry : sharedPreferences.getAll().entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue().toString();
-            String type = value.getClass().getSimpleName();
+            String type = entry.getValue().getClass().getSimpleName();
 
             data[index][0] = key;
             data[index][1] = value;

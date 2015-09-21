@@ -6,8 +6,6 @@ KVS Schema is a code generation library to manage key-value data for Android.
 I use SharedPreferences to save values. However, sometimes I forget key names and types.
 This library helps you to manage key-value data. You can find the structure of pref file at a glance.
 
-Even if you have already used SharedPreferences directly, migration is easy because KVS Schema simply maps the structure of SharedPreferences.
-
 How to use
 ----------
 
@@ -74,6 +72,58 @@ Add dependencies your build.gradle
 apt 'com.rejasupotaro:kvs-schema-compiler:%%version%%'
 compile 'com.rejasupotaro:kvs-schema:%%version%%'
 ```
+
+Migration
+----------
+
+Even if you have already used SharedPreferences directly, migration is easy. KVS Schema simply maps the structure of SharedPreferences.
+
+For example, if you are using default SharedPreferences like below,
+
+```java
+prefs = PreferenceManager.getDefaultSharedPreferences(this);
+Editor editor = prefs.edit();
+editor.putString("user_id", "1");
+editor.putString("user_name", "rejasupotaro");
+editor.apply();
+```
+
+your data is saved in `path/to/app/shared_prefs/package_name_preferences.xml`. The schema becomes below.
+
+```java
+@Table("package_name_preferences")
+public abstract class ExamplePrefsSchema extends PrefSchema {
+    public static ExamplePrefs prefs;
+
+    @Key("user_id")
+    int userId;
+    @Key("user_name")
+    String userName;
+}
+```
+
+In addition, SharedPreferencesInfo may help you to migrate existing app. You can get existing SharedPreferences through `SharedPreferencesInfo.getAllPrefsAsTable`.
+
+```java
+List<SharedPreferencesTable> tables = SharedPreferencesInfo.getAll(this);
+        for (SharedPreferencesTable table : tables) {
+            Log.d("DEBUG", table.toString());
+        }
+```
+
+You can see what kind of data is saved in your app like below.
+
+```
+   name: com.example.android.kvs_preferences
+   path: /data/data/com.example.android.kvs/shared_prefs/com.example.android.kvs_preferences.xml
+ ╔═══════════╤══════════════╤════════╗
+ ║ Key       │ Value        │ Type   ║
+ ╠═══════════╪══════════════╪════════╣
+ ║ user_name │ rejasupotaro │ String ║
+ ╟───────────┼──────────────┼────────╢
+ ║ user_id   │ 1            │ String ║
+ ╚═══════════╧══════════════╧════════╝
+ ```
 
 For developers
 ----------

@@ -23,89 +23,77 @@ public class ExamplePrefsTest {
     @Before
     public void setup() {
         Context context = InstrumentationRegistry.getTargetContext();
-        prefs = ExamplePrefsSchema.create(context);
+        prefs = ExamplePrefsSchema.get(context);
     }
 
     @Test
-    public void checkWhetherTypeIntWorks() {
+    public void checkTypeLongWorks() {
         prefs.clear();
-        assertFalse(prefs.hasIntValue());
+        assertFalse(prefs.hasUserId());
 
-        prefs.putIntValue(999);
-        assertTrue(prefs.hasIntValue());
-        assertThat(prefs.getIntValue(), is(999));
+        prefs.putUserId(99999999999L);
+        assertTrue(prefs.hasUserId());
+        assertThat(prefs.getUserId(), is(99999999999L));
 
-        prefs.removeIntValue();
-        assertFalse(prefs.hasIntValue());
+        prefs.removeUserId();
+        assertFalse(prefs.hasUserId());
     }
 
     @Test
-    public void checkWhetherTypeLongWorks() {
+    public void checkTypeStringWorks() {
         prefs.clear();
-        assertFalse(prefs.hasLongValue());
+        assertFalse(prefs.hasUserName());
+        assertThat(prefs.getUserName(), is("guest"));
 
-        prefs.putLongValue(99999999999L);
-        assertTrue(prefs.hasLongValue());
-        assertThat(prefs.getLongValue(), is(99999999999L));
+        prefs.putUserName("rejasupotaro");
+        assertTrue(prefs.hasUserName());
+        assertThat(prefs.getUserName(), is("rejasupotaro"));
 
-        prefs.removeLongValue();
-        assertFalse(prefs.hasLongValue());
+        prefs.removeUserName();
+        assertFalse(prefs.hasUserName());
     }
 
     @Test
-    public void checkWhetherTypeFloatWorks() {
+    public void checkTypeIntWorks() {
         prefs.clear();
-        assertFalse(prefs.hasFloatValue());
+        assertFalse(prefs.hasUserAge());
 
-        prefs.putFloatValue(99.99f);
-        assertTrue(prefs.hasFloatValue());
-        assertThat(prefs.getFloatValue(), is(99.99f));
+        prefs.putUserAge(26);
+        assertTrue(prefs.hasUserAge());
+        assertThat(prefs.getUserAge(), is(26));
 
-        prefs.removeFloatValue();
-        assertFalse(prefs.hasFloatValue());
+        prefs.removeUserAge();
+        assertFalse(prefs.hasUserAge());
     }
 
     @Test
-    public void checkWhetherTypeBooleanWorks() {
+    public void checkTypeBooleanWorks() {
         prefs.clear();
-        assertFalse(prefs.hasBooleanValue());
+        assertFalse(prefs.hasGuestFlag());
 
-        prefs.putBooleanValue(true);
-        assertTrue(prefs.hasBooleanValue());
-        assertThat(prefs.getBooleanValue(), is(true));
+        prefs.putGuestFlag(true);
+        assertTrue(prefs.hasGuestFlag());
+        assertThat(prefs.getGuestFlag(), is(true));
 
-        prefs.removeBooleanValue();
-        assertFalse(prefs.hasBooleanValue());
+        prefs.removeGuestFlag();
+        assertFalse(prefs.hasGuestFlag());
     }
 
-    @Test
-    public void checkWhetherTypeStringWorks() {
-        prefs.clear();
-        assertFalse(prefs.hasStringValue());
-        assertThat(prefs.getStringValue(), is("guest"));
-
-        prefs.putStringValue("Java");
-        assertTrue(prefs.hasStringValue());
-        assertThat(prefs.getStringValue(), is("Java"));
-
-        prefs.removeStringValue();
-        assertFalse(prefs.hasStringValue());
-    }
 
     @Test
-    public void checkWhetherTypeStringSetWorks() {
+    public void checkTypeStringSetWorks() {
         prefs.clear();
-        assertFalse(prefs.hasStringSet());
+        assertFalse(prefs.hasSearchHistory());
 
-        prefs.putStringSet(new HashSet<String>() {{
+        prefs.putSearchHistory(new HashSet<String>() {{
             add("JAVA");
             add("+");
             add("YOU");
         }});
-        assertTrue(prefs.hasStringSet());
-        assertThat(prefs.getStringSet().size(), is(3));
+        assertTrue(prefs.hasSearchHistory());
+        assertThat(prefs.getSearchHistory().size(), is(3));
 
-        prefs.removeStringSet();
-        assertFalse(prefs.hasStringSet());
+        prefs.removeSearchHistory();
+        assertFalse(prefs.hasSearchHistory());
     }
 }

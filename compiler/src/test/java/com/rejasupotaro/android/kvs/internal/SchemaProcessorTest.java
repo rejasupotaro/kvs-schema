@@ -18,14 +18,13 @@ public class SchemaProcessorTest {
                                 "\n" +
                                 "import android.content.Context;\n" +
                                 "\n" +
-                                "import com.rejasupotaro.android.kvs.PrefSchema;\n" +
                                 "import com.rejasupotaro.android.kvs.annotations.Key;\n" +
                                 "import com.rejasupotaro.android.kvs.annotations.Table;\n" +
                                 "\n" +
                                 "import java.util.Set;\n" +
                                 "\n" +
                                 "@Table(\"example\")\n" +
-                                "public abstract class ExamplePrefsSchema extends PrefSchema {\n" +
+                                "public abstract class ExamplePrefsSchema {\n" +
                                 "    public static ExamplePrefs prefs;\n" +
                                 "\n" +
                                 "    @Key(\"user_id\")\n" +
@@ -45,7 +44,7 @@ public class SchemaProcessorTest {
                                 "        }\n" +
                                 "        return prefs;\n" +
                                 "    }\n" +
-                                "}\n");
+                                "}");
 
         assert_().about(javaSource())
                 .that(examplePrefsSchema)
@@ -58,13 +57,13 @@ public class SchemaProcessorTest {
                                         "\n" +
                                         "import android.content.Context;\n" +
                                         "import android.content.SharedPreferences;\n" +
-                                        "import com.rejasupotaro.android.kvs.PrefSchema;\n" +
+                                        "import com.rejasupotaro.android.kvs.PrefsSchema;\n" +
                                         "import java.lang.String;\n" +
                                         "import java.util.HashSet;\n" +
                                         "import java.util.Set;\n" +
                                         "\n" +
-                                        "public final class ExamplePrefs extends PrefSchema {\n" +
-                                        "  public final String TABLE_NAME = \"example\";\n" +
+                                        "public final class ExamplePrefs extends PrefsSchema {\n" +
+                                        "  public static final String TABLE_NAME = \"example\";\n" +
                                         "\n" +
                                         "  ExamplePrefs(Context context) {\n" +
                                         "    init(context, TABLE_NAME);\n" +

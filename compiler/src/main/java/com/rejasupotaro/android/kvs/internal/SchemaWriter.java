@@ -1,6 +1,6 @@
 package com.rejasupotaro.android.kvs.internal;
 
-import com.rejasupotaro.android.kvs.PrefSchema;
+import com.rejasupotaro.android.kvs.PrefsSchema;
 import com.rejasupotaro.android.kvs.annotations.Key;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
@@ -30,7 +30,7 @@ public class SchemaWriter {
     public void write(Filer filer) throws IOException {
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(model.getClassName());
         classBuilder.addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-        ClassName superClassName = ClassName.get(PrefSchema.class);
+        ClassName superClassName = ClassName.get(PrefsSchema.class);
         classBuilder.superclass(superClassName);
 
         List<FieldSpec> fieldSpecs = createFields(model.getTableName());
@@ -50,7 +50,7 @@ public class SchemaWriter {
 
     private static List<FieldSpec> createFields(String tableName) {
         List<FieldSpec> fieldSpecs = new ArrayList<>();
-        fieldSpecs.add(FieldSpec.builder(String.class, "TABLE_NAME", Modifier.PUBLIC, Modifier.FINAL)
+        fieldSpecs.add(FieldSpec.builder(String.class, "TABLE_NAME", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", tableName)
                 .build());
         return fieldSpecs;

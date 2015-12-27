@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class PrefSchema {
+public abstract class PrefsSchema {
     private SharedPreferences prefs;
 
     protected void init(Context context, String tableName) {

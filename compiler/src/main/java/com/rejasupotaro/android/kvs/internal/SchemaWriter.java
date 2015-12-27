@@ -67,7 +67,7 @@ public class SchemaWriter {
         return methodSpecs;
     }
 
-    private static List<MethodSpec> createMethods(List<VariableElement> keys) {
+    private List<MethodSpec> createMethods(List<VariableElement> keys) {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (VariableElement element : keys) {
             Key key = element.getAnnotation(Key.class);
@@ -76,7 +76,7 @@ public class SchemaWriter {
         return methodSpecs;
     }
 
-    private static List<MethodSpec> createMethod(Key key, VariableElement element) {
+    private List<MethodSpec> createMethod(Key key, VariableElement element) {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         String fieldName = element.getSimpleName().toString();
         String keyName = key.value();
@@ -84,40 +84,40 @@ public class SchemaWriter {
         TypeName t = TypeName.get(element.asType());
         if (t.equals(TypeName.BOOLEAN)) {
             TypeName typeName = TypeName.BOOLEAN;
-            methodSpecs.add(createGetterMethod(typeName, "boolean", fieldName, keyName));
-            methodSpecs.add(createSetterMethod(typeName, "boolean", fieldName, keyName));
-            methodSpecs.add(createHasMethod(fieldName, keyName));
-            methodSpecs.add(createRemoveMethod(fieldName, keyName));
+            methodSpecs.add(createGetterMethod(typeName, "boolean", keyName, fieldName));
+            methodSpecs.add(createSetterMethod(typeName, "boolean", keyName, fieldName));
+            methodSpecs.add(createHasMethod(keyName, fieldName));
+            methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(ClassName.get(String.class))) {
             TypeName typeName = ClassName.get(String.class);
-            methodSpecs.add(createGetterMethod(typeName, "String", fieldName, keyName));
-            methodSpecs.add(createSetterMethod(typeName, "String", fieldName, keyName));
-            methodSpecs.add(createHasMethod(fieldName, keyName));
-            methodSpecs.add(createRemoveMethod(fieldName, keyName));
+            methodSpecs.add(createGetterMethod(typeName, "String", keyName, fieldName));
+            methodSpecs.add(createSetterMethod(typeName, "String", keyName, fieldName));
+            methodSpecs.add(createHasMethod(keyName, fieldName));
+            methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(TypeName.FLOAT)) {
             TypeName typeName = TypeName.FLOAT;
-            methodSpecs.add(createGetterMethod(typeName, "float", fieldName, keyName));
-            methodSpecs.add(createSetterMethod(typeName, "float", fieldName, keyName));
-            methodSpecs.add(createHasMethod(fieldName, keyName));
-            methodSpecs.add(createRemoveMethod(fieldName, keyName));
+            methodSpecs.add(createGetterMethod(typeName, "float", keyName, fieldName));
+            methodSpecs.add(createSetterMethod(typeName, "float", keyName, fieldName));
+            methodSpecs.add(createHasMethod(keyName, fieldName));
+            methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(TypeName.INT)) {
             TypeName typeName = TypeName.INT;
-            methodSpecs.add(createGetterMethod(typeName, "int", fieldName, keyName));
-            methodSpecs.add(createSetterMethod(typeName, "int", fieldName, keyName));
-            methodSpecs.add(createHasMethod(fieldName, keyName));
-            methodSpecs.add(createRemoveMethod(fieldName, keyName));
+            methodSpecs.add(createGetterMethod(typeName, "int", keyName, fieldName));
+            methodSpecs.add(createSetterMethod(typeName, "int", keyName, fieldName));
+            methodSpecs.add(createHasMethod(keyName, fieldName));
+            methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(TypeName.LONG)) {
             TypeName typeName = TypeName.LONG;
-            methodSpecs.add(createGetterMethod(typeName, "long", fieldName, keyName));
-            methodSpecs.add(createSetterMethod(typeName, "long", fieldName, keyName));
-            methodSpecs.add(createHasMethod(fieldName, keyName));
-            methodSpecs.add(createRemoveMethod(fieldName, keyName));
+            methodSpecs.add(createGetterMethod(typeName, "long", keyName, fieldName));
+            methodSpecs.add(createSetterMethod(typeName, "long", keyName, fieldName));
+            methodSpecs.add(createHasMethod(keyName, fieldName));
+            methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(ParameterizedTypeName.get(Set.class, String.class))) {
             TypeName typeName = ParameterizedTypeName.get(Set.class, String.class);
-            methodSpecs.add(createGetterMethod(typeName, "StringSet", fieldName, keyName));
-            methodSpecs.add(createSetterMethod(typeName, "StringSet", fieldName, keyName));
-            methodSpecs.add(createHasMethod(fieldName, keyName));
-            methodSpecs.add(createRemoveMethod(fieldName, keyName));
+            methodSpecs.add(createGetterMethod(typeName, "StringSet", keyName, fieldName));
+            methodSpecs.add(createSetterMethod(typeName, "StringSet", keyName, fieldName));
+            methodSpecs.add(createHasMethod(keyName, fieldName));
+            methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else {
             String fieldTypeFqcn = element.asType().toString();
             throw new IllegalArgumentException(fieldTypeFqcn + " is not supported");
@@ -126,26 +126,28 @@ public class SchemaWriter {
         return methodSpecs;
     }
 
-    private static MethodSpec createGetterMethod(TypeName fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
+    private MethodSpec createGetterMethod(TypeName fieldType, String argTypeOfSuperMethod, String keyName, String fieldName) {
         String methodName = "get" + StringUtils.capitalize(fieldName);
+        String superMethodName = "get" + StringUtils.capitalize(argTypeOfSuperMethod);
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(fieldType)
-                .addStatement("return $N($S, $N)", "get" + StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName)
+                .addStatement("return $N($S, $N)", superMethodName, keyName, fieldName)
                 .build();
     }
 
-    private static MethodSpec createSetterMethod(TypeName fieldType, String argTypeOfSuperMethod, String fieldName, String keyName) {
+    private MethodSpec createSetterMethod(TypeName fieldType, String argTypeOfSuperMethod, String keyName, String fieldName) {
         String methodName = "put" + StringUtils.capitalize(fieldName);
+        String superMethodName = "put" + StringUtils.capitalize(argTypeOfSuperMethod);
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(void.class)
                 .addParameter(fieldType, fieldName)
-                .addStatement("$N($S, $N)", "put" + StringUtils.capitalize(argTypeOfSuperMethod), keyName, fieldName)
+                .addStatement("$N($S, $N)", superMethodName, keyName, fieldName)
                 .build();
     }
 
-    private static MethodSpec createHasMethod(String fieldName, String keyName) {
+    private MethodSpec createHasMethod(String keyName, String fieldName) {
         String methodName = "has" + StringUtils.capitalize(fieldName);
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
@@ -154,7 +156,7 @@ public class SchemaWriter {
                 .build();
     }
 
-    private static MethodSpec createRemoveMethod(String fieldName, String keyName) {
+    private MethodSpec createRemoveMethod(String keyName, String fieldName) {
         String methodName = "remove" + StringUtils.capitalize(fieldName);
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)

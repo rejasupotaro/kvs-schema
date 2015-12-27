@@ -2,14 +2,13 @@ package com.example.android.kvs;
 
 import android.content.Context;
 
-import com.rejasupotaro.android.kvs.PrefSchema;
 import com.rejasupotaro.android.kvs.annotations.Key;
 import com.rejasupotaro.android.kvs.annotations.Table;
 
 import java.util.Set;
 
 @Table("example")
-public abstract class ExamplePrefsSchema extends PrefSchema {
+public abstract class ExamplePrefsSchema {
     public static ExamplePrefs prefs;
 
     @Key("user_id")

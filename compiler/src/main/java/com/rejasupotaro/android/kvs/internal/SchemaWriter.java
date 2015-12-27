@@ -1,5 +1,6 @@
 package com.rejasupotaro.android.kvs.internal;
 
+import com.rejasupotaro.android.kvs.PrefSchema;
 import com.rejasupotaro.android.kvs.annotations.Key;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
@@ -11,6 +12,7 @@ import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +30,7 @@ public class SchemaWriter {
     public void write(Filer filer) throws IOException {
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(model.getClassName());
         classBuilder.addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-        ClassName superClassName = ClassName.get(model.getPackageName(), model.getOriginalClassName());
+        ClassName superClassName = ClassName.get(PrefSchema.class);
         classBuilder.superclass(superClassName);
 
         List<FieldSpec> fieldSpecs = createFields(model.getTableName());
@@ -83,39 +85,71 @@ public class SchemaWriter {
 
         TypeName t = TypeName.get(element.asType());
         if (t.equals(TypeName.BOOLEAN)) {
-            TypeName typeName = TypeName.BOOLEAN;
-            methodSpecs.add(createGetterMethod(typeName, "boolean", keyName, fieldName));
-            methodSpecs.add(createSetterMethod(typeName, "boolean", keyName, fieldName));
+            TypeName fieldType = TypeName.BOOLEAN;
+            String argTypeOfSuperMethod = "boolean";
+
+            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
+            methodSpecs.add(createGetterWithDefaultValueMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, false));
+            methodSpecs.add(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(ClassName.get(String.class))) {
-            TypeName typeName = ClassName.get(String.class);
-            methodSpecs.add(createGetterMethod(typeName, "String", keyName, fieldName));
-            methodSpecs.add(createSetterMethod(typeName, "String", keyName, fieldName));
+            TypeName fieldType = ClassName.get(String.class);
+            String argTypeOfSuperMethod = "String";
+
+            String methodName = "get" + StringUtils.capitalize(fieldName);
+            String superMethodName = "get" + StringUtils.capitalize(argTypeOfSuperMethod);
+            methodSpecs.add(MethodSpec.methodBuilder(methodName)
+                    .addModifiers(Modifier.PUBLIC)
+                    .returns(fieldType)
+                    .addStatement("return $N($S, \"\")", superMethodName, keyName)
+                    .build());
+
+            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
+            methodSpecs.add(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(TypeName.FLOAT)) {
-            TypeName typeName = TypeName.FLOAT;
-            methodSpecs.add(createGetterMethod(typeName, "float", keyName, fieldName));
-            methodSpecs.add(createSetterMethod(typeName, "float", keyName, fieldName));
+            TypeName fieldType = TypeName.FLOAT;
+            String argTypeOfSuperMethod = "float";
+
+            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
+            methodSpecs.add(createGetterWithDefaultValueMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, 0f));
+            methodSpecs.add(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(TypeName.INT)) {
-            TypeName typeName = TypeName.INT;
-            methodSpecs.add(createGetterMethod(typeName, "int", keyName, fieldName));
-            methodSpecs.add(createSetterMethod(typeName, "int", keyName, fieldName));
+            TypeName fieldType = TypeName.INT;
+            String argTypeOfSuperMethod = "int";
+
+            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
+            methodSpecs.add(createGetterWithDefaultValueMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, 0));
+            methodSpecs.add(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(TypeName.LONG)) {
-            TypeName typeName = TypeName.LONG;
-            methodSpecs.add(createGetterMethod(typeName, "long", keyName, fieldName));
-            methodSpecs.add(createSetterMethod(typeName, "long", keyName, fieldName));
+            TypeName fieldType = TypeName.LONG;
+            String argTypeOfSuperMethod = "long";
+
+            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
+            methodSpecs.add(createGetterWithDefaultValueMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, 0L));
+            methodSpecs.add(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(ParameterizedTypeName.get(Set.class, String.class))) {
-            TypeName typeName = ParameterizedTypeName.get(Set.class, String.class);
-            methodSpecs.add(createGetterMethod(typeName, "StringSet", keyName, fieldName));
-            methodSpecs.add(createSetterMethod(typeName, "StringSet", keyName, fieldName));
+            TypeName fieldType = ParameterizedTypeName.get(Set.class, String.class);
+            String argTypeOfSuperMethod = "StringSet";
+
+            String methodName = "get" + StringUtils.capitalize(fieldName);
+            String superMethodName = "get" + StringUtils.capitalize(argTypeOfSuperMethod);
+            methodSpecs.add(MethodSpec.methodBuilder(methodName)
+                    .addModifiers(Modifier.PUBLIC)
+                    .returns(fieldType)
+                    .addStatement("return $N($S, new $T<String>())", superMethodName, keyName, ClassName.get(HashSet.class))
+                    .build());
+
+            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
+            methodSpecs.add(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else {
@@ -129,10 +163,22 @@ public class SchemaWriter {
     private MethodSpec createGetterMethod(TypeName fieldType, String argTypeOfSuperMethod, String keyName, String fieldName) {
         String methodName = "get" + StringUtils.capitalize(fieldName);
         String superMethodName = "get" + StringUtils.capitalize(argTypeOfSuperMethod);
+        String parameterName = "defaultValue";
+        return MethodSpec.methodBuilder(methodName)
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(fieldType, parameterName)
+                .returns(fieldType)
+                .addStatement("return $N($S, $N)", superMethodName, keyName, parameterName)
+                .build();
+    }
+
+    private MethodSpec createGetterWithDefaultValueMethod(TypeName fieldType, String argTypeOfSuperMethod, String keyName, String fieldName, Object defaultValue) {
+        String methodName = "get" + StringUtils.capitalize(fieldName);
+        String superMethodName = "get" + StringUtils.capitalize(argTypeOfSuperMethod);
         return MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(fieldType)
-                .addStatement("return $N($S, $N)", superMethodName, keyName, fieldName)
+                .addStatement("return $N($S, $L)", superMethodName, keyName, defaultValue)
                 .build();
     }
 

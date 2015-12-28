@@ -15,17 +15,15 @@ First, create a schema class. Class name should be `*Schema`.
 
 ```java
 @Table("example")
-public abstract class ExamplePrefsSchema extends PrefSchema {
+public abstract class ExamplePrefsSchema {
     @Key("user_id") int userId;
-    @Key("user_name") String userName = "guest";
+    @Key("user_name") String userName;
 
     public static ExamplePrefs create(Context context) {
         return new ExamplePrefs(context);
     }
 }
 ```
-
-rvalues become default value. For example, "guest" is assigned when `user_name` is not exist in `example` prefs.
 
 ### Read and Write
 
@@ -66,11 +64,12 @@ root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml
 
 ### Installation
 
+This library is distributed by [JitPack](https://jitpack.io/).
 Add dependencies your build.gradle
 
 ```groovy
-apt 'com.rejasupotaro:kvs-schema-compiler:1.4.0'
-compile 'com.rejasupotaro:kvs-schema:1.4.0'
+apt 'com.github.rejasupotaro.kvs-schema:compiler:1.4.0'
+compile 'com.github.rejasupotaro.kvs-schema:library:1.4.0'
 ```
 
 Migration
@@ -125,7 +124,7 @@ You can see what kind of data is saved in your app like below.
  ╚═══════════╧══════════════╧════════╝
  ```
 
-For developers
+Development
 ----------
 
 **Show version**
@@ -146,10 +145,4 @@ $ ./gradlew bumpPatch
 
 ```sh
 $ ./gradlew genReadMe
-```
-
-**Upload library**
-
-```sh
-$ ./gradlew bintrayUpload -PdryRun=false
 ```

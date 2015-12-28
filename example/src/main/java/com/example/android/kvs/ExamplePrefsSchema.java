@@ -9,8 +9,6 @@ import java.util.Set;
 
 @Table("example")
 public abstract class ExamplePrefsSchema {
-    public static ExamplePrefs prefs;
-
     @Key("user_id")
     long userId;
     @Key("user_name")
@@ -21,6 +19,8 @@ public abstract class ExamplePrefsSchema {
     boolean guestFlag;
     @Key("search_history")
     Set<String> searchHistory;
+
+    public static ExamplePrefs prefs;
 
     public static synchronized ExamplePrefs get(Context context) {
         if (prefs == null) {

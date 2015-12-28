@@ -68,8 +68,8 @@ This library is distributed by [JitPack](https://jitpack.io/).
 Add dependencies your build.gradle
 
 ```groovy
-apt 'com.github.rejasupotaro.kvs-schema:compiler:1.4.0'
-compile 'com.github.rejasupotaro.kvs-schema:library:1.4.0'
+apt 'com.github.rejasupotaro.kvs-schema:compiler:2.0.0'
+compile 'com.github.rejasupotaro.kvs-schema:library:2.0.0'
 ```
 
 Migration

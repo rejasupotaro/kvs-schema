@@ -25,8 +25,6 @@ public class SchemaProcessorTest {
                                 "\n" +
                                 "@Table(\"example\")\n" +
                                 "public abstract class ExamplePrefsSchema {\n" +
-                                "    public static ExamplePrefs prefs;\n" +
-                                "\n" +
                                 "    @Key(\"user_id\")\n" +
                                 "    long userId;\n" +
                                 "    @Key(\"user_name\")\n" +
@@ -38,13 +36,15 @@ public class SchemaProcessorTest {
                                 "    @Key(\"search_history\")\n" +
                                 "    Set<String> searchHistory;\n" +
                                 "\n" +
+                                "    public static ExamplePrefs prefs;\n" +
+                                "\n" +
                                 "    public static synchronized ExamplePrefs get(Context context) {\n" +
                                 "        if (prefs == null) {\n" +
                                 "            prefs = new ExamplePrefs(context);\n" +
                                 "        }\n" +
                                 "        return prefs;\n" +
                                 "    }\n" +
-                                "}");
+                                "}\n");
 
         assert_().about(javaSource())
                 .that(examplePrefsSchema)
@@ -81,6 +81,10 @@ public class SchemaProcessorTest {
                                         "    return getLong(\"user_id\", 0);\n" +
                                         "  }\n" +
                                         "\n" +
+                                        "  public void setUserId(long userId) {\n" +
+                                        "    putLong(\"user_id\", userId);\n" +
+                                        "  }\n" +
+                                        "\n" +
                                         "  public void putUserId(long userId) {\n" +
                                         "    putLong(\"user_id\", userId);\n" +
                                         "  }\n" +
@@ -99,6 +103,10 @@ public class SchemaProcessorTest {
                                         "\n" +
                                         "  public String getUserName(String defaultValue) {\n" +
                                         "    return getString(\"user_name\", defaultValue);\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  public void setUserName(String userName) {\n" +
+                                        "    putString(\"user_name\", userName);\n" +
                                         "  }\n" +
                                         "\n" +
                                         "  public void putUserName(String userName) {\n" +
@@ -121,6 +129,10 @@ public class SchemaProcessorTest {
                                         "    return getInt(\"user_age\", 0);\n" +
                                         "  }\n" +
                                         "\n" +
+                                        "  public void setUserAge(int userAge) {\n" +
+                                        "    putInt(\"user_age\", userAge);\n" +
+                                        "  }\n" +
+                                        "\n" +
                                         "  public void putUserAge(int userAge) {\n" +
                                         "    putInt(\"user_age\", userAge);\n" +
                                         "  }\n" +
@@ -141,6 +153,10 @@ public class SchemaProcessorTest {
                                         "    return getBoolean(\"guest_flag\", false);\n" +
                                         "  }\n" +
                                         "\n" +
+                                        "  public void setGuestFlag(boolean guestFlag) {\n" +
+                                        "    putBoolean(\"guest_flag\", guestFlag);\n" +
+                                        "  }\n" +
+                                        "\n" +
                                         "  public void putGuestFlag(boolean guestFlag) {\n" +
                                         "    putBoolean(\"guest_flag\", guestFlag);\n" +
                                         "  }\n" +
@@ -159,6 +175,10 @@ public class SchemaProcessorTest {
                                         "\n" +
                                         "  public Set<String> getSearchHistory(Set<String> defaultValue) {\n" +
                                         "    return getStringSet(\"search_history\", defaultValue);\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  public void setSearchHistory(Set<String> searchHistory) {\n" +
+                                        "    putStringSet(\"search_history\", searchHistory);\n" +
                                         "  }\n" +
                                         "\n" +
                                         "  public void putSearchHistory(Set<String> searchHistory) {\n" +

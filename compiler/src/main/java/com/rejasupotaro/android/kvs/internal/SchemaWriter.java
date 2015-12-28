@@ -12,6 +12,7 @@ import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -90,7 +91,7 @@ public class SchemaWriter {
 
             methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createGetterWithDefaultValueMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, false));
-            methodSpecs.add(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
+            methodSpecs.addAll(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(ClassName.get(String.class))) {
@@ -106,7 +107,7 @@ public class SchemaWriter {
                     .build());
 
             methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
-            methodSpecs.add(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
+            methodSpecs.addAll(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(TypeName.FLOAT)) {
@@ -115,7 +116,7 @@ public class SchemaWriter {
 
             methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createGetterWithDefaultValueMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, 0f));
-            methodSpecs.add(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
+            methodSpecs.addAll(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(TypeName.INT)) {
@@ -124,7 +125,7 @@ public class SchemaWriter {
 
             methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createGetterWithDefaultValueMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, 0));
-            methodSpecs.add(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
+            methodSpecs.addAll(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(TypeName.LONG)) {
@@ -133,7 +134,7 @@ public class SchemaWriter {
 
             methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createGetterWithDefaultValueMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, 0L));
-            methodSpecs.add(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
+            methodSpecs.addAll(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else if (t.equals(ParameterizedTypeName.get(Set.class, String.class))) {
@@ -149,7 +150,7 @@ public class SchemaWriter {
                     .build());
 
             methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
-            methodSpecs.add(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
+            methodSpecs.addAll(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
         } else {
@@ -182,15 +183,32 @@ public class SchemaWriter {
                 .build();
     }
 
-    private MethodSpec createSetterMethod(TypeName fieldType, String argTypeOfSuperMethod, String keyName, String fieldName) {
-        String methodName = "put" + StringUtils.capitalize(fieldName);
-        String superMethodName = "put" + StringUtils.capitalize(argTypeOfSuperMethod);
-        return MethodSpec.methodBuilder(methodName)
-                .addModifiers(Modifier.PUBLIC)
-                .returns(void.class)
-                .addParameter(fieldType, fieldName)
-                .addStatement("$N($S, $N)", superMethodName, keyName, fieldName)
-                .build();
+    private Collection<MethodSpec> createSetterMethod(TypeName fieldType, String argTypeOfSuperMethod, String keyName, String fieldName) {
+        ArrayList<MethodSpec> methodSpecs = new ArrayList<>();
+
+        {
+            String methodName = "set" + StringUtils.capitalize(fieldName);
+            String superMethodName = "put" + StringUtils.capitalize(argTypeOfSuperMethod);
+            methodSpecs.add(MethodSpec.methodBuilder(methodName)
+                    .addModifiers(Modifier.PUBLIC)
+                    .returns(void.class)
+                    .addParameter(fieldType, fieldName)
+                    .addStatement("$N($S, $N)", superMethodName, keyName, fieldName)
+                    .build());
+        }
+
+        {
+            String methodName = "put" + StringUtils.capitalize(fieldName);
+            String superMethodName = "put" + StringUtils.capitalize(argTypeOfSuperMethod);
+            methodSpecs.add(MethodSpec.methodBuilder(methodName)
+                    .addModifiers(Modifier.PUBLIC)
+                    .returns(void.class)
+                    .addParameter(fieldType, fieldName)
+                    .addStatement("$N($S, $N)", superMethodName, keyName, fieldName)
+                    .build());
+        }
+
+        return methodSpecs;
     }
 
     private MethodSpec createHasMethod(String keyName, String fieldName) {

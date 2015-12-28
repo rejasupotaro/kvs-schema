@@ -18,30 +18,27 @@ public class SchemaProcessorTest {
                                 "\n" +
                                 "import android.content.Context;\n" +
                                 "\n" +
-                                "import com.rejasupotaro.android.kvs.PrefSchema;\n" +
                                 "import com.rejasupotaro.android.kvs.annotations.Key;\n" +
                                 "import com.rejasupotaro.android.kvs.annotations.Table;\n" +
                                 "\n" +
                                 "import java.util.Set;\n" +
                                 "\n" +
                                 "@Table(\"example\")\n" +
-                                "public abstract class ExamplePrefsSchema extends PrefSchema {\n" +
+                                "public abstract class ExamplePrefsSchema {\n" +
+                                "    @Key(\"user_id\")\n" +
+                                "    long userId;\n" +
+                                "    @Key(\"user_name\")\n" +
+                                "    String userName = \"guest\";\n" +
+                                "    @Key(\"user_age\")\n" +
+                                "    int userAge;\n" +
+                                "    @Key(\"guest_flag\")\n" +
+                                "    boolean guestFlag;\n" +
+                                "    @Key(\"search_history\")\n" +
+                                "    Set<String> searchHistory;\n" +
+                                "\n" +
                                 "    public static ExamplePrefs prefs;\n" +
                                 "\n" +
-                                "    @Key(\"int_value\")\n" +
-                                "    protected int intValue;\n" +
-                                "    @Key(\"long_value\")\n" +
-                                "    protected long longValue;\n" +
-                                "    @Key(\"float_value\")\n" +
-                                "    protected float floatValue;\n" +
-                                "    @Key(\"boolean_value\")\n" +
-                                "    protected boolean booleanValue;\n" +
-                                "    @Key(\"string_value\")\n" +
-                                "    protected String stringValue = \"guest\";\n" +
-                                "    @Key(\"string_set\")\n" +
-                                "    protected Set<String> stringSet;\n" +
-                                "\n" +
-                                "    public static synchronized ExamplePrefs create(Context context) {\n" +
+                                "    public static synchronized ExamplePrefs get(Context context) {\n" +
                                 "        if (prefs == null) {\n" +
                                 "            prefs = new ExamplePrefs(context);\n" +
                                 "        }\n" +
@@ -60,11 +57,13 @@ public class SchemaProcessorTest {
                                         "\n" +
                                         "import android.content.Context;\n" +
                                         "import android.content.SharedPreferences;\n" +
+                                        "import com.rejasupotaro.android.kvs.PrefsSchema;\n" +
                                         "import java.lang.String;\n" +
+                                        "import java.util.HashSet;\n" +
                                         "import java.util.Set;\n" +
                                         "\n" +
-                                        "public final class ExamplePrefs extends ExamplePrefsSchema {\n" +
-                                        "  public final String TABLE_NAME = \"example\";\n" +
+                                        "public final class ExamplePrefs extends PrefsSchema {\n" +
+                                        "  public static final String TABLE_NAME = \"example\";\n" +
                                         "\n" +
                                         "  ExamplePrefs(Context context) {\n" +
                                         "    init(context, TABLE_NAME);\n" +
@@ -74,100 +73,124 @@ public class SchemaProcessorTest {
                                         "    init(prefs);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public int getIntValue() {\n" +
-                                        "    return getInt(\"int_value\", intValue);\n" +
+                                        "  public long getUserId(long defaultValue) {\n" +
+                                        "    return getLong(\"user_id\", defaultValue);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public void putIntValue(int intValue) {\n" +
-                                        "    putInt(\"int_value\", intValue);\n" +
+                                        "  public long getUserId() {\n" +
+                                        "    return getLong(\"user_id\", 0);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public boolean hasIntValue() {\n" +
-                                        "    return has(\"int_value\");\n" +
+                                        "  public void setUserId(long userId) {\n" +
+                                        "    putLong(\"user_id\", userId);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public void removeIntValue() {\n" +
-                                        "    remove(\"int_value\");\n" +
+                                        "  public void putUserId(long userId) {\n" +
+                                        "    putLong(\"user_id\", userId);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public long getLongValue() {\n" +
-                                        "    return getLong(\"long_value\", longValue);\n" +
+                                        "  public boolean hasUserId() {\n" +
+                                        "    return has(\"user_id\");\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public void putLongValue(long longValue) {\n" +
-                                        "    putLong(\"long_value\", longValue);\n" +
+                                        "  public void removeUserId() {\n" +
+                                        "    remove(\"user_id\");\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public boolean hasLongValue() {\n" +
-                                        "    return has(\"long_value\");\n" +
+                                        "  public String getUserName() {\n" +
+                                        "    return getString(\"user_name\", \"\");\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public void removeLongValue() {\n" +
-                                        "    remove(\"long_value\");\n" +
+                                        "  public String getUserName(String defaultValue) {\n" +
+                                        "    return getString(\"user_name\", defaultValue);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public float getFloatValue() {\n" +
-                                        "    return getFloat(\"float_value\", floatValue);\n" +
+                                        "  public void setUserName(String userName) {\n" +
+                                        "    putString(\"user_name\", userName);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public void putFloatValue(float floatValue) {\n" +
-                                        "    putFloat(\"float_value\", floatValue);\n" +
+                                        "  public void putUserName(String userName) {\n" +
+                                        "    putString(\"user_name\", userName);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public boolean hasFloatValue() {\n" +
-                                        "    return has(\"float_value\");\n" +
+                                        "  public boolean hasUserName() {\n" +
+                                        "    return has(\"user_name\");\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public void removeFloatValue() {\n" +
-                                        "    remove(\"float_value\");\n" +
+                                        "  public void removeUserName() {\n" +
+                                        "    remove(\"user_name\");\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public boolean getBooleanValue() {\n" +
-                                        "    return getBoolean(\"boolean_value\", booleanValue);\n" +
+                                        "  public int getUserAge(int defaultValue) {\n" +
+                                        "    return getInt(\"user_age\", defaultValue);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public void putBooleanValue(boolean booleanValue) {\n" +
-                                        "    putBoolean(\"boolean_value\", booleanValue);\n" +
+                                        "  public int getUserAge() {\n" +
+                                        "    return getInt(\"user_age\", 0);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public boolean hasBooleanValue() {\n" +
-                                        "    return has(\"boolean_value\");\n" +
+                                        "  public void setUserAge(int userAge) {\n" +
+                                        "    putInt(\"user_age\", userAge);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public void removeBooleanValue() {\n" +
-                                        "    remove(\"boolean_value\");\n" +
+                                        "  public void putUserAge(int userAge) {\n" +
+                                        "    putInt(\"user_age\", userAge);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public String getStringValue() {\n" +
-                                        "    return getString(\"string_value\", stringValue);\n" +
+                                        "  public boolean hasUserAge() {\n" +
+                                        "    return has(\"user_age\");\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public void putStringValue(String stringValue) {\n" +
-                                        "    putString(\"string_value\", stringValue);\n" +
+                                        "  public void removeUserAge() {\n" +
+                                        "    remove(\"user_age\");\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public boolean hasStringValue() {\n" +
-                                        "    return has(\"string_value\");\n" +
+                                        "  public boolean getGuestFlag(boolean defaultValue) {\n" +
+                                        "    return getBoolean(\"guest_flag\", defaultValue);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public void removeStringValue() {\n" +
-                                        "    remove(\"string_value\");\n" +
+                                        "  public boolean getGuestFlag() {\n" +
+                                        "    return getBoolean(\"guest_flag\", false);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public Set<String> getStringSet() {\n" +
-                                        "    return getStringSet(\"string_set\", stringSet);\n" +
+                                        "  public void setGuestFlag(boolean guestFlag) {\n" +
+                                        "    putBoolean(\"guest_flag\", guestFlag);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public void putStringSet(Set<String> stringSet) {\n" +
-                                        "    putStringSet(\"string_set\", stringSet);\n" +
+                                        "  public void putGuestFlag(boolean guestFlag) {\n" +
+                                        "    putBoolean(\"guest_flag\", guestFlag);\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public boolean hasStringSet() {\n" +
-                                        "    return has(\"string_set\");\n" +
+                                        "  public boolean hasGuestFlag() {\n" +
+                                        "    return has(\"guest_flag\");\n" +
                                         "  }\n" +
                                         "\n" +
-                                        "  public void removeStringSet() {\n" +
-                                        "    remove(\"string_set\");\n" +
+                                        "  public void removeGuestFlag() {\n" +
+                                        "    remove(\"guest_flag\");\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  public Set<String> getSearchHistory() {\n" +
+                                        "    return getStringSet(\"search_history\", new HashSet<String>());\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  public Set<String> getSearchHistory(Set<String> defaultValue) {\n" +
+                                        "    return getStringSet(\"search_history\", defaultValue);\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  public void setSearchHistory(Set<String> searchHistory) {\n" +
+                                        "    putStringSet(\"search_history\", searchHistory);\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  public void putSearchHistory(Set<String> searchHistory) {\n" +
+                                        "    putStringSet(\"search_history\", searchHistory);\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  public boolean hasSearchHistory() {\n" +
+                                        "    return has(\"search_history\");\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  public void removeSearchHistory() {\n" +
+                                        "    remove(\"search_history\");\n" +
                                         "  }\n" +
                                         "}\n"
                         ));

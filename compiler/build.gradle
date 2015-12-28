@@ -1,5 +1,5 @@
 apply plugin: 'java'
-apply plugin: 'bintray-release'
+apply plugin: 'com.github.dcendents.android-maven'
 
 targetCompatibility = JavaVersion.VERSION_1_7
 sourceCompatibility = JavaVersion.VERSION_1_7
@@ -25,14 +25,3 @@ sourceSets {
         }
     }
 }
-
-publish {
-    userOrg = 'rejasupotaro'
-    groupId = 'com.rejasupotaro'
-    artifactId = 'kvs-schema-compiler'
-    version = VERSION
-    description = 'Immutable code generation to store key-value data for Android'
-    website = 'https://github.com/rejasupotaro/kvs-schema'
-    licences = ['MIT']
-}
-

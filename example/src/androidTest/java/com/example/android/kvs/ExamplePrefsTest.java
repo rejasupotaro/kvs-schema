@@ -43,7 +43,7 @@ public class ExamplePrefsTest {
     public void checkTypeStringWorks() {
         prefs.clear();
         assertFalse(prefs.hasUserName());
-        assertThat(prefs.getUserName(), is("guest"));
+        assertThat(prefs.getUserName("guest"), is("guest"));
 
         prefs.putUserName("rejasupotaro");
         assertTrue(prefs.hasUserName());

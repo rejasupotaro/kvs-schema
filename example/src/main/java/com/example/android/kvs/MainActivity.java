@@ -1,7 +1,7 @@
 package com.example.android.kvs;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +17,7 @@ import java.util.Set;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
     @Bind(R.id.long_value_text)
     TextView userIdTextView;
     @Bind(R.id.string_value_text)

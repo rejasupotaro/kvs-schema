@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'android-apt'
-apply plugin: 'bintray-release'
+apply plugin: 'com.github.dcendents.android-maven'
+group = 'com.github.rejasupotaro'
 
 android {
     compileSdkVersion 21
@@ -30,14 +31,4 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.jakewharton.fliptables:fliptables:1.0.2'
-}
-
-publish {
-    userOrg = 'rejasupotaro'
-    groupId = 'com.rejasupotaro'
-    artifactId = 'kvs-schema'
-    version = VERSION
-    description = 'Immutable code generation to store key-value data for Android'
-    website = 'https://github.com/rejasupotaro/kvs-schema'
-    licences = ['MIT']
 }

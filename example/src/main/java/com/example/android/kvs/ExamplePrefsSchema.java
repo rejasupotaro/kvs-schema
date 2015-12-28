@@ -2,16 +2,13 @@ package com.example.android.kvs;
 
 import android.content.Context;
 
-import com.rejasupotaro.android.kvs.PrefSchema;
 import com.rejasupotaro.android.kvs.annotations.Key;
 import com.rejasupotaro.android.kvs.annotations.Table;
 
 import java.util.Set;
 
 @Table("example")
-public abstract class ExamplePrefsSchema extends PrefSchema {
-    public static ExamplePrefs prefs;
-
+public abstract class ExamplePrefsSchema {
     @Key("user_id")
     long userId;
     @Key("user_name")
@@ -22,6 +19,8 @@ public abstract class ExamplePrefsSchema extends PrefSchema {
     boolean guestFlag;
     @Key("search_history")
     Set<String> searchHistory;
+
+    public static ExamplePrefs prefs;
 
     public static synchronized ExamplePrefs get(Context context) {
         if (prefs == null) {

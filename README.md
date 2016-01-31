@@ -2,9 +2,7 @@ KVS Schema
 ==========
 
 KVS Schema is a code generation library to manage key-value data for Android.
-
-I use SharedPreferences to save values. However, sometimes I forget key names and types.
-This library helps you to manage key-value data. You can find the structure of pref file at a glance.
+This library generates some useful methods to access to SharedPrefences from schema class.
 
 How to use
 ----------

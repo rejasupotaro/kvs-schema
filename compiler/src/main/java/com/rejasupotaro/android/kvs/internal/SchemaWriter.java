@@ -74,12 +74,12 @@ public class SchemaWriter {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (VariableElement element : keys) {
             Key key = element.getAnnotation(Key.class);
-            methodSpecs.addAll(createMethod(key, element));
+            methodSpecs.addAll(createMethods(key, element));
         }
         return methodSpecs;
     }
 
-    private List<MethodSpec> createMethod(Key key, VariableElement element) {
+    private List<MethodSpec> createMethods(Key key, VariableElement element) {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         String fieldName = element.getSimpleName().toString();
         String keyName = key.value();

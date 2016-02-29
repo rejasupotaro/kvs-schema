@@ -11,6 +11,8 @@ import java.util.List;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 
 public class SchemaModel {
@@ -19,6 +21,7 @@ public class SchemaModel {
     private ClassName className;
     private String tableName;
     private List<VariableElement> keys = new ArrayList<>();
+    private ClassName builderClassName;
 
     public TypeElement getElement() {
         return element;
@@ -40,16 +43,21 @@ public class SchemaModel {
         return keys;
     }
 
+    public ClassName getBuilderClassName() {
+        return builderClassName;
+    }
+
     public SchemaModel(TypeElement element, Elements elementUtils) {
         this.element = element;
         Table table = element.getAnnotation(Table.class);
-        this.tableName = table.value();
+        this.tableName = table.name();
         String packageName = getPackageName(elementUtils, element);
         this.originalClassName = getClassName(element, packageName);
         if (!originalClassName.endsWith("Schema")) {
             throw new TableNameIsInvalidException(originalClassName + " is invalid. Table class name should end with 'Schema'");
         }
         this.className = ClassName.get(packageName, originalClassName.replace("Schema", ""));
+        this.builderClassName = getBuilderClassName(table);
 
         findAnnotations(element);
     }
@@ -72,5 +80,16 @@ public class SchemaModel {
     private static String getClassName(TypeElement type, String packageName) {
         int packageLen = packageName.length() + 1;
         return type.getQualifiedName().toString().substring(packageLen).replace('.', '$');
+    }
+
+    private static ClassName getBuilderClassName(Table table) {
+        TypeMirror typeMirror = null;
+        try {
+            table.builder();
+        } catch (MirroredTypeException e) { // Throwing this exception is expected.
+            typeMirror = e.getTypeMirror();
+        }
+        assert typeMirror != null;
+        return ClassName.bestGuess(typeMirror.toString());
     }
 }

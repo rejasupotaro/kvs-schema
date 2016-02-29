@@ -5,7 +5,7 @@ import com.rejasupotaro.android.kvs.annotations.Table;
 
 import java.util.Set;
 
-@Table("example")
+@Table(name = "example", builder = ExamplePrefsBuilder.class)
 public abstract class ExamplePrefsSchema {
     @Key("user_id")
     long userId;

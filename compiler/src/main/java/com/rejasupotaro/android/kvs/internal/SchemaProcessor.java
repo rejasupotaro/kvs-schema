@@ -52,7 +52,7 @@ public class SchemaProcessor extends AbstractProcessor {
             SchemaWriter writer = new SchemaWriter(model);
             try {
                 writer.write(filer);
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (IOException e) {
                 messager.printMessage(Diagnostic.Kind.ERROR, e.getMessage());
             }
         }

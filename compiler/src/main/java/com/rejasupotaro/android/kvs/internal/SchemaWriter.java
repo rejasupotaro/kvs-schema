@@ -28,7 +28,7 @@ public class SchemaWriter {
         this.model = model;
     }
 
-    public void write(Filer filer) throws IOException, ClassNotFoundException {
+    public void write(Filer filer) throws IOException {
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(model.getClassName().simpleName());
         classBuilder.addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         ClassName superClassName = ClassName.get(PrefsSchema.class);
@@ -50,7 +50,7 @@ public class SchemaWriter {
                 .writeTo(filer);
     }
 
-    private List<FieldSpec> createFields() throws ClassNotFoundException {
+    private List<FieldSpec> createFields() {
         List<FieldSpec> fieldSpecs = new ArrayList<>();
 
         fieldSpecs.add(FieldSpec.builder(String.class, "TABLE_NAME", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)

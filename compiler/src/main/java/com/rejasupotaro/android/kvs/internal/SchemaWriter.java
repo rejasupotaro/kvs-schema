@@ -28,17 +28,18 @@ public class SchemaWriter {
         this.model = model;
     }
 
-    public void write(Filer filer) throws IOException {
+    public void write(Filer filer) throws IOException, ClassNotFoundException {
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(model.getClassName());
         classBuilder.addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         ClassName superClassName = ClassName.get(PrefsSchema.class);
         classBuilder.superclass(superClassName);
 
-        List<FieldSpec> fieldSpecs = createFields(model.getTableName());
+        List<FieldSpec> fieldSpecs = createFields();
         classBuilder.addFields(fieldSpecs);
 
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.addAll(createConstructors());
+        methodSpecs.add(createInitializeMethod());
         methodSpecs.addAll(createMethods(model.getKeys()));
         classBuilder.addMethods(methodSpecs);
 
@@ -49,15 +50,20 @@ public class SchemaWriter {
                 .writeTo(filer);
     }
 
-    private static List<FieldSpec> createFields(String tableName) {
+    private List<FieldSpec> createFields() throws ClassNotFoundException {
         List<FieldSpec> fieldSpecs = new ArrayList<>();
+
         fieldSpecs.add(FieldSpec.builder(String.class, "TABLE_NAME", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer("$S", tableName)
+                .initializer("$S", model.getTableName())
                 .build());
+
+        fieldSpecs.add(FieldSpec.builder(ClassName.get(model.getPackageName(), model.getClassName()), "prefs", Modifier.PRIVATE, Modifier.STATIC)
+                .build());
+
         return fieldSpecs;
     }
 
-    private static List<MethodSpec> createConstructors() {
+    private List<MethodSpec> createConstructors() {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.add(MethodSpec.constructorBuilder()
                 .addParameter(ClassName.get("android.content", "Context"), "context")
@@ -68,6 +74,16 @@ public class SchemaWriter {
                 .addStatement("init(prefs)")
                 .build());
         return methodSpecs;
+    }
+
+    private MethodSpec createInitializeMethod() {
+        return MethodSpec.methodBuilder("get")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.SYNCHRONIZED)
+                .returns(ClassName.get(model.getPackageName(), model.getClassName()))
+                .addParameter(ClassName.get("android.content", "Context"), "context")
+                .addStatement("if (prefs == null) prefs = new $N(context)", model.getClassName())
+                .addStatement("return prefs")
+                .build();
     }
 
     private List<MethodSpec> createMethods(List<VariableElement> keys) {

@@ -75,7 +75,7 @@
     <!-- string set -->
     <TextView
         style="@style/GridCell"
-        android:text="languages" />
+        android:text="search history" />
 
     <TextView
         android:id="@+id/string_set_value_text"

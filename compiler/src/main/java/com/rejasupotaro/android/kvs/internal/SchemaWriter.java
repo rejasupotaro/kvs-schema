@@ -57,7 +57,7 @@ public class SchemaWriter {
                 .initializer("$S", model.getTableName())
                 .build());
 
-        fieldSpecs.add(FieldSpec.builder(model.getClassName(), "prefs", Modifier.PRIVATE, Modifier.STATIC)
+        fieldSpecs.add(FieldSpec.builder(model.getClassName(), "singleton", Modifier.PRIVATE, Modifier.STATIC)
                 .build());
 
         return fieldSpecs;
@@ -81,8 +81,11 @@ public class SchemaWriter {
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.SYNCHRONIZED)
                 .returns(model.getClassName())
                 .addParameter(ClassName.get("android.content", "Context"), "context")
-                .addStatement("if (prefs == null) prefs = new $N(context)", model.getClassName().simpleName())
-                .addStatement("return prefs")
+                .addStatement("if (singleton != null) return singleton")
+                .addStatement("synchronized ($N.class) { if (singleton == null) singleton = new $N(context); }",
+                        model.getClassName().simpleName(),
+                        model.getClassName().simpleName())
+                .addStatement("return singleton")
                 .build();
     }
 

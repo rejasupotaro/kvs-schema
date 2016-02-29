@@ -3,6 +3,7 @@ package com.rejasupotaro.android.kvs.internal;
 import com.rejasupotaro.android.kvs.annotations.Key;
 import com.rejasupotaro.android.kvs.annotations.Table;
 import com.rejasupotaro.android.kvs.internal.exceptions.TableNameIsInvalidException;
+import com.squareup.javapoet.ClassName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,8 @@ import javax.lang.model.util.Elements;
 
 public class SchemaModel {
     private TypeElement element;
-    private String packageName;
     private String originalClassName;
-    private String className;
+    private ClassName className;
     private String tableName;
     private List<VariableElement> keys = new ArrayList<>();
 
@@ -24,15 +24,11 @@ public class SchemaModel {
         return element;
     }
 
-    public String getPackageName() {
-        return packageName;
-    }
-
     public String getOriginalClassName() {
         return originalClassName;
     }
 
-    public String getClassName() {
+    public ClassName getClassName() {
         return className;
     }
 
@@ -48,12 +44,12 @@ public class SchemaModel {
         this.element = element;
         Table table = element.getAnnotation(Table.class);
         this.tableName = table.value();
-        this.packageName = getPackageName(elementUtils, element);
+        String packageName = getPackageName(elementUtils, element);
         this.originalClassName = getClassName(element, packageName);
         if (!originalClassName.endsWith("Schema")) {
             throw new TableNameIsInvalidException(originalClassName + " is invalid. Table class name should end with 'Schema'");
         }
-        this.className = originalClassName.replace("Schema", "");
+        this.className = ClassName.get(packageName, originalClassName.replace("Schema", ""));
 
         findAnnotations(element);
     }

@@ -29,7 +29,7 @@ public class SchemaWriter {
     }
 
     public void write(Filer filer) throws IOException, ClassNotFoundException {
-        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(model.getClassName());
+        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(model.getClassName().simpleName());
         classBuilder.addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         ClassName superClassName = ClassName.get(PrefsSchema.class);
         classBuilder.superclass(superClassName);
@@ -40,12 +40,12 @@ public class SchemaWriter {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.addAll(createConstructors());
         methodSpecs.add(createInitializeMethod());
-        methodSpecs.addAll(createMethods(model.getKeys()));
+        methodSpecs.addAll(createMethods());
         classBuilder.addMethods(methodSpecs);
 
         TypeSpec outClass = classBuilder.build();
 
-        JavaFile.builder(model.getPackageName(), outClass)
+        JavaFile.builder(model.getClassName().packageName(), outClass)
                 .build()
                 .writeTo(filer);
     }
@@ -57,7 +57,7 @@ public class SchemaWriter {
                 .initializer("$S", model.getTableName())
                 .build());
 
-        fieldSpecs.add(FieldSpec.builder(ClassName.get(model.getPackageName(), model.getClassName()), "prefs", Modifier.PRIVATE, Modifier.STATIC)
+        fieldSpecs.add(FieldSpec.builder(model.getClassName(), "prefs", Modifier.PRIVATE, Modifier.STATIC)
                 .build());
 
         return fieldSpecs;
@@ -79,16 +79,16 @@ public class SchemaWriter {
     private MethodSpec createInitializeMethod() {
         return MethodSpec.methodBuilder("get")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.SYNCHRONIZED)
-                .returns(ClassName.get(model.getPackageName(), model.getClassName()))
+                .returns(model.getClassName())
                 .addParameter(ClassName.get("android.content", "Context"), "context")
-                .addStatement("if (prefs == null) prefs = new $N(context)", model.getClassName())
+                .addStatement("if (prefs == null) prefs = new $N(context)", model.getClassName().simpleName())
                 .addStatement("return prefs")
                 .build();
     }
 
-    private List<MethodSpec> createMethods(List<VariableElement> keys) {
+    private List<MethodSpec> createMethods() {
         List<MethodSpec> methodSpecs = new ArrayList<>();
-        for (VariableElement element : keys) {
+        for (VariableElement element : model.getKeys()) {
             Key key = element.getAnnotation(Key.class);
             methodSpecs.addAll(createMethods(key, element));
         }

@@ -78,7 +78,7 @@ public class SchemaWriter {
 
     private MethodSpec createInitializeMethod() {
         return MethodSpec.methodBuilder("get")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.SYNCHRONIZED)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(model.getClassName())
                 .addParameter(ClassName.get("android.content", "Context"), "context")
                 .addStatement("if (singleton != null) return singleton")

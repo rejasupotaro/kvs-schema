@@ -1,34 +1,38 @@
 KVS Schema
 ==========
 
-KVS Schema is a code generation library to manage key-value data for Android.
-This library generates some useful methods to access to SharedPrefences from schema class.
+KVS Schema is a library to manage key-value data for Android.
+This library generates methods from each key like below in compile time.
+
+- `get*`
+- `put*`
+- `remove*`
+- `has*`
+
+Data will is stored on SharedPreferences through generated class.
 
 How to use
 ----------
 
 ### Create Schema
 
-First, create a schema class. Class name should be `*Schema`.
+First, create a schema class.
+Class name should be `*Schema`. Table's value become SharedPreferences's file name.
 
 ```java
 @Table("example")
 public abstract class ExamplePrefsSchema {
     @Key("user_id") int userId;
     @Key("user_name") String userName;
-
-    public static ExamplePrefs create(Context context) {
-        return new ExamplePrefs(context);
-    }
 }
 ```
 
 ### Read and Write
 
-Annotation processor generates `put*`, `get*`, `has*` and `remove*` methods. You can use these methods.
+`put*`, `get*`, `has*` and `remove*` methods will be generated. You can use these methods through generated class.
 
 ```java
-ExamplePrefs prefs = ExamplePrefsSchema.create(context);
+ExamplePrefs prefs = ExamplePrefs.get(context);
 prefs.putUserId(123);
 prefs.putUserName("Jack");
 prefs.hasUserName(); // => true
@@ -66,8 +70,8 @@ This library is distributed by [JitPack](https://jitpack.io/).
 Add dependencies your build.gradle
 
 ```groovy
-apt 'com.github.rejasupotaro.kvs-schema:compiler:2.0.0'
-compile 'com.github.rejasupotaro.kvs-schema:library:2.0.0'
+apt 'com.github.rejasupotaro.kvs-schema:compiler:2.1.0'
+compile 'com.github.rejasupotaro.kvs-schema:library:2.1.0'
 ```
 
 Migration

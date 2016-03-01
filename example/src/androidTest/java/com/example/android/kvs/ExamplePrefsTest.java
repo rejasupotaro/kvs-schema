@@ -23,7 +23,7 @@ public class ExamplePrefsTest {
     @Before
     public void setup() {
         Context context = InstrumentationRegistry.getTargetContext();
-        prefs = ExamplePrefsSchema.get(context);
+        prefs = ExamplePrefs.get(context);
     }
 
     @Test

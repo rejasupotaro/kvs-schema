@@ -29,35 +29,41 @@ public class SchemaWriter {
     }
 
     public void write(Filer filer) throws IOException {
-        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(model.getClassName());
+        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(model.getClassName().simpleName());
         classBuilder.addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         ClassName superClassName = ClassName.get(PrefsSchema.class);
         classBuilder.superclass(superClassName);
 
-        List<FieldSpec> fieldSpecs = createFields(model.getTableName());
+        List<FieldSpec> fieldSpecs = createFields();
         classBuilder.addFields(fieldSpecs);
 
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.addAll(createConstructors());
-        methodSpecs.addAll(createMethods(model.getKeys()));
+        methodSpecs.add(createInitializeMethod());
+        methodSpecs.addAll(createMethods());
         classBuilder.addMethods(methodSpecs);
 
         TypeSpec outClass = classBuilder.build();
 
-        JavaFile.builder(model.getPackageName(), outClass)
+        JavaFile.builder(model.getClassName().packageName(), outClass)
                 .build()
                 .writeTo(filer);
     }
 
-    private static List<FieldSpec> createFields(String tableName) {
+    private List<FieldSpec> createFields() {
         List<FieldSpec> fieldSpecs = new ArrayList<>();
+
         fieldSpecs.add(FieldSpec.builder(String.class, "TABLE_NAME", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer("$S", tableName)
+                .initializer("$S", model.getTableName())
                 .build());
+
+        fieldSpecs.add(FieldSpec.builder(model.getClassName(), "singleton", Modifier.PRIVATE, Modifier.STATIC)
+                .build());
+
         return fieldSpecs;
     }
 
-    private static List<MethodSpec> createConstructors() {
+    private List<MethodSpec> createConstructors() {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.add(MethodSpec.constructorBuilder()
                 .addParameter(ClassName.get("android.content", "Context"), "context")
@@ -70,16 +76,29 @@ public class SchemaWriter {
         return methodSpecs;
     }
 
-    private List<MethodSpec> createMethods(List<VariableElement> keys) {
+    private MethodSpec createInitializeMethod() {
+        return MethodSpec.methodBuilder("get")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .returns(model.getClassName())
+                .addParameter(ClassName.get("android.content", "Context"), "context")
+                .addStatement("if (singleton != null) return singleton")
+                .addStatement("synchronized ($N.class) { if (singleton == null) singleton = new $N(context); }",
+                        model.getClassName().simpleName(),
+                        model.getClassName().simpleName())
+                .addStatement("return singleton")
+                .build();
+    }
+
+    private List<MethodSpec> createMethods() {
         List<MethodSpec> methodSpecs = new ArrayList<>();
-        for (VariableElement element : keys) {
+        for (VariableElement element : model.getKeys()) {
             Key key = element.getAnnotation(Key.class);
-            methodSpecs.addAll(createMethod(key, element));
+            methodSpecs.addAll(createMethods(key, element));
         }
         return methodSpecs;
     }
 
-    private List<MethodSpec> createMethod(Key key, VariableElement element) {
+    private List<MethodSpec> createMethods(Key key, VariableElement element) {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         String fieldName = element.getSimpleName().toString();
         String keyName = key.value();

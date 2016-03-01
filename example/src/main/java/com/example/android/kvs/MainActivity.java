@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupViews() {
-        ExamplePrefs prefs = ExamplePrefsSchema.get(this);
+        ExamplePrefs prefs = ExamplePrefs.get(this);
 
         prefs.putUserId(1L);
         long id = prefs.getUserId();

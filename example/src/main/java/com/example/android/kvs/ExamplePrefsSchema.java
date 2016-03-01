@@ -1,7 +1,5 @@
 package com.example.android.kvs;
 
-import android.content.Context;
-
 import com.rejasupotaro.android.kvs.annotations.Key;
 import com.rejasupotaro.android.kvs.annotations.Table;
 
@@ -19,13 +17,4 @@ public abstract class ExamplePrefsSchema {
     boolean guestFlag;
     @Key("search_history")
     Set<String> searchHistory;
-
-    public static ExamplePrefs prefs;
-
-    public static synchronized ExamplePrefs get(Context context) {
-        if (prefs == null) {
-            prefs = new ExamplePrefs(context);
-        }
-        return prefs;
-    }
 }

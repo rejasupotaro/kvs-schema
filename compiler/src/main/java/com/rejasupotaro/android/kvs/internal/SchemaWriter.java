@@ -77,7 +77,7 @@ public class SchemaWriter {
     }
 
     private MethodSpec createInitializeMethod() {
-        if (model.getBuilderClassName().simpleName().equals("Object")) {
+        if (model.getBuilderClassFqcn().equals("java.lang.Object")) {
             return MethodSpec.methodBuilder("get")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                     .returns(model.getClassName())
@@ -96,7 +96,7 @@ public class SchemaWriter {
                     .addStatement("if (singleton != null) return singleton")
                     .addStatement("synchronized ($N.class) { if (singleton == null) singleton = new $N().build(context); }",
                             model.getClassName().simpleName(),
-                            model.getBuilderClassName().simpleName())
+                            model.getBuilderClassFqcn())
                     .addStatement("return singleton")
                     .build();
         }

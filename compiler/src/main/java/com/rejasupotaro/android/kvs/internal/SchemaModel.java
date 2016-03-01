@@ -21,7 +21,7 @@ public class SchemaModel {
     private ClassName className;
     private String tableName;
     private List<VariableElement> keys = new ArrayList<>();
-    private ClassName builderClassName;
+    private String builderClassFqcn;
 
     public TypeElement getElement() {
         return element;
@@ -43,8 +43,8 @@ public class SchemaModel {
         return keys;
     }
 
-    public ClassName getBuilderClassName() {
-        return builderClassName;
+    public String getBuilderClassFqcn() {
+        return builderClassFqcn;
     }
 
     public SchemaModel(TypeElement element, Elements elementUtils) {
@@ -57,7 +57,7 @@ public class SchemaModel {
             throw new TableNameIsInvalidException(originalClassName + " is invalid. Table class name should end with 'Schema'");
         }
         this.className = ClassName.get(packageName, originalClassName.replace("Schema", ""));
-        this.builderClassName = getBuilderClassName(table);
+        this.builderClassFqcn = getBuilderFqcn(table);
 
         findAnnotations(element);
     }
@@ -82,7 +82,7 @@ public class SchemaModel {
         return type.getQualifiedName().toString().substring(packageLen).replace('.', '$');
     }
 
-    private static ClassName getBuilderClassName(Table table) {
+    private static String getBuilderFqcn(Table table) {
         TypeMirror typeMirror = null;
         try {
             table.builder();
@@ -90,6 +90,6 @@ public class SchemaModel {
             typeMirror = e.getTypeMirror();
         }
         assert typeMirror != null;
-        return ClassName.bestGuess(typeMirror.toString());
+        return typeMirror.toString();
     }
 }

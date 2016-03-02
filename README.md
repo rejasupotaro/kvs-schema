@@ -2,26 +2,35 @@ KVS Schema
 ==========
 
 KVS Schema is a library to manage key-value data for Android.
-This library generates methods from each key like below in compile time.
+This library generates methods from annotated fields in compile time.
+For example, when a schema class has `@Key("user_id") String userId` like below,
 
-- `get*`
-- `put*`
-- `remove*`
-- `has*`
+```java
+@Table(name = "example")
+public class ExamplePrefsSchema {
+    @Key("user_id") String userId;
+}
+```
 
-Data will is stored on SharedPreferences through generated class.
+KVS Schema generates accessor methods below.
+
+- `ExamplePrefs#getUserId`
+- `ExamplePrefs#putUserId`
+- `ExamplePrefs#removeUserId`
+- `ExamplePrefs#hasUserId`
+
+Values are stored on SharedPreferences through generated class.
 
 How to use
 ----------
 
 ### Create Schema
 
-First, create a schema class.
-Class name should be `*Schema`. Table's value become SharedPreferences's file name.
+Class name should be `*Schema`.
 
 ```java
-@Table("example")
-public abstract class ExamplePrefsSchema {
+@Table(name = "example")
+public class ExamplePrefsSchema {
     @Key("user_id") int userId;
     @Key("user_name") String userName;
 }
@@ -29,7 +38,7 @@ public abstract class ExamplePrefsSchema {
 
 ### Read and Write
 
-`put*`, `get*`, `has*` and `remove*` methods will be generated. You can use these methods through generated class.
+`put*`, `get*`, `has*` and `remove*` methods will be generated in compile time.
 
 ```java
 ExamplePrefs prefs = ExamplePrefs.get(context);
@@ -40,6 +49,15 @@ prefs.getUserName(); // => Jack
 prefs.removeUserName();
 prefs.hasUserName(); // => false
 ```
+
+Initialize method (ExamplePrefs.get) is also generated. It provides singleton instance of Prefs.
+You can change initialize method of Prefs by specifying builder class.
+
+```java
+@Table(name = "example", builder = ExamplePrefsBuilder.class)
+```
+
+See: https://github.com/rejasupotaro/kvs-schema/pull/12
 
 ### Supported types
 
@@ -52,9 +70,9 @@ kvs-schema supports these types for now.
 - long
 - String set
 
-### Saved XML (the case of PrefSchema)
+### Saved XML
 
-`@Table`'s value becomes SharedPreferences' name.
+Table's name becomes SharedPreferences' name.
 
 ```xml
 root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml
@@ -70,8 +88,8 @@ This library is distributed by [JitPack](https://jitpack.io/).
 Add dependencies your build.gradle
 
 ```groovy
-apt 'com.github.rejasupotaro.kvs-schema:compiler:2.1.0'
-compile 'com.github.rejasupotaro.kvs-schema:library:2.1.0'
+apt 'com.github.rejasupotaro.kvs-schema:compiler:3.0.0'
+compile 'com.github.rejasupotaro.kvs-schema:library:3.0.0'
 ```
 
 Migration
@@ -89,7 +107,7 @@ editor.putString("user_name", "rejasupotaro");
 editor.apply();
 ```
 
-your data is saved in `path/to/app/shared_prefs/package_name_preferences.xml`. The schema becomes below.
+your data is saved on `path/to/app/shared_prefs/package_name_preferences.xml`. The schema becomes below.
 
 ```java
 @Table("package_name_preferences")
@@ -102,6 +120,8 @@ public abstract class ExamplePrefsSchema extends PrefSchema {
     String userName;
 }
 ```
+
+See concrete example: https://github.com/konifar/droidkaigi2016/pull/311
 
 In addition, SharedPreferencesInfo may help you to migrate existing app. You can get existing SharedPreferences through `SharedPreferencesInfo.getAllPrefsAsTable`.
 

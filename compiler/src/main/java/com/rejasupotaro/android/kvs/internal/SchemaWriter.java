@@ -77,16 +77,29 @@ public class SchemaWriter {
     }
 
     private MethodSpec createInitializeMethod() {
-        return MethodSpec.methodBuilder("get")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(model.getClassName())
-                .addParameter(ClassName.get("android.content", "Context"), "context")
-                .addStatement("if (singleton != null) return singleton")
-                .addStatement("synchronized ($N.class) { if (singleton == null) singleton = new $N(context); }",
-                        model.getClassName().simpleName(),
-                        model.getClassName().simpleName())
-                .addStatement("return singleton")
-                .build();
+        if (model.getBuilderClassFqcn().equals("java.lang.Object")) {
+            return MethodSpec.methodBuilder("get")
+                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                    .returns(model.getClassName())
+                    .addParameter(ClassName.get("android.content", "Context"), "context")
+                    .addStatement("if (singleton != null) return singleton")
+                    .addStatement("synchronized ($N.class) { if (singleton == null) singleton = new $N(context); }",
+                            model.getClassName().simpleName(),
+                            model.getClassName().simpleName())
+                    .addStatement("return singleton")
+                    .build();
+        } else {
+            return MethodSpec.methodBuilder("get")
+                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                    .returns(model.getClassName())
+                    .addParameter(ClassName.get("android.content", "Context"), "context")
+                    .addStatement("if (singleton != null) return singleton")
+                    .addStatement("synchronized ($N.class) { if (singleton == null) singleton = new $N().build(context); }",
+                            model.getClassName().simpleName(),
+                            model.getBuilderClassFqcn())
+                    .addStatement("return singleton")
+                    .build();
+        }
     }
 
     private List<MethodSpec> createMethods() {

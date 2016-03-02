@@ -5,12 +5,12 @@ import com.rejasupotaro.android.kvs.annotations.Table;
 
 import java.util.Set;
 
-@Table("example")
+@Table(name = "example", builder = ExamplePrefsBuilder.class)
 public abstract class ExamplePrefsSchema {
     @Key("user_id")
     long userId;
     @Key("user_name")
-    String userName = "guest";
+    String userName;
     @Key("user_age")
     int userAge;
     @Key("guest_flag")

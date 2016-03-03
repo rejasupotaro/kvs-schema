@@ -111,13 +111,9 @@ your data is saved on `path/to/app/shared_prefs/package_name_preferences.xml`. T
 
 ```java
 @Table("package_name_preferences")
-public abstract class ExamplePrefsSchema extends PrefSchema {
-    public static ExamplePrefs prefs;
-
-    @Key("user_id")
-    int userId;
-    @Key("user_name")
-    String userName;
+public abstract class ExamplePrefsSchema {
+    @Key("user_id") int userId;
+    @Key("user_name") String userName;
 }
 ```
 

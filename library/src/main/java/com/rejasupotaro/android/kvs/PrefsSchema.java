@@ -3,7 +3,6 @@ package com.rejasupotaro.android.kvs;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public abstract class PrefsSchema {
@@ -62,7 +61,7 @@ public abstract class PrefsSchema {
     }
 
     protected Set<String> getStringSet(String key, Set<String> defValue) {
-        return prefs.getStringSet(key, new HashSet<String>());
+        return prefs.getStringSet(key, defValue);
     }
 
     protected boolean has(String key) {

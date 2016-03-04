@@ -10,90 +10,107 @@ import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 public class ExamplePrefsTest {
 
+    private Context context;
     private ExamplePrefs prefs;
 
     @Before
     public void setup() {
-        Context context = InstrumentationRegistry.getTargetContext();
-        prefs = ExamplePrefs.get(context);
+        this.context = InstrumentationRegistry.getTargetContext();
+        this.prefs = ExamplePrefs.get(context);
+        prefs.clear();
     }
 
     @Test
-    public void checkTypeLongWorks() {
-        prefs.clear();
-        assertFalse(prefs.hasUserId());
+    public void getSingletonInstance() {
+        {
+            ExamplePrefs prefs1 = new ExamplePrefs(context);
+            ExamplePrefs prefs2 = new ExamplePrefs(context);
+            assertThat(prefs1).isNotEqualTo(prefs2);
+        }
+        {
+            ExamplePrefs prefs1 = ExamplePrefs.get(context);
+            ExamplePrefs prefs2 = ExamplePrefs.get(context);
+            assertThat(prefs1).isEqualTo(prefs2);
+        }
+    }
+
+    @Test
+    public void longWorks() {
+        assertThat(prefs.hasUserId()).isFalse();
+        assertThat(prefs.getUserId(-1L)).isEqualTo(-1L);
 
         prefs.putUserId(99999999999L);
-        assertTrue(prefs.hasUserId());
-        assertThat(prefs.getUserId(), is(99999999999L));
+        assertThat(prefs.hasUserId()).isTrue();
+        assertThat(prefs.getUserId()).isEqualTo(99999999999L);
 
         prefs.removeUserId();
-        assertFalse(prefs.hasUserId());
+        assertThat(prefs.hasUserId()).isFalse();
     }
 
     @Test
-    public void checkTypeStringWorks() {
-        prefs.clear();
-        assertFalse(prefs.hasUserName());
-        assertThat(prefs.getUserName("guest"), is("guest"));
+    public void stringWorks() {
+        assertThat(prefs.hasUserName()).isFalse();
+        assertThat(prefs.getUserName("guest")).isEqualTo("guest");
 
         prefs.putUserName("rejasupotaro");
-        assertTrue(prefs.hasUserName());
-        assertThat(prefs.getUserName(), is("rejasupotaro"));
+        assertThat(prefs.hasUserName()).isTrue();
+        assertThat(prefs.getUserName()).isEqualTo("rejasupotaro");
 
         prefs.removeUserName();
-        assertFalse(prefs.hasUserName());
+        assertThat(prefs.hasUserName()).isFalse();
     }
 
     @Test
-    public void checkTypeIntWorks() {
-        prefs.clear();
-        assertFalse(prefs.hasUserAge());
+    public void intWorks() {
+        assertThat(prefs.hasUserAge()).isFalse();
+        assertThat(prefs.getUserAge(-1)).isEqualTo(-1);
 
         prefs.putUserAge(26);
-        assertTrue(prefs.hasUserAge());
-        assertThat(prefs.getUserAge(), is(26));
+        assertThat(prefs.hasUserAge()).isTrue();
+        assertThat(prefs.getUserAge()).isEqualTo(26);
 
         prefs.removeUserAge();
-        assertFalse(prefs.hasUserAge());
+        assertThat(prefs.hasUserAge()).isFalse();
     }
 
     @Test
-    public void checkTypeBooleanWorks() {
-        prefs.clear();
-        assertFalse(prefs.hasGuestFlag());
+    public void booleanWorks() {
+        assertThat(prefs.hasGuestFlag()).isFalse();
+        assertThat(prefs.getGuestFlag(true)).isTrue();
 
         prefs.putGuestFlag(true);
-        assertTrue(prefs.hasGuestFlag());
-        assertThat(prefs.getGuestFlag(), is(true));
+        assertThat(prefs.hasGuestFlag()).isTrue();
+        assertThat(prefs.getGuestFlag()).isTrue();
 
         prefs.removeGuestFlag();
-        assertFalse(prefs.hasGuestFlag());
+        assertThat(prefs.hasGuestFlag()).isFalse();
     }
 
 
     @Test
-    public void checkTypeStringSetWorks() {
-        prefs.clear();
-        assertFalse(prefs.hasSearchHistory());
+    public void stringSetWorks() {
+        assertThat(prefs.hasSearchHistory()).isFalse();
+        assertThat(prefs.getSearchHistory(new HashSet<String>() {{
+            add("Kotlin");
+        }}).size()).isEqualTo(1);
 
         prefs.putSearchHistory(new HashSet<String>() {{
             add("JAVA");
             add("+");
             add("YOU");
         }});
-        assertTrue(prefs.hasSearchHistory());
-        assertThat(prefs.getSearchHistory().size(), is(3));
+        assertThat(prefs.hasSearchHistory()).isTrue();
+        assertThat(prefs.getSearchHistory().size()).isEqualTo(3);
+        assertThat(prefs.getSearchHistory().contains("JAVA")).isTrue();
+        assertThat(prefs.getSearchHistory().contains("+")).isTrue();
+        assertThat(prefs.getSearchHistory().contains("YOU")).isTrue();
 
         prefs.removeSearchHistory();
-        assertFalse(prefs.hasSearchHistory());
+        assertThat(prefs.hasSearchHistory()).isFalse();
     }
 }

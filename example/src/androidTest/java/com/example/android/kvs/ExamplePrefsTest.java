@@ -40,7 +40,7 @@ public class ExamplePrefsTest {
     }
 
     @Test
-    public void checkTypeLongWorks() {
+    public void longWorks() {
         assertThat(prefs.hasUserId()).isFalse();
 
         prefs.putUserId(99999999999L);
@@ -52,7 +52,7 @@ public class ExamplePrefsTest {
     }
 
     @Test
-    public void checkTypeStringWorks() {
+    public void stringWorks() {
         assertThat(prefs.hasUserName()).isFalse();
         assertThat(prefs.getUserName("guest")).isEqualTo("guest");
 
@@ -65,7 +65,7 @@ public class ExamplePrefsTest {
     }
 
     @Test
-    public void checkTypeIntWorks() {
+    public void intWorks() {
         assertThat(prefs.hasUserAge()).isFalse();
 
         prefs.putUserAge(26);
@@ -77,7 +77,7 @@ public class ExamplePrefsTest {
     }
 
     @Test
-    public void checkTypeBooleanWorks() {
+    public void booleanWorks() {
         assertThat(prefs.hasGuestFlag()).isFalse();
 
         prefs.putGuestFlag(true);
@@ -90,7 +90,7 @@ public class ExamplePrefsTest {
 
 
     @Test
-    public void checkTypeStringSetWorks() {
+    public void stringSetWorks() {
         assertThat(prefs.hasSearchHistory()).isFalse();
 
         prefs.putSearchHistory(new HashSet<String>() {{

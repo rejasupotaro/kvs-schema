@@ -5,10 +5,12 @@ import com.rejasupotaro.android.kvs.internal.exceptions.TableNameDuplicateExcept
 import com.rejasupotaro.android.kvs.internal.exceptions.TableNameIsNotDefinedException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 
@@ -16,18 +18,16 @@ import static com.rejasupotaro.android.kvs.internal.StringUtils.isEmpty;
 
 public final class EnvParser {
     public static List<SchemaModel> parse(RoundEnvironment env, Elements elementUtils) {
-        ArrayList<SchemaModel> models = new ArrayList<>();
-        ArrayList<Element> elements = new ArrayList<>(env.getElementsAnnotatedWith(Table.class));
-        for (Element element : elements) {
-            SchemaModel model = new SchemaModel((TypeElement) element, elementUtils);
-            models.add(model);
-        }
+        List<SchemaModel> models = new ArrayList<>(env.getElementsAnnotatedWith(Table.class))
+                .stream()
+                .map(element -> new SchemaModel((TypeElement) element, elementUtils))
+                .collect(Collectors.toList());
         validateSchemaModel(models);
         return models;
     }
 
     public static void validateSchemaModel(List<SchemaModel> models) {
-        List<String> tableNames = new ArrayList<>();
+        Set<String> tableNames = new HashSet<>();
         for (SchemaModel model : models) {
             String tableName = model.getTableName();
 

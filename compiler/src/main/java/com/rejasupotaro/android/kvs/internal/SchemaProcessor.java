@@ -5,7 +5,6 @@ import com.rejasupotaro.android.kvs.annotations.Table;
 
 import java.io.IOException;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -47,15 +46,16 @@ public class SchemaProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment env) {
-        List<SchemaModel> models = EnvParser.parse(env, elementUtils);
-        for (SchemaModel model : models) {
-            SchemaWriter writer = new SchemaWriter(model);
-            try {
-                writer.write(filer);
-            } catch (IOException e) {
-                messager.printMessage(Diagnostic.Kind.ERROR, e.getMessage());
-            }
-        }
+        EnvParser.parse(env, elementUtils)
+                .stream()
+                .map(SchemaWriter::new)
+                .forEach(writer -> {
+                    try {
+                        writer.write(filer);
+                    } catch (IOException e) {
+                        messager.printMessage(Diagnostic.Kind.ERROR, e.getMessage());
+                    }
+                });
         return true;
     }
 }

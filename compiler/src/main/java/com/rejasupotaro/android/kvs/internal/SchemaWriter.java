@@ -122,7 +122,7 @@ public class SchemaWriter {
             String argTypeOfSuperMethod = "boolean";
 
             methodSpecs.add(createGetterMethodWithDefaultValueMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
-            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, false));
+            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, "false"));
             methodSpecs.addAll(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
             methodSpecs.add(createRemoveMethod(keyName, fieldName));
@@ -145,7 +145,7 @@ public class SchemaWriter {
             TypeName fieldType = TypeName.FLOAT;
             String argTypeOfSuperMethod = "float";
 
-            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, 0f));
+            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, "0.0F"));
             methodSpecs.add(createGetterMethodWithDefaultValueMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.addAll(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
@@ -154,7 +154,7 @@ public class SchemaWriter {
             TypeName fieldType = TypeName.INT;
             String argTypeOfSuperMethod = "int";
 
-            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, 0));
+            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, "0"));
             methodSpecs.add(createGetterMethodWithDefaultValueMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.addAll(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
@@ -163,7 +163,7 @@ public class SchemaWriter {
             TypeName fieldType = TypeName.LONG;
             String argTypeOfSuperMethod = "long";
 
-            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, 0L));
+            methodSpecs.add(createGetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName, "0L"));
             methodSpecs.add(createGetterMethodWithDefaultValueMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.addAll(createSetterMethod(fieldType, argTypeOfSuperMethod, keyName, fieldName));
             methodSpecs.add(createHasMethod(keyName, fieldName));
@@ -191,7 +191,7 @@ public class SchemaWriter {
         return methodSpecs;
     }
 
-    private MethodSpec createGetterMethod(TypeName fieldType, String argTypeOfSuperMethod, String keyName, String fieldName, Object defaultValue) {
+    private MethodSpec createGetterMethod(TypeName fieldType, String argTypeOfSuperMethod, String keyName, String fieldName, String defaultValue) {
         String methodName = "get" + StringUtils.capitalize(fieldName);
         String superMethodName = "get" + StringUtils.capitalize(argTypeOfSuperMethod);
         return MethodSpec.methodBuilder(methodName)

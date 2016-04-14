@@ -79,6 +79,19 @@ public class ExamplePrefsTest {
     }
 
     @Test
+    public void floatWorks(){
+        assertThat(prefs.hasProgress()).isFalse();
+        assertThat(prefs.getProgress(-1.0F)).isEqualTo(-1.0F);
+
+        prefs.putProgress(40.0F);
+        assertThat(prefs.hasProgress()).isTrue();
+        assertThat(prefs.getProgress()).isEqualTo(40.0F);
+
+        prefs.removeProgress();
+        assertThat(prefs.hasProgress()).isFalse();
+    }
+
+    @Test
     public void booleanWorks() {
         assertThat(prefs.hasGuestFlag()).isFalse();
         assertThat(prefs.getGuestFlag(true)).isTrue();

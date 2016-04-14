@@ -15,6 +15,8 @@ public abstract class ExamplePrefsSchema {
     int userAge;
     @Key("guest_flag")
     boolean guestFlag;
+    @Key("progress")
+    float progress;
     @Key("search_history")
     Set<String> searchHistory;
 }

@@ -84,22 +84,11 @@ root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml
 
 ### Installation
 
-This library is distributed by [JitPack](https://jitpack.io/).
-
-Add the JitPack repository and dependencies to your build.gradle.
+Add dependencies to your build.gradle.
 
 ```groovy
-allprojects {
-    repositories {
-        ...
-        maven { url "https://jitpack.io" }
-    }
-}
-
-apply plugin: 'com.neenbedankt.android-apt'
-
-apt 'com.github.rejasupotaro.kvs-schema:compiler:3.1.0'
-compile 'com.github.rejasupotaro.kvs-schema:library:3.1.0'
+apt 'com.rejasupotaro:kvs-schema-compiler:4.0.0'
+compile 'com.rejasupotaro:kvs-schema:4.0.0'
 ```
 
 Migration
@@ -151,26 +140,3 @@ You can see what kind of data is saved in your app like below.
  ║ user_id   │ 1            │ String ║
  ╚═══════════╧══════════════╧════════╝
  ```
-
-Development
-----------
-
-**Show version**
-
-```sh
-$ ./gradlew version
-```
-
-**Bump version**
-
-```sh
-$ ./gradlew bumpMajor
-$ ./gradlew bumpMinor
-$ ./gradlew bumpPatch
-```
-
-**Generate README**
-
-```sh
-$ ./gradlew genReadMe
-```

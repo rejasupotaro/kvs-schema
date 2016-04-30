@@ -64,10 +64,12 @@ public class SchemaWriter {
     private List<MethodSpec> createConstructors() {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.add(MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC)
                 .addParameter(ClassName.get("android.content", "Context"), "context")
                 .addStatement("init(context, TABLE_NAME)")
                 .build());
         methodSpecs.add(MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC)
                 .addParameter(ClassName.get("android.content", "SharedPreferences"), "prefs")
                 .addStatement("init(prefs)")
                 .build());
@@ -113,7 +115,9 @@ public class SchemaWriter {
 
         if (TypeName.BOOLEAN.equals(field.getType())) {
             String argTypeOfSuperMethod = "boolean";
-            String defaultValue = "false";
+            String defaultValue = field.getValue() == null
+                    ? "false"
+                    : field.getValue().toString();
 
             methodSpecs.add(createGetterWithDefaultValue(field, argTypeOfSuperMethod));
             methodSpecs.add(createGetter(field, argTypeOfSuperMethod, defaultValue));
@@ -122,13 +126,16 @@ public class SchemaWriter {
             methodSpecs.add(createRemoveMethod(field));
         } else if (ClassName.get(String.class).equals(field.getType())) {
             String argTypeOfSuperMethod = "String";
+            String defaultValue = field.getValue() == null
+                    ? ""
+                    : field.getValue().toString();
 
             String methodName = "get" + StringUtils.capitalize(field.getName());
             String superMethodName = "get" + StringUtils.capitalize(argTypeOfSuperMethod);
             methodSpecs.add(MethodSpec.methodBuilder(methodName)
                     .addModifiers(Modifier.PUBLIC)
                     .returns(field.getType())
-                    .addStatement("return $N($S, \"\")", superMethodName, field.getPrefKeyName())
+                    .addStatement("return $N($S, $S)", superMethodName, field.getPrefKeyName(), defaultValue)
                     .build());
             methodSpecs.addAll(createSetter(field, argTypeOfSuperMethod));
             methodSpecs.add(createGetterWithDefaultValue(field, argTypeOfSuperMethod));
@@ -136,7 +143,9 @@ public class SchemaWriter {
             methodSpecs.add(createRemoveMethod(field));
         } else if (TypeName.FLOAT.equals(field.getType())) {
             String argTypeOfSuperMethod = "float";
-            String defaultValue = "0.0F";
+            String defaultValue = field.getValue() == null
+                    ? "0.0F"
+                    : field.getValue().toString() + "f";
 
             methodSpecs.add(createGetterWithDefaultValue(field, argTypeOfSuperMethod));
             methodSpecs.add(createGetter(field, argTypeOfSuperMethod, defaultValue));
@@ -145,7 +154,9 @@ public class SchemaWriter {
             methodSpecs.add(createRemoveMethod(field));
         } else if (TypeName.INT.equals(field.getType())) {
             String argTypeOfSuperMethod = "int";
-            String defaultValue = "0";
+            String defaultValue = field.getValue() == null
+                    ? "0"
+                    : field.getValue().toString();
 
             methodSpecs.add(createGetterWithDefaultValue(field, argTypeOfSuperMethod));
             methodSpecs.add(createGetter(field, argTypeOfSuperMethod, defaultValue));
@@ -154,7 +165,9 @@ public class SchemaWriter {
             methodSpecs.add(createRemoveMethod(field));
         } else if (TypeName.LONG.equals(field.getType())) {
             String argTypeOfSuperMethod = "long";
-            String defaultValue = "0L";
+            String defaultValue = field.getValue() == null
+                    ? "0L"
+                    : field.getValue().toString() + "L";
 
             methodSpecs.add(createGetterWithDefaultValue(field, argTypeOfSuperMethod));
             methodSpecs.add(createGetter(field, argTypeOfSuperMethod, defaultValue));
@@ -163,9 +176,9 @@ public class SchemaWriter {
             methodSpecs.add(createRemoveMethod(field));
         } else if (ParameterizedTypeName.get(Set.class, String.class).equals(field.getType())) {
             String argTypeOfSuperMethod = "StringSet";
-
             String methodName = "get" + StringUtils.capitalize(field.getName());
             String superMethodName = "get" + StringUtils.capitalize(argTypeOfSuperMethod);
+
             methodSpecs.add(MethodSpec.methodBuilder(methodName)
                     .addModifiers(Modifier.PUBLIC)
                     .returns(field.getType())

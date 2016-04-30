@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.android.kvs.prefs.schemas.ExamplePrefs;
 import com.rejasupotaro.android.kvs.SharedPreferencesInfo;
 import com.rejasupotaro.android.kvs.SharedPreferencesTable;
 

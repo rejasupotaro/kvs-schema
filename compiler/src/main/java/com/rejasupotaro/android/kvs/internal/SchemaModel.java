@@ -10,22 +10,16 @@ import java.util.List;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 
 public class SchemaModel {
-    private TypeElement element;
     private String originalClassName;
     private ClassName className;
     private String tableName;
-    private List<VariableElement> keys = new ArrayList<>();
+    private List<Field> keys = new ArrayList<>();
     private String builderClassFqcn;
-
-    public TypeElement getElement() {
-        return element;
-    }
 
     public String getOriginalClassName() {
         return originalClassName;
@@ -39,7 +33,7 @@ public class SchemaModel {
         return tableName;
     }
 
-    public List<VariableElement> getKeys() {
+    public List<Field> getKeys() {
         return keys;
     }
 
@@ -48,7 +42,6 @@ public class SchemaModel {
     }
 
     public SchemaModel(TypeElement element, Elements elementUtils) {
-        this.element = element;
         Table table = element.getAnnotation(Table.class);
         this.tableName = table.name();
         String packageName = getPackageName(elementUtils, element);
@@ -68,7 +61,7 @@ public class SchemaModel {
 
             Key key = enclosedElement.getAnnotation(Key.class);
             if (key != null) {
-                keys.add((VariableElement) enclosedElement);
+                keys.add(new Field(enclosedElement, key));
             }
         }
     }

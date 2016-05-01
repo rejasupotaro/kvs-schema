@@ -14,7 +14,7 @@ Let's say you will store user id, You have to create a schema class like below.
 ```java
 @Table(name = "example")
 public class ExamplePrefsSchema {
-    @Key("user_id") int userId;
+    @Key(name = "user_id") int userId;
 }
 ```
 
@@ -131,10 +131,10 @@ editor.apply();
 your data is saved on `path/to/app/shared_prefs/package_name_preferences.xml`. The schema class becomes like below.
 
 ```java
-@Table("package_name_preferences")
+@Table(name = "package_name_preferences")
 public abstract class ExamplePrefsSchema {
-    @Key("user_id") int userId;
-    @Key("user_name") String userName;
+    @Key(name = "user_id") int userId;
+    @Key(name = "user_name") String userName;
 }
 ```
 

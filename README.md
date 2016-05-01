@@ -87,8 +87,8 @@ root@android:/data/data/com.example.android.kvs/shared_prefs # cat example.xml
 Add dependencies to your build.gradle.
 
 ```groovy
-apt 'com.rejasupotaro:kvs-schema-compiler:4.0.0'
-compile 'com.rejasupotaro:kvs-schema:4.0.0'
+apt 'com.rejasupotaro:kvs-schema-compiler:4.1.0'
+compile 'com.rejasupotaro:kvs-schema:4.1.0'
 ```
 
 Migration

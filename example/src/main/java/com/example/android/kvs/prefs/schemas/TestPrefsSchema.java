@@ -7,17 +7,17 @@ import java.util.Set;
 
 @Table(name = "test")
 public abstract class TestPrefsSchema {
-    @Key("long_value")
+    @Key(name = "long_value")
     long longValue;
-    @Key("string_value")
+    @Key(name = "string_value")
     String stringValue;
-    @Key("int_value")
+    @Key(name = "int_value")
     int intValue;
-    @Key("boolean_value")
+    @Key(name = "boolean_value")
     boolean booleanValue;
-    @Key("float_value")
+    @Key(name = "float_value")
     float floatValue;
-    @Key("string_set_value")
+    @Key(name = "string_set_value")
     Set<String> stringSetValue;
 }
 

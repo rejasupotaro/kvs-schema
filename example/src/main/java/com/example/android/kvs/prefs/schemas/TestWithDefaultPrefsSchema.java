@@ -7,17 +7,17 @@ import java.util.Set;
 
 @Table(name = "test_with_default")
 public abstract class TestWithDefaultPrefsSchema {
-    @Key("long_value")
+    @Key(name = "long_value")
     final long longValue = 99999999999L;
-    @Key("string_value")
+    @Key(name = "string_value")
     final String stringValue = "abc";
-    @Key("int_value")
+    @Key(name = "int_value")
     final int intValue = -1;
-    @Key("boolean_value")
+    @Key(name = "boolean_value")
     final boolean booleanValue = true;
-    @Key("float_value")
+    @Key(name = "float_value")
     final float floatValue = -1.0f;
-    @Key("string_set_value")
+    @Key(name = "string_set_value")
     Set<String> stringSetValue;
 }
 

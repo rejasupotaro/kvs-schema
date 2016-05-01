@@ -6,12 +6,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class StringUtilsTest {
     @Test
-    public void testCapitalize() {
+    public void capitalize() {
         assertThat(StringUtils.capitalize("username")).isEqualTo("Username");
     }
 
     @Test
-    public void testIsEmpty() {
+    public void isEmpty() {
         assertThat(StringUtils.isEmpty(null)).isTrue();
         assertThat(StringUtils.isEmpty("")).isTrue();
         assertThat(StringUtils.isEmpty("foo")).isFalse();

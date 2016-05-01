@@ -15,28 +15,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class TestWithDefaultPrefsTest {
 
-    private Context context;
     private TestWithDefaultPrefs prefs;
 
     @Before
     public void setup() {
-        this.context = InstrumentationRegistry.getTargetContext();
+        Context context = InstrumentationRegistry.getTargetContext();
         this.prefs = TestWithDefaultPrefs.get(context);
         prefs.clear();
-    }
-
-    @Test
-    public void getSingletonInstance() {
-        {
-            TestWithDefaultPrefs prefs1 = new TestWithDefaultPrefs(context);
-            TestWithDefaultPrefs prefs2 = new TestWithDefaultPrefs(context);
-            assertThat(prefs1).isNotEqualTo(prefs2);
-        }
-        {
-            TestWithDefaultPrefs prefs1 = TestWithDefaultPrefs.get(context);
-            TestWithDefaultPrefs prefs2 = TestWithDefaultPrefs.get(context);
-            assertThat(prefs1).isEqualTo(prefs2);
-        }
     }
 
     @Test

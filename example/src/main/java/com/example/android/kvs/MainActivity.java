@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.android.kvs.models.User;
 import com.example.android.kvs.prefs.schemas.ExamplePrefs;
 import com.rejasupotaro.android.kvs.SharedPreferencesInfo;
 import com.rejasupotaro.android.kvs.SharedPreferencesTable;
@@ -39,20 +40,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupViews() {
+        User user = new User(1, "Smith", 32, true);
+
         ExamplePrefs prefs = ExamplePrefs.get(this);
 
-        prefs.putUserId(1L);
+        prefs.putUserId(user.getId());
         long id = prefs.getUserId();
         userIdTextView.setText("" + id);
 
-        prefs.putGuestFlag(false);
+        prefs.putGuestFlag(user.isGuest());
         boolean isGuest = prefs.getGuestFlag();
         guestFlagTextView.setText("" + isGuest);
 
-        prefs.putUserName("Smith");
+        prefs.putUserName(user.getName());
         userNameTextView.setText(prefs.getUserName());
 
-        prefs.putUserAge(32);
+        prefs.putUserAge(user.getAge());
         long age = prefs.getUserAge();
         userAgeTextView.setText("" + age);
 
@@ -61,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
             add("pork stake");
             add("banana cake");
         }});
-        Set<String> languages = prefs.getSearchHistory();
-        searchHistoryTextView.setText(languages.toString());
+        Set<String> searchHistory = prefs.getSearchHistory();
+        searchHistoryTextView.setText(searchHistory.toString());
 
         List<SharedPreferencesTable> tables = SharedPreferencesInfo.getAll(this);
         for (SharedPreferencesTable table : tables) {

@@ -8,16 +8,16 @@ import java.util.Set;
 
 @Table(name = "example", builder = ExamplePrefsBuilder.class)
 public abstract class ExamplePrefsSchema {
-    @Key("user_id")
+    @Key(name = "user_id")
     long userId;
-    @Key("user_name")
+    @Key(name = "user_name")
     String userName;
-    @Key("user_age")
+    @Key(name = "user_age")
     int userAge;
-    @Key("guest_flag")
+    @Key(name = "guest_flag")
     boolean guestFlag;
-    @Key("progress")
+    @Key(name = "progress")
     float progress;
-    @Key("search_history")
+    @Key(name = "search_history")
     Set<String> searchHistory;
 }

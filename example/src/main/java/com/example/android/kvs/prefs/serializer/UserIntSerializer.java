@@ -1,12 +1,12 @@
 package com.example.android.kvs.prefs.serializer;
 
 import com.example.android.kvs.models.User;
-import com.rejasupotaro.android.kvs.serializers.Serializer;
+import com.rejasupotaro.android.kvs.serializers.PrefsSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserIntSerializer implements Serializer<User, Integer> {
+public class UserIntSerializer implements PrefsSerializer<User, Integer> {
     public static final List<User> USERS = new ArrayList<User>() {{
         add(new User(1, "Smith", 32, true));
         add(new User(2, "John", 28, true));

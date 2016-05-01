@@ -1,8 +1,8 @@
 package com.rejasupotaro.android.kvs.internal;
 
 import com.rejasupotaro.android.kvs.annotations.Key;
-import com.rejasupotaro.android.kvs.serializers.DefaultSerializer;
-import com.rejasupotaro.android.kvs.serializers.Serializer;
+import com.rejasupotaro.android.kvs.serializers.DefaultPrefsSerializer;
+import com.rejasupotaro.android.kvs.serializers.PrefsSerializer;
 import com.squareup.javapoet.TypeName;
 
 import java.lang.reflect.ParameterizedType;
@@ -30,7 +30,7 @@ public class Field {
     }
 
     public boolean hasSerializer() {
-        return !TypeName.get(DefaultSerializer.class).equals(serializerType);
+        return !TypeName.get(DefaultPrefsSerializer.class).equals(serializerType);
     }
 
     public TypeName getSerializerType() {
@@ -92,7 +92,7 @@ public class Field {
     }
 
     private Type[] getSerializerGenericsTypesByClass(Class clazz) {
-        Type type = Serializer.class;
+        Type type = PrefsSerializer.class;
         Class targetClass = clazz;
         while (targetClass != null) {
             for (Type in : targetClass.getGenericInterfaces()) {
@@ -118,7 +118,7 @@ public class Field {
                 for (TypeMirror in : targetType.getInterfaces()) {
                     DeclaredType inType = (DeclaredType) in;
                     if (inType.asElement().getSimpleName().toString()
-                            .equals(Serializer.class.getSimpleName())) {
+                            .equals(PrefsSerializer.class.getSimpleName())) {
                         return inType.getTypeArguments();
                     }
                 }

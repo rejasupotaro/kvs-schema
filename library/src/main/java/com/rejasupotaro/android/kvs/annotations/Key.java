@@ -1,7 +1,7 @@
 package com.rejasupotaro.android.kvs.annotations;
 
-import com.rejasupotaro.android.kvs.serializers.DefaultSerializer;
-import com.rejasupotaro.android.kvs.serializers.Serializer;
+import com.rejasupotaro.android.kvs.serializers.DefaultPrefsSerializer;
+import com.rejasupotaro.android.kvs.serializers.PrefsSerializer;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,5 +12,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Key {
     String name();
-    Class<? extends Serializer> serializer() default DefaultSerializer.class;
+    Class<? extends PrefsSerializer> serializer() default DefaultPrefsSerializer.class;
 }

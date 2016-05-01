@@ -1,6 +1,6 @@
 package com.rejasupotaro.android.kvs.serializers;
 
-public class DefaultSerializer implements Serializer<Object, Object> {
+public class DefaultPrefsSerializer implements PrefsSerializer<Object, Object> {
     @Override
     public Object serialize(Object src) {
         return src;

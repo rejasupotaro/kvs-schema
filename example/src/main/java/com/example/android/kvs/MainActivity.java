@@ -19,15 +19,15 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-    @Bind(R.id.long_value_text)
+    @Bind(R.id.user_id_text)
     TextView userIdTextView;
-    @Bind(R.id.string_value_text)
+    @Bind(R.id.user_name_text)
     TextView userNameTextView;
-    @Bind(R.id.int_value_text)
+    @Bind(R.id.user_age_text)
     TextView userAgeTextView;
-    @Bind(R.id.boolean_value_text)
+    @Bind(R.id.guest_flag_text)
     TextView guestFlagTextView;
-    @Bind(R.id.string_set_value_text)
+    @Bind(R.id.search_history_text)
     TextView searchHistoryTextView;
 
     @Override
@@ -49,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
         boolean isGuest = prefs.getGuestFlag();
         guestFlagTextView.setText("" + isGuest);
 
-        prefs.putUserName("rejasupotaro");
+        prefs.putUserName("Smith");
         userNameTextView.setText(prefs.getUserName());
 
-        prefs.putUserAge(26);
+        prefs.putUserAge(32);
         long age = prefs.getUserAge();
         userAgeTextView.setText("" + age);
 

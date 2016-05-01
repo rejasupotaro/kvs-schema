@@ -1,5 +1,6 @@
-package com.example.android.kvs;
+package com.example.android.kvs.prefs.schemas;
 
+import com.example.android.kvs.prefs.ExamplePrefsBuilder;
 import com.rejasupotaro.android.kvs.annotations.Key;
 import com.rejasupotaro.android.kvs.annotations.Table;
 

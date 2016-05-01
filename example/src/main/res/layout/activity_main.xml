@@ -1,7 +1,7 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:columnCount="3"
+    android:columnCount="2"
     android:padding="@dimen/spacing_large">
 
     <!-- header -->
@@ -15,73 +15,48 @@
         android:text="Value"
         android:textStyle="bold" />
 
-    <TextView
-        style="@style/GridCell"
-        android:text="Type"
-        android:textStyle="bold" />
-
     <!-- long -->
     <TextView
         style="@style/GridCell"
-        android:text="id" />
+        android:text="user_id" />
 
     <TextView
-        android:id="@+id/long_value_text"
+        android:id="@+id/user_id_text"
         style="@style/GridCell" />
-
-    <TextView
-        style="@style/GridCell"
-        android:text="long" />
 
     <!-- string -->
     <TextView
         style="@style/GridCell"
-        android:text="name" />
+        android:text="user_name" />
 
     <TextView
-        android:id="@+id/string_value_text"
+        android:id="@+id/user_name_text"
         style="@style/GridCell" />
-
-    <TextView
-        style="@style/GridCell"
-        android:text="string" />
 
     <!-- int -->
     <TextView
         style="@style/GridCell"
-        android:text="age" />
+        android:text="user_age" />
 
     <TextView
-        android:id="@+id/int_value_text"
+        android:id="@+id/user_age_text"
         style="@style/GridCell" />
-
-    <TextView
-        style="@style/GridCell"
-        android:text="int" />
 
     <!-- boolean -->
     <TextView
         style="@style/GridCell"
-        android:text="guest?" />
+        android:text="guest_flag" />
 
     <TextView
-        android:id="@+id/boolean_value_text"
+        android:id="@+id/guest_flag_text"
         style="@style/GridCell" />
-
-    <TextView
-        style="@style/GridCell"
-        android:text="boolean" />
 
     <!-- string set -->
     <TextView
         style="@style/GridCell"
-        android:text="search history" />
+        android:text="search_history" />
 
     <TextView
-        android:id="@+id/string_set_value_text"
+        android:id="@+id/search_history_text"
         style="@style/GridCell" />
-
-    <TextView
-        style="@style/GridCell"
-        android:text="string_set" />
 </GridLayout>

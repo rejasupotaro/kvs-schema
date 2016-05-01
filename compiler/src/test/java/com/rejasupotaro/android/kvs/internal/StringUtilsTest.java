@@ -14,7 +14,6 @@ public class StringUtilsTest {
     public void testIsEmpty() {
         assertThat(StringUtils.isEmpty(null)).isTrue();
         assertThat(StringUtils.isEmpty("")).isTrue();
-        assertThat(StringUtils.isEmpty("hoge")).isFalse();
+        assertThat(StringUtils.isEmpty("foo")).isFalse();
     }
-
 }

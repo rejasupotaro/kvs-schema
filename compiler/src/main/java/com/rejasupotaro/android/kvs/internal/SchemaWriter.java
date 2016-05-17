@@ -118,9 +118,7 @@ public class SchemaWriter {
                     ? "false"
                     : field.getValue().toString();
             methodSpecs.add(createGetterWithDefaultValue(field, argTypeOfSuperMethod));
-            if (!field.hasSerializer()) {
-                methodSpecs.add(createGetter(field, argTypeOfSuperMethod, defaultValue));
-            }
+            methodSpecs.add(createGetter(field, argTypeOfSuperMethod, defaultValue));
             methodSpecs.addAll(createSetter(field, argTypeOfSuperMethod));
             methodSpecs.add(createHasMethod(field));
             methodSpecs.add(createRemoveMethod(field));
@@ -157,9 +155,7 @@ public class SchemaWriter {
                     ? "0.0F"
                     : field.getValue().toString() + "f";
             methodSpecs.add(createGetterWithDefaultValue(field, argTypeOfSuperMethod));
-            if (!field.hasSerializer()) {
-                methodSpecs.add(createGetter(field, argTypeOfSuperMethod, defaultValue));
-            }
+            methodSpecs.add(createGetter(field, argTypeOfSuperMethod, defaultValue));
             methodSpecs.addAll(createSetter(field, argTypeOfSuperMethod));
             methodSpecs.add(createHasMethod(field));
             methodSpecs.add(createRemoveMethod(field));
@@ -169,9 +165,7 @@ public class SchemaWriter {
                     ? "0"
                     : field.getValue().toString();
             methodSpecs.add(createGetterWithDefaultValue(field, argTypeOfSuperMethod));
-            if (!field.hasSerializer()) {
-                methodSpecs.add(createGetter(field, argTypeOfSuperMethod, defaultValue));
-            }
+            methodSpecs.add(createGetter(field, argTypeOfSuperMethod, defaultValue));
             methodSpecs.addAll(createSetter(field, argTypeOfSuperMethod));
             methodSpecs.add(createHasMethod(field));
             methodSpecs.add(createRemoveMethod(field));
@@ -181,9 +175,7 @@ public class SchemaWriter {
                     ? "0L"
                     : field.getValue().toString() + "L";
             methodSpecs.add(createGetterWithDefaultValue(field, argTypeOfSuperMethod));
-            if (!field.hasSerializer()) {
-                methodSpecs.add(createGetter(field, argTypeOfSuperMethod, defaultValue));
-            }
+            methodSpecs.add(createGetter(field, argTypeOfSuperMethod, defaultValue));
             methodSpecs.addAll(createSetter(field, argTypeOfSuperMethod));
             methodSpecs.add(createHasMethod(field));
             methodSpecs.add(createRemoveMethod(field));

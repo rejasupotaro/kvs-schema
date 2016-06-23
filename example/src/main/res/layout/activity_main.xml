@@ -1,62 +1,65 @@
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:columnCount="2"
-    android:padding="@dimen/spacing_large">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- header -->
-    <TextView
-        style="@style/GridCell"
-        android:text="Key"
-        android:textStyle="bold" />
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:padding="@dimen/spacing_large">
 
-    <TextView
-        style="@style/GridCell"
-        android:text="Value"
-        android:textStyle="bold" />
+        <!-- header -->
+        <TextView
+            style="@style/GridCell"
+            android:text="Key"
+            android:textStyle="bold" />
 
-    <!-- long -->
-    <TextView
-        style="@style/GridCell"
-        android:text="user_id" />
+        <TextView
+            style="@style/GridCell"
+            android:text="Value"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/user_id_text"
-        style="@style/GridCell" />
+        <!-- long -->
+        <TextView
+            style="@style/GridCell"
+            android:text="user_id" />
 
-    <!-- string -->
-    <TextView
-        style="@style/GridCell"
-        android:text="user_name" />
+        <TextView
+            android:id="@+id/user_id_text"
+            style="@style/GridCell" />
 
-    <TextView
-        android:id="@+id/user_name_text"
-        style="@style/GridCell" />
+        <!-- string -->
+        <TextView
+            style="@style/GridCell"
+            android:text="user_name" />
 
-    <!-- int -->
-    <TextView
-        style="@style/GridCell"
-        android:text="user_age" />
+        <TextView
+            android:id="@+id/user_name_text"
+            style="@style/GridCell" />
 
-    <TextView
-        android:id="@+id/user_age_text"
-        style="@style/GridCell" />
+        <!-- int -->
+        <TextView
+            style="@style/GridCell"
+            android:text="user_age" />
 
-    <!-- boolean -->
-    <TextView
-        style="@style/GridCell"
-        android:text="guest_flag" />
+        <TextView
+            android:id="@+id/user_age_text"
+            style="@style/GridCell" />
 
-    <TextView
-        android:id="@+id/guest_flag_text"
-        style="@style/GridCell" />
+        <!-- boolean -->
+        <TextView
+            style="@style/GridCell"
+            android:text="guest_flag" />
 
-    <!-- string set -->
-    <TextView
-        style="@style/GridCell"
-        android:text="search_history" />
+        <TextView
+            android:id="@+id/guest_flag_text"
+            style="@style/GridCell" />
 
-    <TextView
-        android:id="@+id/search_history_text"
-        style="@style/GridCell" />
-</GridLayout>
+        <!-- string set -->
+        <TextView
+            style="@style/GridCell"
+            android:text="search_history" />
+
+        <TextView
+            android:id="@+id/search_history_text"
+            style="@style/GridCell" />
+    </GridLayout>
+</layout>

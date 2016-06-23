@@ -5,6 +5,10 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
+    dataBinding {
+        enabled = true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
@@ -44,9 +48,6 @@ dependencies {
     compile project(':library')
 
     compile 'com.android.support:appcompat-v7:23.2.0'
-
-    apt 'com.jakewharton:butterknife:7.0.1-compiler'
-    compile 'com.jakewharton:butterknife:7.0.1'
 
     compile 'com.google.code.gson:gson:2.6.2'
 

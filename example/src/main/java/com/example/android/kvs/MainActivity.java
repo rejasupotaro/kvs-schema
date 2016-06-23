@@ -1,12 +1,13 @@
 package com.example.android.kvs;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
+import com.example.android.kvs.databinding.ActivityMainBinding;
 import com.example.android.kvs.models.User;
 import com.example.android.kvs.prefs.schemas.ExamplePrefs;
 import com.rejasupotaro.android.kvs.SharedPreferencesInfo;
@@ -16,26 +17,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 public class MainActivity extends AppCompatActivity {
-    @Bind(R.id.user_id_text)
-    TextView userIdTextView;
-    @Bind(R.id.user_name_text)
-    TextView userNameTextView;
-    @Bind(R.id.user_age_text)
-    TextView userAgeTextView;
-    @Bind(R.id.guest_flag_text)
-    TextView guestFlagTextView;
-    @Bind(R.id.search_history_text)
-    TextView searchHistoryTextView;
+
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        this.binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setupViews();
     }
 
@@ -46,18 +35,18 @@ public class MainActivity extends AppCompatActivity {
 
         prefs.putUserId(user.getId());
         long id = prefs.getUserId();
-        userIdTextView.setText("" + id);
+        binding.userIdText.setText("" + id);
 
         prefs.putGuestFlag(user.isGuest());
         boolean isGuest = prefs.getGuestFlag();
-        guestFlagTextView.setText("" + isGuest);
+        binding.guestFlagText.setText("" + isGuest);
 
         prefs.putUserName(user.getName());
-        userNameTextView.setText(prefs.getUserName());
+        binding.userNameText.setText(prefs.getUserName());
 
         prefs.putUserAge(user.getAge());
         long age = prefs.getUserAge();
-        userAgeTextView.setText("" + age);
+        binding.userAgeText.setText("" + age);
 
         prefs.putSearchHistory(new HashSet<String>() {{
             add("turkey gravy");
@@ -65,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             add("banana cake");
         }});
         Set<String> searchHistory = prefs.getSearchHistory();
-        searchHistoryTextView.setText(searchHistory.toString());
+        binding.searchHistoryText.setText(searchHistory.toString());
 
         List<SharedPreferencesTable> tables = SharedPreferencesInfo.getAll(this);
         for (SharedPreferencesTable table : tables) {

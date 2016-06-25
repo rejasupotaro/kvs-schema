@@ -204,12 +204,25 @@ public class SchemaWriter {
         String methodName = "get" + StringUtils.capitalize(field.getName());
         String superMethodName = "get" + StringUtils.capitalize(argTypeOfSuperMethod);
         String parameterName = "defValue";
-        return MethodSpec.methodBuilder(methodName)
-                .addModifiers(Modifier.PUBLIC)
-                .addParameter(field.getFieldType(), parameterName)
-                .returns(field.getFieldType())
-                .addStatement("return $N($S, $N)", superMethodName, field.getPrefKeyName(), parameterName)
-                .build();
+        if (field.hasSerializer()) {
+            return MethodSpec.methodBuilder(methodName)
+                    .addModifiers(Modifier.PUBLIC)
+                    .addParameter(field.getFieldType(), parameterName)
+                    .returns(field.getSerializeType())
+                    .addStatement("return new $T().deserialize($N($S, $L))",
+                            field.getSerializerType(),
+                            superMethodName,
+                            field.getPrefKeyName(),
+                            parameterName)
+                    .build();
+        } else {
+            return MethodSpec.methodBuilder(methodName)
+                    .addModifiers(Modifier.PUBLIC)
+                    .addParameter(field.getFieldType(), parameterName)
+                    .returns(field.getFieldType())
+                    .addStatement("return $N($S, $N)", superMethodName, field.getPrefKeyName(), parameterName)
+                    .build();
+        }
     }
 
     private MethodSpec createGetter(Field field, String argTypeOfSuperMethod, String defaultValue) {

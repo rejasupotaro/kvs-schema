@@ -109,8 +109,8 @@ Installation
 Add dependencies to your build.gradle.
 
 ```groovy
-apt 'com.rejasupotaro:kvs-schema-compiler:5.0.0'
-compile 'com.rejasupotaro:kvs-schema:5.0.0'
+apt 'com.rejasupotaro:kvs-schema-compiler:5.0.1'
+compile 'com.rejasupotaro:kvs-schema:5.0.1'
 ```
 
 Migration

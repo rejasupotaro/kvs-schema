@@ -109,8 +109,8 @@ Installation
 Add dependencies to your build.gradle.
 
 ```groovy
-apt 'com.rejasupotaro:kvs-schema-compiler:5.0.1'
-compile 'com.rejasupotaro:kvs-schema:5.0.1'
+annotationProcessor 'com.rejasupotaro:kvs-schema-compiler:5.1.0'
+compile 'com.rejasupotaro:kvs-schema:5.1.0'
 ```
 
 Migration
@@ -136,29 +136,4 @@ public abstract class ExamplePrefsSchema {
     @Key(name = "user_id") int userId;
     @Key(name = "user_name") String userName;
 }
-```
-
-See a concrete example: https://github.com/konifar/droidkaigi2016/pull/311
-
-In addition, SharedPreferencesInfo may help you to migrate from existing apps. You can get existing SharedPreferences through `SharedPreferencesInfo.getAllPrefsAsTable`.
-
-```java
-List<SharedPreferencesTable> tables = SharedPreferencesInfo.getAll(this);
-        for (SharedPreferencesTable table : tables) {
-            Log.d("DEBUG", table.toString());
-        }
-```
-
-You can see what kind of data is saved in your app like below.
-
-```
-   name: com.example.android.kvs_preferences
-   path: /data/data/com.example.android.kvs/shared_prefs/com.example.android.kvs_preferences.xml
- ╔═══════════╤══════════════╤════════╗
- ║ Key       │ Value        │ Type   ║
- ╠═══════════╪══════════════╪════════╣
- ║ user_name │ Smith        │ String ║
- ╟───────────┼──────────────┼────────╢
- ║ user_id   │ 1            │ String ║
- ╚═══════════╧══════════════╧════════╝
 ```

@@ -109,7 +109,7 @@ Installation
 Add dependencies to your build.gradle.
 
 ```groovy
-apt 'com.rejasupotaro:kvs-schema-compiler:%%version%%'
+annotationProcessor 'com.rejasupotaro:kvs-schema-compiler:%%version%%'
 compile 'com.rejasupotaro:kvs-schema:%%version%%'
 ```
 

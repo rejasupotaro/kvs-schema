@@ -1,9 +1,8 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 'android-28'
+    buildToolsVersion '28.0.3'
 
     dataBinding {
         enabled = true
@@ -16,11 +15,11 @@ android {
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     lintOptions {
@@ -44,10 +43,10 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    apt project(':compiler')
-    compile project(':library')
+    annotationProcessor project(':compiler')
+    compile project(path: ':library',configuration: 'default')
 
-    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'androidx.appcompat:appcompat:1.0.2'
 
     compile 'com.google.code.gson:gson:2.6.2'
 

@@ -2,8 +2,6 @@ package com.rejasupotaro.android.kvs;
 
 import android.content.SharedPreferences;
 
-import com.jakewharton.fliptables.FlipTable;
-
 import java.util.Map;
 
 public class SharedPreferencesTable {
@@ -52,10 +50,11 @@ public class SharedPreferencesTable {
 
     @Override
     public String toString() {
-        return String.format("\n\n  name: %s\n  path: %s\n%s\n",
-                name,
-                path,
-                FlipTable.of(HEADER, toArray()));
+        return name + ": " + path;
+//        return String.format("\n\n  name: %s\n  path: %s\n%s\n",
+//                name,
+//                path,
+//                FlipTable.of(HEADER, toArray()));
     }
 }
 

@@ -1,21 +1,18 @@
 package com.example.android.kvs;
 
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.kvs.databinding.ActivityMainBinding;
 import com.example.android.kvs.models.User;
 import com.example.android.kvs.prefs.schemas.ExamplePrefs;
-import com.rejasupotaro.android.kvs.SharedPreferencesInfo;
-import com.rejasupotaro.android.kvs.SharedPreferencesTable;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,11 +52,6 @@ public class MainActivity extends AppCompatActivity {
         }});
         Set<String> searchHistory = prefs.getSearchHistory();
         binding.searchHistoryText.setText(searchHistory.toString());
-
-        List<SharedPreferencesTable> tables = SharedPreferencesInfo.getAll(this);
-        for (SharedPreferencesTable table : tables) {
-            Log.d("DEBUG", table.toString());
-        }
     }
 
     @Override
